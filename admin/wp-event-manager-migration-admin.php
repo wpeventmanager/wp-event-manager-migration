@@ -216,13 +216,12 @@ class WP_Event_Manager_Migration_Admin {
 
 	public function import_event($params) 
 	{
-		if($params['_event_title'] != '' && $params['_event_description'] != '')
+		if($params['_event_title'] != '')
 		{
 			$user_id = get_current_user_id();
 
 			$args = [
 	    		'post_title'     => $params['_event_title'],
-				'post_content'   => $params['_event_description'],
 				'post_type'      => 'event_listing',
 	            'post_author'    => $user_id,
 				'comment_status' => 'closed',
@@ -231,16 +230,19 @@ class WP_Event_Manager_Migration_Admin {
 
 	    	$event_id = wp_insert_post($args);
 
-	    	/*
-	    	$my_event = [
-	    		'ID'           => $event_id,
-	  			'post_status'  => 'pending',
-	    	];
-	    	wp_update_post( $my_event );
-	    	*/
-
 	        if($event_id != '')
 	        {
+	        	$my_event = [
+		    		'ID'           => $event_id,
+		    	];
+
+		    	if(isset($params['_event_description']) && $params['_event_description'] != '')
+		    	{
+		    		$my_event['post_content'] = $params['_event_description'];
+		    	}
+
+		    	wp_update_post( $my_event );
+
 	        	$migration_import_fields = get_option('migration_import_fields', true);
 
 	        	foreach ($params as $meta_key => $meta_value) 

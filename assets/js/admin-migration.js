@@ -20,12 +20,14 @@ jQuery(document).ready(function($) {
                     $('span.file_name').html(attach.filename);
                     $('input.file_id').attr('value', attach.id);
                     $('input.file_type').attr('value', attach.subtype);
+                    $('input[name="wp_event_manager_migration_upload"]').attr('type', 'submit');
                 } else
                 {
                     $('span.file_name').addClass('error');
                     $('input.file_id').attr('value', '');
                     $('input.file_type').attr('value', '');
                     $('span.file_name').html(event_manager_migration_admin.file_type_error);
+                    $('input[name="wp_event_manager_migration_upload"]').attr('type', 'button');
                 }
             })
             .open();

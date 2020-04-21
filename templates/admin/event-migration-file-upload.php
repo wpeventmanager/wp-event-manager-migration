@@ -17,7 +17,7 @@
 		        	<input type="hidden" name="page" value="event-migration" />
 		        	<input type="hidden" name="action" value="upload" />
 
-		            <input type="submit" class="button-primary" name="wp_event_manager_migration_upload" value="<?php _e( 'Step 1', 'wp-event-manager-migration' ); ?>" />
+		            <input type="button" class="button-primary" name="wp_event_manager_migration_upload" value="<?php _e( 'Step 1', 'wp-event-manager-migration' ); ?>" />
 
 		            <?php wp_nonce_field( 'event_manager_migration_upload' ); ?>
 		        </td>
