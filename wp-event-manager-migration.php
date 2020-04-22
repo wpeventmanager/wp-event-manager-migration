@@ -1,6 +1,6 @@
 <?php
 /**
-Plugin Name: WP Event Manager Migration
+Plugin Name: WP Event Manager - Migration
 
 Plugin URI: https://www.wp-eventmanager.com/
 
