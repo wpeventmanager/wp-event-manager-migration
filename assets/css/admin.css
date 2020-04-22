@@ -1,24 +1,6 @@
-.wp-event-manager-migration-mapping-form table .field-actions a.delete-field {
-    color: #ccc;
-    padding: 1em 0 0;
-    width: 1em;
-    height: 0;
-    overflow: hidden;
-    display: inline-block;
-    position: relative;
+.wp-event-mailchimp-migration-upload-file span.response_message{
+    color: green;
 }
-
-.wp-event-manager-migration-mapping-form table .field-actions a.delete-field:hover {
+.wp-event-mailchimp-migration-upload-file span.error{
     color: red;
-}
-
-.wp-event-manager-migration-mapping-form table .field-actions a.delete-field:before {
-    content: "\f153";
-    font-family: dashicons;
-    font-size: 1em;
-    line-height: 1em;
-    vertical-align: top;
-    position: absolute;
-    top: 0;
-    left: 0;
 }

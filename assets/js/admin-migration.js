@@ -15,23 +15,27 @@ jQuery(document).ready(function($) {
 
                 if (attach.subtype == 'csv')
                 {
-                    $('span.file_name').removeClass('error');
+                    $('span.response_message').removeClass('error');
 
-                    $('span.file_name').html(attach.filename);
+                    $('span.response_message').html(attach.filename);
                     $('input.file_id').attr('value', attach.id);
                     $('input.file_type').attr('value', attach.subtype);
                     $('input[name="wp_event_manager_migration_upload"]').attr('type', 'submit');
                 } else
                 {
-                    $('span.file_name').addClass('error');
+                    $('span.response_message').addClass('error');
                     $('input.file_id').attr('value', '');
                     $('input.file_type').attr('value', '');
-                    $('span.file_name').html(event_manager_migration_admin.file_type_error);
+                    $('span.response_message').html(event_manager_migration_admin.file_type_error);
                     $('input[name="wp_event_manager_migration_upload"]').attr('type', 'button');
                 }
             })
             .open();
-		});
+		})
+        .on( 'click', 'input[type="button"]', function() {
+            $('span.response_message').addClass('error');
+            $('span.response_message').html(event_manager_migration_admin.file_type_error);
+        });
 
 
     $('.wp-event-manager-migration-mapping-form')

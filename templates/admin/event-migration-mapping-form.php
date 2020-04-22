@@ -26,6 +26,10 @@
 									<?php foreach ( $event_fields as $group_key => $group_fields ) : ?>
 										<optgroup label="<?php echo $group_key; ?>">
 
+                                            <?php if($group_key == 'event') : ?>
+                                                <option value="_event_id"><?php _e( 'Event ID', 'wp-event-manager-migration' ); ?></option>
+                                            <?php endif; ?>
+
 											<?php foreach ( $group_fields as $name => $field ) : ?>
 												<option value="_<?php echo esc_attr( $name ); ?>" ><?php echo esc_html( $field['label'] ); ?></option>
 											<?php endforeach; ?>

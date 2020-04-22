@@ -30,7 +30,8 @@ class WP_Event_Manager_Migration_Admin {
 	 * @return void
 	 */
 	public function admin_menu() {
-		add_menu_page( __( 'Event Migration', 'wp-event-manager-migration' ), __( 'Event Migration', 'wp-event-manager-migration' ), 'manage_options', 'event-migration', [$this, 'event_migration']);
+		add_menu_page( __( 'Event Migration', 'wp-event-manager-migration' ), __( 'Event Migration', 'wp-event-manager-migration' ), 'manage_options', 'event-migration', [$this, 'event_migration'], '
+dashicons-upload', 30);
 	}
 
 	/**
