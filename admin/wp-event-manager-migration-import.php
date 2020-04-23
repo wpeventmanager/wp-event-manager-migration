@@ -15,7 +15,8 @@ class WP_Event_Manager_Migration_Import {
 	 * @return void
 	 */
 	public function __construct() {
-		
+		// Ajax
+		add_action( 'wp_ajax_get_migration_terms', array( $this, 'get_migration_terms' ) );
 	}
 
 	/**
@@ -24,14 +25,69 @@ class WP_Event_Manager_Migration_Import {
 	 * @access public
 	 * @return void
 	 */
-	public function get_event_form_field_lists() {
+	public function get_migration_post_type() {
 
-		if(!class_exists('WP_Event_Manager_Form_Submit_Event') ) {
-			include_once( EVENT_MANAGER_PLUGIN_DIR . '/forms/wp-event-manager-form-abstract.php' );
-			include_once( EVENT_MANAGER_PLUGIN_DIR . '/forms/wp-event-manager-form-submit-event.php' );	
+		return apply_filters( 'migration_post_type', array(
+			'event_listing'   => __( 'Events', 'wp-event-manager-migration' ),
+			'event_organizer'  => __( 'Organizer', 'wp-event-manager-migration' ),
+			'event_venue'  => __( 'Venue', 'wp-event-manager-migration' ),
+		) );	
+	}
+
+	/**
+	 * get_migration_terms function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function get_migration_terms() {
+
+		if(isset($_POST['taxonomy']))
+		{
+			$terms = get_categories(array('taxonomy' => $_POST['taxonomy'], 'hide_empty' => false));
 		}
-		$form_submit_event_instance = call_user_func( array( 'WP_Event_Manager_Form_Submit_Event', 'instance' ) );
-		$fields = $form_submit_event_instance->merge_with_custom_fields('backend');
+
+		$output = '<option value="">'. __('Select option', 'wp-event-manager-migration').'...</option>';
+
+		if(!empty($terms))
+		{
+			foreach ($terms as $key => $term) {
+				$output .= '<option value="'.$term->term_id.'">'.$term->name.'</option>';
+
+			}
+		}
+
+		print($output);
+		wp_die();
+	}
+
+	/**
+	 * get_event_form_field_lists function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function get_event_form_field_lists($post_type) {
+
+		$fields = [];
+		if($post_type == 'event_listing')
+		{
+			$GLOBALS['event_manager']->forms->get_form( 'submit-event', array() );
+			$form_submit_event_instance = call_user_func( array( 'WP_Event_Manager_Form_Submit_Event', 'instance' ) );
+			$fields =	$form_submit_event_instance->merge_with_custom_fields('backend');
+		}
+		else if($post_type == 'event_organizer')
+		{
+			$GLOBALS['event_manager']->forms->get_form( 'submit-organizer', array() );
+			$form_submit_organizer_instance = call_user_func( array( 'WP_Event_Manager_Form_Submit_Organizer', 'instance' ) );
+			$fields =	$form_submit_organizer_instance->merge_with_custom_fields('backend');
+		}
+		else if($post_type == 'event_venue')
+		{
+			$GLOBALS['event_manager']->forms->get_form( 'submit-venue', array() );
+			$form_submit_venue_instance = call_user_func( array( 'WP_Event_Manager_Form_Submit_Venue', 'instance' ) );
+			$fields =	$form_submit_venue_instance->merge_with_custom_fields('backend');	
+		}
 
 		return $fields;		
 	}
@@ -56,46 +112,95 @@ class WP_Event_Manager_Migration_Import {
 	}
 
 	/**
-	 * import_event function.
+	 * import_data function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function import_event($params) {
+	public function import_data($post_type, $params) {
+
 		$user_id = get_current_user_id();
 
-		if(isset($params['_event_id']) && $params['_event_id'] != '')
+		$post_id = '';
+
+		if(isset($params['_post_id']) && $params['_post_id'] != '')
     	{
-    		$event_id = $params['_event_id'];    		
+    		$type = get_post_type($params['_post_id']);
+
+    		if($post_type == $type)
+    		{
+    			$post_id = $params['_post_id'];
+    		}
     	}
-    	else if(isset($params['_event_title']) && $params['_event_title'] != '')
+
+    	if($post_type == 'event_listing')
+		{
+			$post_title = !empty($params['_event_title']) ? $params['_event_title'] : '';
+		}
+		else if($post_type == 'event_organizer')
+		{
+			$post_title = !empty($params['_organizer_name']) ? $params['_organizer_name'] : '';
+		}
+		else if($post_type == 'event_venue')
+		{
+			$post_title = !empty($params['_venue_name']) ? $params['_venue_name'] : '';
+		}
+
+    	if($post_id == '' && $post_title != '')
     	{
     		$args = [
-	    		'post_title'     => $params['_event_title'],
-				'post_type'      => 'event_listing',
+	    		'post_title'     => $post_title,
+				'post_type'      => $post_type,
 	            'post_author'    => $user_id,
 				'comment_status' => 'closed',
 				'post_status'    => 'publish',
 	    	];
 
-	    	$event_id = wp_insert_post($args);
-    	}
-    	else
-    	{
-			$event_id = '';
+	    	$post_id = wp_insert_post($args);
+
+	    	if(isset($params['_post_id']) && $params['_post_id'] != '')
+    		{
+	    		update_post_meta($post_id, 'migration_id', $params['_post_id');
+	    	}
     	}
 
+
+		if($post_type == 'event_listing')
+		{
+			$this->import_event($post_id, $post_type, $params);
+		}
+		else if($post_type == 'event_organizer')
+		{
+			$this->import_organizer($post_id, $post_type, $params);
+		}
+		else if($post_type == 'event_venue')
+		{
+			$this->import_venue($post_id, $post_type, $params);
+		}
+	}
+
+	/**
+	 * import_event function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function import_event($event_id, $post_type, $params) {
+		
 		if($event_id != '')
         {
+        	$post_title = !empty($params['_event_title']) ? $params['_event_title'] : '';
+    		$post_content = !empty($params['_event_description']) ? $params['_event_description'] : '';
+
         	$update_event = ['ID' => $event_id];
 
-	    	if(isset($params['_event_title']) && $params['_event_title'] != '')
+	    	if($post_title != '')
 	    	{
-	    		$update_event['post_title'] = $params['_event_title'];
+	    		$update_event['post_title'] = $post_title;
 	    	}
-	    	if(isset($params['_event_description']) && $params['_event_description'] != '')
+	    	if($post_content != '')
 	    	{
-	    		$update_event['post_content'] = $params['_event_description'];
+	    		$update_event['post_content'] = $post_content;
 	    	}
 
 	    	wp_update_post( $update_event );
@@ -176,22 +281,165 @@ class WP_Event_Manager_Migration_Import {
         		}
         		else
         		{
-        			if($import_fields['taxonomy'] != '')
+        			if($meta_value != '')
         			{
-        				$term = term_exists($meta_value, $import_fields['taxonomy']);
+        				if($import_fields['taxonomy'] != '')
+	        			{
+	        				$term = term_exists($meta_value, $import_fields['taxonomy']);
 
-						if (empty($term))
-						{
-							$term = wp_insert_term(
-										$meta_value,
-										$import_fields['taxonomy']
-									);								
-						}
+							if (empty($term))
+							{
+								$term = wp_insert_term(
+											$meta_value,
+											$import_fields['taxonomy']
+										);								
+							}
 
-						wp_set_post_terms($event_id, $term['term_id'], $import_fields['taxonomy'], true);
+							wp_set_post_terms($event_id, $term['term_id'], $import_fields['taxonomy'], true);
+	        			}
+        			}
+        			else
+        			{
+        				$meta_value = $import_fields['default_value'];
+
+        				if($import_fields['taxonomy'] != '')
+	        			{
+	        				wp_set_post_terms($event_id, $meta_value, $import_fields['taxonomy'], true);
+	        			}
         			}
         			
+        			
         			update_post_meta($event_id, $meta_key, $meta_value);
+        		}
+        	}
+        }				
+	}
+
+	/**
+	 * import_organizer function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function import_organizer($organizer_id, $post_type, $params) {
+		
+		if($organizer_id != '')
+        {
+        	$post_title = !empty($params['_organizer_name']) ? $params['_organizer_name'] : '';
+    		$post_content = !empty($params['_organizer_description']) ? $params['_organizer_description'] : '';
+
+        	$update_event = ['ID' => $organizer_id];
+
+	    	if($post_title != '')
+	    	{
+	    		$update_event['post_title'] = $post_title;
+	    	}
+	    	if($post_content != '')
+	    	{
+	    		$update_event['post_content'] = $post_content;
+	    	}
+
+	    	wp_update_post( $update_event );
+
+        	$migration_import_fields = get_option('migration_import_fields', true);
+
+        	foreach ($params as $meta_key => $meta_value) 
+        	{
+        		$import_fields = $migration_import_fields[$meta_key];
+
+        		if($meta_key == '_organizer_logo')
+        		{
+        			$response = $this->image_exists($meta_value);
+
+		    		if($response)
+		    		{
+		    			$imageData = $this->upload_image($meta_value);
+
+    					if(!empty($imageData))
+    					{
+    						$thumbnail_id = $imageData['image_url'];
+    					}
+					}
+					else
+					{
+						$thumbnail_id = $meta_value;
+					}
+
+        			update_post_meta($organizer_id, '_thumbnail_id', $thumbnail_id);	
+        		}
+        		else
+        		{
+        			if($meta_value == '')
+        			{
+        				$meta_value = $import_fields['default_value'];
+        			}
+        			
+        			update_post_meta($organizer_id, $meta_key, $meta_value);
+        		}
+        	}
+        }				
+	}
+
+	/**
+	 * import_venue function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function import_venue($venue_id, $post_type, $params) {
+		
+		if($venue_id != '')
+        {
+        	$post_title = !empty($params['_venue_name']) ? $params['_venue_name'] : '';
+    		$post_content = !empty($params['_venue_description']) ? $params['_venue_description'] : '';
+
+        	$update_event = ['ID' => $venue_id];
+
+	    	if($post_title != '')
+	    	{
+	    		$update_event['post_title'] = $post_title;
+	    	}
+	    	if($post_content != '')
+	    	{
+	    		$update_event['post_content'] = $post_content;
+	    	}
+
+	    	wp_update_post( $update_event );
+
+        	$migration_import_fields = get_option('migration_import_fields', true);
+
+        	foreach ($params as $meta_key => $meta_value) 
+        	{
+        		$import_fields = $migration_import_fields[$meta_key];
+
+        		if($meta_key == '_organizer_logo')
+        		{
+        			$response = $this->image_exists($meta_value);
+
+		    		if($response)
+		    		{
+		    			$imageData = $this->upload_image($meta_value);
+
+    					if(!empty($imageData))
+    					{
+    						$thumbnail_id = $imageData['image_url'];
+    					}
+					}
+					else
+					{
+						$thumbnail_id = $meta_value;
+					}
+
+        			update_post_meta($venue_id, '_thumbnail_id', $thumbnail_id);	
+        		}
+        		else
+        		{
+        			if($meta_value == '')
+        			{
+        				$meta_value = $import_fields['default_value'];
+        			}
+        			
+        			update_post_meta($venue_id, $meta_key, $meta_value);
         		}
         	}
         }				

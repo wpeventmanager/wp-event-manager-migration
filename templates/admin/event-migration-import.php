@@ -23,6 +23,7 @@
             <tr>
                 <td>
                     <input type="hidden" name="page" value="event-migration" />
+                    <input type="hidden" name="migration_post_type" value="<?php echo $migration_post_type; ?>" />
                     <input type="hidden" name="file_id" class="file_id" value="<?php echo $file_id; ?>" />
                     <input type="hidden" name="action" value="import" />
 

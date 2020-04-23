@@ -13,6 +13,16 @@
 		        </td>
 		    </tr>
 		    <tr>
+		        <th><?php _e('Content Type', 'wp-event-manager-migration' ); ?></th>
+		        <td>
+					<select class="migration_post_type" name="migration_post_type">
+						<?php foreach ( $migration_post_type as $name => $label ) : ?>
+							<option value="<?php echo esc_attr( $name ); ?>" ><?php echo esc_html( $label ); ?></option>
+						<?php endforeach; ?>
+					</select>
+		        </td>
+		    </tr>
+		    <tr>
 		        <td colspan="2">
 		        	<input type="hidden" name="page" value="event-migration" />
 		        	<input type="hidden" name="action" value="upload" />

@@ -70,14 +70,18 @@ dashicons-upload', 30);
 
                 $csv_head_fields = array_shift($csv_data);
 
-                $event_fields = $this->import_class->get_event_form_field_lists();
+                $migration_fields = $this->import_class->get_event_form_field_lists($_POST['migration_post_type']);
+
+                $taxonomies = get_object_taxonomies( $_POST['migration_post_type'], 'objects' );
 
                 get_event_manager_template( 
 					'event-migration-mapping-form.php', 
 					array(
 						'file_id' => $_POST['file_id'],
 						'csv_head_fields' => $csv_head_fields,
-						'event_fields' => $event_fields,
+						'migration_fields' => $migration_fields,
+						'migration_post_type' => $_POST['migration_post_type'],
+						'taxonomies' => $taxonomies,
 					), 
 					'wp-event-manager-migration', 
 					EVENT_MANAGER_MIGRATION_PLUGIN_DIR . '/templates/admin/'
@@ -87,16 +91,23 @@ dashicons-upload', 30);
 		else if ( ! empty( $_POST['wp_event_manager_migration_mapping'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'event_manager_migration_mapping' ) ) 
 		{
 			$migration_import_fields = [];
-			if(!empty($_POST['event_field']))
-			{				
-				foreach ($_POST['event_field'] as $key => $field) 
+			if(!empty($_POST['migration_field']))
+			{
+				foreach ($_POST['migration_field'] as $key => $field) 
 				{
 					if($field != '')
 					{
+						if( $field == 'custom_field')
+						{
+							$field = $_POST['custom_field'][$key];
+						}
+
 						$csv_field = [];
 						$csv_field['key'] = $key;
-						$csv_field['name'] = $_POST['csv_field'][$key];
-						$csv_field['taxonomy'] = $_POST['event_taxonomy'][$key];
+						$csv_field['csv_field'] = $_POST['csv_field'][$key];
+						$csv_field['taxonomy'] = $_POST['taxonomy_field'][$key];
+						$csv_field['default_value'] = $_POST['default_value'][$key];
+
 						$migration_import_fields[$field] = $csv_field;
 					}
 				}
@@ -114,10 +125,11 @@ dashicons-upload', 30);
                 $csv_sample_data = $csv_data[0];
 
                 $sample_data = [];
-
-                foreach ($migration_import_fields as $field_name => $field_date) 
+                foreach ($migration_import_fields as $field_name => $field_data) 
                 {
-                	$sample_data[$field_name] = $csv_sample_data[$field_date['key']];
+                	$value = ! empty( $csv_sample_data[$field_data['key']] ) ? $csv_sample_data[$field_data['key']] : $field_data['default_value'];
+
+                	$sample_data[$field_name] = $value;
                 }
 
 				get_event_manager_template( 
@@ -125,6 +137,7 @@ dashicons-upload', 30);
 					array(
 						'file_id' => $_POST['file_id'],
 						'migration_import_fields' => $migration_import_fields,
+						'migration_post_type' => $_POST['migration_post_type'],
 						'sample_data' => $sample_data,
 					), 
 					'wp-event-manager-migration', 
@@ -154,7 +167,7 @@ dashicons-upload', 30);
 		                	$import_data[$field_name] = $csv_data[$i][$field_date['key']];
 		                }
 
-		                $this->import_class->import_event($import_data);
+		                $this->import_class->import_data($_POST['migration_post_type'], $import_data);
                 	}
                 }
 
@@ -181,9 +194,13 @@ dashicons-upload', 30);
 			echo '</pre>' . __FILE__ . ' ( Line Number ' . __LINE__ . ')';
 			die;
 			*/
+
+			$migration_post_type = $this->import_class->get_migration_post_type();
+
 			get_event_manager_template( 
 				'event-migration-file-upload.php', 
 				array(
+					'migration_post_type' => $migration_post_type,
 				), 
 				'wp-event-manager-migration', 
 				EVENT_MANAGER_MIGRATION_PLUGIN_DIR . '/templates/admin/'
