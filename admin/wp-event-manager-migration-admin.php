@@ -188,6 +188,7 @@ dashicons-upload', 30);
 			/*
 			$term = term_exists('Appearance or Signing', 'event_listing_type');
 			wp_set_post_terms(276, $term['term_id'],'event_listing_type', true);
+			$ids = $this->import_class->get_migration_id('event_organizer', ['10','12']);
 
 			echo '<pre>';
 			print_r($term);

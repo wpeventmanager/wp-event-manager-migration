@@ -24,10 +24,12 @@
             				<td>
             					<select class="migration_field" name="migration_field[<?php echo $key; ?>]" id="migration_field_<?php echo $key; ?>" data-type="text">
 									<option value=""><?php _e( 'Select Event Field', 'wp-event-manager-migration' ); ?>...</option>
+
+                                    <?php $i = 1; ?>
 									<?php foreach ( $migration_fields as $group_key => $group_fields ) : ?>
 										<optgroup label="<?php echo $group_key; ?>">
 
-                                            <?php if($group_key == 'event') : ?>
+                                            <?php if($i == 1) : ?>
                                                 <option class="text" value="_post_id"><?php _e( 'ID', 'wp-event-manager-migration' ); ?></option>
                                             <?php endif; ?>
 
@@ -42,6 +44,8 @@
 											<?php endforeach; ?>
 
 										</optgroup>
+
+                                        <?php $i++; ?>
 									<?php endforeach; ?>
 
                                     <?php if(!empty($taxonomies)) : ?>

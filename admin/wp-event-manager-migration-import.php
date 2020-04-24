@@ -160,10 +160,9 @@ class WP_Event_Manager_Migration_Import {
 
 	    	if(isset($params['_post_id']) && $params['_post_id'] != '')
     		{
-	    		update_post_meta($post_id, 'migration_id', $params['_post_id');
+	    		update_post_meta($post_id, '_migration_id', $params['_post_id']);
 	    	}
     	}
-
 
 		if($post_type == 'event_listing')
 		{
@@ -185,14 +184,14 @@ class WP_Event_Manager_Migration_Import {
 	 * @access public
 	 * @return void
 	 */
-	public function import_event($event_id, $post_type, $params) {
+	public function import_event($post_id, $post_type, $params) {
 		
-		if($event_id != '')
+		if($post_id != '')
         {
         	$post_title = !empty($params['_event_title']) ? $params['_event_title'] : '';
     		$post_content = !empty($params['_event_description']) ? $params['_event_description'] : '';
 
-        	$update_event = ['ID' => $event_id];
+        	$update_event = ['ID' => $post_id];
 
 	    	if($post_title != '')
 	    	{
@@ -206,6 +205,8 @@ class WP_Event_Manager_Migration_Import {
 	    	wp_update_post( $update_event );
 
         	$migration_import_fields = get_option('migration_import_fields', true);
+
+        	$migration_id = get_post_meta($post_id, '_migration_id', true);
 
         	foreach ($params as $meta_key => $meta_value) 
         	{
@@ -255,36 +256,59 @@ class WP_Event_Manager_Migration_Import {
 
 	    				if(!empty($imageData))
 	    				{
-	    					update_post_meta($event_id, $meta_key, $imageData);
+	    					update_post_meta($post_id, $meta_key, $imageData);
 	    				}
         			}	        			
         		}
-        		else if($meta_key == '_organizer_logo')
+        		else if(in_array($meta_key, ['_event_organizer_ids','_event_venue_ids']))
         		{
-        			$response = $this->image_exists($meta_value);
+        			$is_json = is_string($meta_value) && is_array(json_decode($meta_value, true)) ? true : false;
 
-		    		if($response)
-		    		{
-		    			$imageData = $this->upload_image($meta_value);
+        			if($is_json)
+        			{
+        				$arrID = json_decode($meta_value, true);
+        			}
+        			else
+        			{
+        				if( strpos($meta_value, ',') !== false )
+        				{
+						    $arrID = explode(',', $meta_value);
+						}
+						else if( strpos($meta_value, '|') !== false )
+        				{
+						    $arrID = explode('|', $meta_value);
+						}
+						else
+        				{
+						    $arrID = [$meta_value];
+						}	        				
+        			}
 
-    					if(!empty($imageData))
-    					{
-    						$thumbnail_id = $imageData['image_url'];
-    					}
-					}
-					else
-					{
-						$thumbnail_id = $meta_value;
-					}
+        			if(!empty($arrID))
+        			{
+        				if($meta_key == '_event_organizer_ids')
+        				{
+        					$ids = $this->get_migration_id('event_organizer', $arrID);
+        				}
+        				else if($meta_key == '_event_venue_ids')
+        				{
+        					$ids = $this->get_migration_id('event_venue', $arrID);
+        				}
+        				else
+        				{
+        					$ids = '';
+        				}
 
-        			update_post_meta($event_id, '_thumbnail_id', $thumbnail_id);	
+        				update_post_meta($post_id, $meta_key, $ids);
+        			}
+        			
         		}
         		else
         		{
-        			if($meta_value != '')
+        			if($import_fields['taxonomy'] != '')
         			{
-        				if($import_fields['taxonomy'] != '')
-	        			{
+        				if($meta_value != '')
+        				{
 	        				$term = term_exists($meta_value, $import_fields['taxonomy']);
 
 							if (empty($term))
@@ -295,21 +319,28 @@ class WP_Event_Manager_Migration_Import {
 										);								
 							}
 
-							wp_set_post_terms($event_id, $term['term_id'], $import_fields['taxonomy'], true);
-	        			}
+							wp_set_post_terms($post_id, $term['term_id'], $import_fields['taxonomy'], true);
+						}
+						else
+						{
+							$term_id = $import_fields['default_value'];
+
+							if($term_id != '')
+							{
+								wp_set_post_terms($post_id, $term_id, $import_fields['taxonomy'], true);	
+							}
+						}
         			}
         			else
         			{
-        				$meta_value = $import_fields['default_value'];
+        				if($meta_value == '')
+        				{
+        					$meta_value = $import_fields['default_value'];
+        				}
 
-        				if($import_fields['taxonomy'] != '')
-	        			{
-	        				wp_set_post_terms($event_id, $meta_value, $import_fields['taxonomy'], true);
-	        			}
+        				update_post_meta($post_id, $meta_key, $meta_value);
         			}
-        			
-        			
-        			update_post_meta($event_id, $meta_key, $meta_value);
+
         		}
         	}
         }				
@@ -321,14 +352,14 @@ class WP_Event_Manager_Migration_Import {
 	 * @access public
 	 * @return void
 	 */
-	public function import_organizer($organizer_id, $post_type, $params) {
+	public function import_organizer($post_id, $post_type, $params) {
 		
-		if($organizer_id != '')
+		if($post_id != '')
         {
         	$post_title = !empty($params['_organizer_name']) ? $params['_organizer_name'] : '';
     		$post_content = !empty($params['_organizer_description']) ? $params['_organizer_description'] : '';
 
-        	$update_event = ['ID' => $organizer_id];
+        	$update_event = ['ID' => $post_id];
 
 	    	if($post_title != '')
 	    	{
@@ -345,36 +376,34 @@ class WP_Event_Manager_Migration_Import {
 
         	foreach ($params as $meta_key => $meta_value) 
         	{
-        		$import_fields = $migration_import_fields[$meta_key];
+        		if($meta_value == '')
+    			{
+    				$meta_value = $import_fields['default_value'];
+    			}
 
         		if($meta_key == '_organizer_logo')
         		{
         			$response = $this->image_exists($meta_value);
 
-		    		if($response)
+        			if($response)
 		    		{
 		    			$imageData = $this->upload_image($meta_value);
 
     					if(!empty($imageData))
     					{
-    						$thumbnail_id = $imageData['image_url'];
+    						$thumbnail_id = $imageData['image_id'];
     					}
 					}
 					else
 					{
-						$thumbnail_id = $meta_value;
+						$thumbnail_id = '';
 					}
 
-        			update_post_meta($organizer_id, '_thumbnail_id', $thumbnail_id);	
+        			update_post_meta($post_id, '_thumbnail_id', $thumbnail_id);	
         		}
         		else
         		{
-        			if($meta_value == '')
-        			{
-        				$meta_value = $import_fields['default_value'];
-        			}
-        			
-        			update_post_meta($organizer_id, $meta_key, $meta_value);
+        			update_post_meta($post_id, $meta_key, $meta_value);
         		}
         	}
         }				
@@ -386,14 +415,14 @@ class WP_Event_Manager_Migration_Import {
 	 * @access public
 	 * @return void
 	 */
-	public function import_venue($venue_id, $post_type, $params) {
+	public function import_venue($post_id, $post_type, $params) {
 		
-		if($venue_id != '')
+		if($post_id != '')
         {
         	$post_title = !empty($params['_venue_name']) ? $params['_venue_name'] : '';
     		$post_content = !empty($params['_venue_description']) ? $params['_venue_description'] : '';
 
-        	$update_event = ['ID' => $venue_id];
+        	$update_event = ['ID' => $post_id];
 
 	    	if($post_title != '')
 	    	{
@@ -412,34 +441,34 @@ class WP_Event_Manager_Migration_Import {
         	{
         		$import_fields = $migration_import_fields[$meta_key];
 
-        		if($meta_key == '_organizer_logo')
+        		if($meta_value == '')
+    			{
+    				$meta_value = $import_fields['default_value'];
+    			}
+
+        		if($meta_key == '_venue_logo')
         		{
         			$response = $this->image_exists($meta_value);
 
-		    		if($response)
+        			if($response)
 		    		{
 		    			$imageData = $this->upload_image($meta_value);
 
     					if(!empty($imageData))
     					{
-    						$thumbnail_id = $imageData['image_url'];
+    						$thumbnail_id = $imageData['image_id'];
     					}
 					}
 					else
 					{
-						$thumbnail_id = $meta_value;
+						$thumbnail_id = '';
 					}
 
-        			update_post_meta($venue_id, '_thumbnail_id', $thumbnail_id);	
+        			update_post_meta($post_id, '_thumbnail_id', $thumbnail_id);	
         		}
         		else
         		{
-        			if($meta_value == '')
-        			{
-        				$meta_value = $import_fields['default_value'];
-        			}
-        			
-        			update_post_meta($venue_id, $meta_key, $meta_value);
+        			update_post_meta($post_id, $meta_key, $meta_value);
         		}
         	}
         }				
@@ -524,6 +553,40 @@ class WP_Event_Manager_Migration_Import {
 		$response_code = wp_remote_retrieve_response_code( $response );
 
 	    return $response_code == 200 ? true : false;
+	}
+
+	/**
+	 * image_exists function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+    public function get_migration_id($post_type, $arrID) {
+		global $wpdb;
+
+		$arr_ID = [];
+
+		if (!empty($arrID))
+	    {
+	    	$ids   = implode(",", $arrID);
+
+	    	$query = "SELECT `post_id` FROM `" . $wpdb->prefix . "postmeta` WHERE 1
+							AND `meta_value` IN (". $ids .") 
+							AND `meta_key` = '_migration_id' 
+							AND `post_id` IN (SELECT ID FROM `" . $wpdb->prefix . "posts` WHERE `post_type` = '" . $post_type . "' AND `post_status` = 'publish')";
+
+	        $results = $wpdb->get_results($query, ARRAY_A);
+
+	        if(!empty($results))
+	        {
+	        	foreach ($results as $key => $result) {
+	        		$arr_ID[] = $result['post_id'];
+	        	}
+	        }
+	    }
+
+	    return $arr_ID;
+
 	}
 
 
