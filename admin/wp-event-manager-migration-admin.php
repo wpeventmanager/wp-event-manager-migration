@@ -15,7 +15,7 @@ class WP_Event_Manager_Migration_Admin {
 	 * @return void
 	 */
 	public function __construct() {
-		include ('wp-event-manager-migration-import.php');
+		include ('wp-event-manager-migration-import.php');		
 
 		add_action( 'admin_menu', array( $this, 'admin_menu' ), 12 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -30,8 +30,7 @@ class WP_Event_Manager_Migration_Admin {
 	 * @return void
 	 */
 	public function admin_menu() {
-		add_menu_page( __( 'Event Migration', 'wp-event-manager-migration' ), __( 'Event Migration', 'wp-event-manager-migration' ), 'manage_options', 'event-migration', [$this, 'event_migration'], '
-dashicons-upload', 30);
+		add_menu_page( __('Event Migration', 'wp-event-manager-migration'), __('Event Migration', 'wp-event-manager-migration'), 'manage_options', 'event-migration', [$this, 'event_migration'], 'dashicons-upload', 30);
 	}
 
 	/**

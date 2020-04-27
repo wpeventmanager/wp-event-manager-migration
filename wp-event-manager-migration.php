@@ -29,7 +29,6 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 **/
 
 // Exit if accessed directly
-
 if ( ! defined( 'ABSPATH' ) ) {
 	
 	exit;
@@ -49,7 +48,29 @@ class WP_Event_Manager_Migration {
 		define( 'EVENT_MANAGER_MIGRATION_VERSION', '1.0' );
 		define( 'EVENT_MANAGER_MIGRATION_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 		define( 'EVENT_MANAGER_MIGRATION_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
-				
+
+		/**
+		 * Detect plugin. For use on Front End only.
+		 */
+		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+		// check for plugin using plugin name
+		if ( is_plugin_active( 'wp-event-manager-sell-tickets/wp-event-manager-sell-tickets.php' ) ) {
+		    define( 'IS_ACTIVE_EVENT_MANAGER_SELL_TICKETS_PLUGIN', true );
+		}
+		else
+		{
+			define( 'IS_ACTIVE_EVENT_MANAGER_SELL_TICKETS_PLUGIN', false );
+		}
+
+		// check for plugin using plugin name
+		if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+		    define( 'IS_ACTIVE_WOOCOMMERCE_PLUGIN', true );
+		}
+		else
+		{
+			define( 'IS_ACTIVE_WOOCOMMERCE_PLUGIN', false );
+		}
 		
 		if ( is_admin() ) {
 			include( 'admin/wp-event-manager-migration-admin.php' );

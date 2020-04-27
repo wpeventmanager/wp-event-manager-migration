@@ -26,12 +26,18 @@ class WP_Event_Manager_Migration_Import {
 	 * @return void
 	 */
 	public function get_migration_post_type() {
-
-		return apply_filters( 'migration_post_type', array(
+		$post_types = array(
 			'event_listing'   => __( 'Events', 'wp-event-manager-migration' ),
 			'event_organizer'  => __( 'Organizer', 'wp-event-manager-migration' ),
 			'event_venue'  => __( 'Venue', 'wp-event-manager-migration' ),
-		) );	
+		);
+
+		if(IS_ACTIVE_EVENT_MANAGER_SELL_TICKETS_PLUGIN && IS_ACTIVE_WOOCOMMERCE_PLUGIN)
+		{
+			$post_types['product'] = __('Sell Tickets', 'wp-event-manager-migration');
+		}
+
+		return apply_filters( 'migration_post_type',  $post_types);	
 	}
 
 	/**
@@ -88,7 +94,40 @@ class WP_Event_Manager_Migration_Import {
 			$form_submit_venue_instance = call_user_func( array( 'WP_Event_Manager_Form_Submit_Venue', 'instance' ) );
 			$fields =	$form_submit_venue_instance->merge_with_custom_fields('backend');	
 		}
+		else if($post_type == 'product')
+		{	
+			/*
+			$fields['ticket']	= [
+				'ticket_name' => [
+					'lable' => __( 'Ticket name', 'wp-event-manager-migration' ),
+				],
+				'ticket_quantity' => __( 'Ticket quantity', 'wp-event-manager-migration' )
+				],
+				'ticket_price' => __( 'Ticket price', 'wp-event-manager-migration' )
+				],
+				'ticket_sales_start_date' => __( 'Ticket sale start date', 'wp-event-manager-migration' )
+				],
+				'ticket_sales_start_time' => __( 'Ticket sale start time', 'wp-event-manager-migration' )
+				],
+				'ticket_sales_end_date' => __( 'Ticket sale end date', 'wp-event-manager-migration' )
+				],
+				'ticket_sales_end_time' => __( 'Ticket sale end time', 'wp-event-manager-migration' )
+				],
+				'ticket_description' => __( 'Ticket description', 'wp-event-manager-migration' )
+				],
+				'ticket_show_description' => __( 'Show ticket description', 'wp-event-manager-migration' ),
+				'ticket_fee_pay_by' => __( 'Ticket fee pay by', 'wp-event-manager-migration' ),
+				'ticket_visibility' => __( 'Ticket visibility', 'wp-event-manager-migration' ),
+				'ticket_minimum' => __( 'Ticket minimum order', 'wp-event-manager-migration' ),
+				'ticket_maximum' => __( 'Ticket maximum order', 'wp-event-manager-migration' ),
+				'show_remaining_tickets' => __( 'Show remaining ticket', 'wp-event-manager-migration' ),
+				'ticket_individually' => __( 'Ticket individually', 'wp-event-manager-migration' ),
+			];
+			*/
 
+			$fields = $this->event_listing_sell_tickets_fields();
+		}
+		
 		return $fields;		
 	}
 
@@ -131,7 +170,29 @@ class WP_Event_Manager_Migration_Import {
     		{
     			$post_id = $params['_post_id'];
     		}
+
+    		if($post_type == 'product')
+			{
+				$product = wc_get_product($params['_post_id']);
+
+				if(!empty($product))
+				{
+					if($product->is_type( 'event_ticket' ))
+					{
+						$post_id = $params['_post_id'];
+					}
+					else
+					{
+						$post_id = '';
+					}
+				}
+				else
+				{
+					$post_id = '';
+				}
+			}    		
     	}
+
 
     	if($post_type == 'event_listing')
 		{
@@ -144,6 +205,10 @@ class WP_Event_Manager_Migration_Import {
 		else if($post_type == 'event_venue')
 		{
 			$post_title = !empty($params['_venue_name']) ? $params['_venue_name'] : '';
+		}
+		else if($post_type == 'product')
+		{
+			$post_title = !empty($params['ticket_name']) ? $params['ticket_name'] : '';
 		}
 
     	if($post_id == '' && $post_title != '')
@@ -175,6 +240,10 @@ class WP_Event_Manager_Migration_Import {
 		else if($post_type == 'event_venue')
 		{
 			$this->import_venue($post_id, $post_type, $params);
+		}
+		else if($post_type == 'product')
+		{
+			$this->import_ticket($post_id, $post_type, $params);
 		}
 	}
 
@@ -475,6 +544,164 @@ class WP_Event_Manager_Migration_Import {
 	}
 
 	/**
+	 * import_ticket function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function import_ticket($post_id, $post_type, $params) {
+		
+		if($post_id != '')
+        {
+        	$product_id = $post_id;
+        	$ticket_name        = isset( $params['ticket_name'] ) ?  $params['ticket_name'] : '';
+            $ticket_quantity    = isset( $params['ticket_quantity'] ) ? $params['ticket_quantity'] : '';
+            $ticket_price       = isset( $params['ticket_price'] ) ? $params['ticket_price'] : '';
+            $ticket_description = isset( $params['ticket_description'] ) ? $params['ticket_description'] : ''; 
+            $ticket_show_description =isset( $params['ticket_show_description'] ) ? $params['ticket_show_description'] : 0;  
+            $ticket_fee_pay_by  = isset( $params['ticket_fee_pay_by'] ) ? $params['ticket_fee_pay_by'] : 'ticket_fee_pay_by_attendee';  
+            $ticket_visibility  = isset( $params['ticket_visibility'] ) ? $params['ticket_visibility'] : 'public';  
+            $ticket_minimum     = isset( $params['ticket_minimum'] ) ? $params['ticket_minimum'] : '';  
+            $ticket_maximum     = isset( $params['ticket_maximum'] ) ? $params['ticket_maximum'] : '';
+            $ticket_sales_start_date = isset( $params['ticket_sales_start_date'] ) ? $params['ticket_sales_start_date'] : '';
+            $sales_start_time 	= isset( $params['ticket_sales_start_time'] ) ? $params['ticket_sales_start_time'] : '';
+            $ticket_sales_end_date   = isset( $params['ticket_sales_end_date'] ) ? $params['ticket_sales_end_date'] : '';
+            $sales_end_time 	= isset( $params['ticket_sales_end_time'] ) ? $params['ticket_sales_end_time'] : '';
+            $show_remaining_tickets = isset( $params['show_remaining_tickets'] ) ? $params['show_remaining_tickets'] : '';
+            $sold_tickets_individually = isset( $params['ticket_individually'] ) ? $params['ticket_individually'] : '';
+            
+            $ticket_type = isset( $params['ticket_type'] ) ? $params['ticket_type'] : '';
+            $event_id = isset( $params['_event_id'] ) ? $params['_event_id'] : '';
+
+        	$update_event = [
+        		'ID' => $product_id,
+        		'post_status'   => $ticket_visibility
+        	];
+
+	    	if($post_title != '')
+	    	{
+	    		$update_event['post_title'] = $ticket_name;
+	    	}
+	    	if($post_content != '')
+	    	{
+	    		$update_event['post_content'] = $ticket_description;
+	    	}
+
+	    	wp_update_post( $update_event );
+
+	    	//set product type as event ticket
+            wp_set_object_terms( $product_id, 'event_ticket', 'product_type' );
+
+	    	$is_virtual = apply_filters('event_ticket_is_virtual','yes');
+
+        	$migration_import_fields = get_option('migration_import_fields', true);
+
+        	
+            if($ticket_type == '' && $ticket_price == '')
+            {
+            	$ticket_type = 'free';
+            }
+            else if($ticket_type == '' && $ticket_price != '')
+            {
+            	$ticket_type = 'paid';
+            }
+
+            //all woocommerce product meta keys
+            update_post_meta($product_id, '_regular_price', $ticket_price );
+    		update_post_meta($product_id, '_price', $ticket_price );    
+            update_post_meta($product_id, '_stock', $ticket_quantity );
+    		update_post_meta($product_id, '_stock_status', 'instock' );
+    		update_post_meta($product_id, '_manage_stock', 'yes' );    				
+    		update_post_meta($product_id, 'minimum_order', $ticket_minimum );  //woocommerce meta key
+    		update_post_meta($product_id, 'maximum_order', $ticket_maximum );  //woocommerce meta key
+    		update_post_meta($product_id, '_sold_individually', $sold_tickets_individually );
+    
+    		//add event id in product
+    		update_post_meta($product_id, '_event_id', $event_id);
+    		update_post_meta($product_id, '_ticket_sales_start_date', $ticket_sales_start_date);
+    		update_post_meta($product_id, '_ticket_sales_end_date', $ticket_sales_end_date);
+    		update_post_meta($product_id, '_ticket_type', $ticket_type);
+    		update_post_meta($product_id, '_ticket_show_description',$ticket_show_description );
+    		update_post_meta($product_id, '_show_remaining_tickets',$show_remaining_tickets );
+    
+    		//add all fee details as custom attributes of the product, values will get from decided fees tab as get_options setttings.
+    		update_post_meta($product_id, '_ticket_fee_pay_by', $ticket_fee_pay_by );
+    		update_post_meta($product_id, '_virtual', $is_virtual);
+
+    		if($event_id != '')
+    		{
+    			$updated_tickets = [];
+    			
+    			$get_tickets = get_post_meta($event_id, '_' . $ticket_type . '_tickets', true);
+
+    			$updated_new_tickets = [];
+
+    			$is_add_ticket = true;
+    			if(!empty($get_tickets))
+    			{
+    				foreach ($get_tickets as $ticket) 
+	    			{
+	    				if( $ticket['product_id'] == $product_id )
+	    				{
+	    					$ticket['product_id'] = $product_id;
+	    					$ticket['ticket_name'] = $ticket_name;
+	    					$ticket['ticket_quantity'] = $ticket_quantity;
+	    					$ticket['ticket_price'] = $ticket_price;
+	    					$ticket['ticket_description'] = $ticket_description;
+	    					$ticket['ticket_show_description'] = $ticket_show_description;
+	    					$ticket['ticket_fee_pay_by'] = $ticket_fee_pay_by;
+	    					$ticket['ticket_visibility'] = $ticket_visibility;
+	    					$ticket['ticket_minimum'] = $ticket_minimum;
+	    					$ticket['ticket_maximum'] = $ticket_maximum;
+	    					$ticket['ticket_sales_start_date'] = $ticket_sales_start_date;
+	    					$ticket['ticket_sales_start_time'] = $ticket_sales_start_time;
+	    					$ticket['ticket_sales_end_date'] = $ticket_sales_end_date;
+	    					$ticket['ticket_sales_end_time'] = $ticket_sales_end_time;
+	    					$ticket['show_remaining_tickets'] = $show_remaining_tickets;
+	    					$ticket['ticket_individually'] = $ticket_individually;
+
+	    					$updated_new_tickets[] = $ticket;
+
+	    					$is_add_ticket = false;
+	    				}
+	    				else
+	    				{
+	    					$updated_new_tickets[] = $ticket;
+	    				}
+	    			}
+    			}
+
+    			if($is_add_ticket)
+    			{
+    				$new_ticket = [];
+
+    				$new_ticket['product_id'] = $product_id;
+					$new_ticket['ticket_name'] = $ticket_name;
+					$new_ticket['ticket_quantity'] = $ticket_quantity;
+					$new_ticket['ticket_price'] = $ticket_price;
+					$new_ticket['ticket_description'] = $ticket_description;
+					$new_ticket['ticket_show_description'] = $ticket_show_description;
+					$new_ticket['ticket_fee_pay_by'] = $ticket_fee_pay_by;
+					$new_ticket['ticket_visibility'] = $ticket_visibility;
+					$new_ticket['ticket_minimum'] = $ticket_minimum;
+					$new_ticket['ticket_maximum'] = $ticket_maximum;
+					$new_ticket['ticket_sales_start_date'] = $ticket_sales_start_date;
+					$new_ticket['ticket_sales_start_time'] = $ticket_sales_start_time;
+					$new_ticket['ticket_sales_end_date'] = $ticket_sales_end_date;
+					$new_ticket['ticket_sales_end_time'] = $ticket_sales_end_time;
+					$new_ticket['show_remaining_tickets'] = $show_remaining_tickets;
+					$new_ticket['ticket_individually'] = $ticket_individually;
+
+					$updated_new_tickets[] = $new_ticket;
+    			}
+
+    			update_post_meta($event_id, '_' . $ticket_type . '_tickets', $updated_new_tickets );
+    		}
+
+        }				
+	}
+
+	/**
 	 * upload_image function.
 	 *
 	 * @access public
@@ -587,6 +814,148 @@ class WP_Event_Manager_Migration_Import {
 
 	    return $arr_ID;
 
+	}
+
+
+	public static function event_listing_sell_tickets_fields() {
+		 
+		$fields = array(
+				'tickets' => array(  //fields attribute must
+				        'ticket_name' => array(
+							'label'       => __( 'Ticket Name', 'wp-event-manager-migration' ),
+							'type'        => 'text',
+							'required'    => false,
+							'placeholder' => __('Give your ticket name', 'wp-event-manager-migration' ),
+							'priority'    => 1
+						),
+						'ticket_quantity' => array(
+							'label'       => __( 'Ticket Quantity', 'wp-event-manager-migration' ),
+							'type'        => 'text',
+							'required'    => false,
+							'placeholder' => __('Enter number of tickets', 'wp-event-manager-migration' ),
+							'priority'    => 2
+						),
+						'ticket_type' => array(
+							'label'       => __( 'Ticket Type', 'wp-event-manager-migration' ),
+							'type'        => 'text',
+							'required'    => false,
+							'placeholder' => __('Ticket Type', 'wp-event-manager-migration' ),
+							'priority'    => 3
+						),
+						'ticket_price' => array(
+							'label'       => __( 'Ticket Price', 'wp-event-manager-migration' ),
+							'type'        => 'number',
+							'required'    => false,
+							'placeholder' => __('Ticket price', 'wp-event-manager-migration' ),
+							'priority'    => 3
+						),						
+						'ticket_description' => array(
+							'label'       => __( 'Ticket Description', 'wp-event-manager-migration' ),
+							'type'        => 'textarea',
+							'required'    => false,
+							'placeholder' => __('Tell your attendees more about this ticket type', 'wp-event-manager-migration' ),
+							'priority'    => 4
+						),
+						'ticket_show_description' => array(
+							'label'       => __( 'Show Ticket Description', 'wp-event-manager-migration' ),
+							'type'        => 'checkbox',
+							'required'    => false,
+							'std'         => 0,
+							'placeholder' => '',
+							'description'=>  __( 'Show ticket description on event page', 'wp-event-manager-migration'),
+							'priority'    => 5
+						),
+						'ticket_fee_pay_by' => array(
+							'label'       => __( 'Fees Pay By', 'wp-event-manager-migration' ),
+							'type'        => 'select',
+							'required'    => false,
+							'description' => __('Pay by attendee : fees will be added to the ticket price and paid by the attendee.','wp-event-manager-migration'),
+							'priority'    => 6,
+							'std'  => 'ticket_fee_pay_by_attendee',
+							'options'     =>   
+											array(							                    
+												 'ticket_fee_pay_by_attendee'  => __( 'Pay By Attendee', 'wp-event-manager-migration' ),
+												 'ticket_fee_pay_by_organizer'  => __( 'Pay By Organizer', 'wp-event-manager-migration' )
+												)
+						
+						),
+						'ticket_visibility' => array(
+							'label'       => __( 'Tickets Visibility', 'wp-event-manager-migration' ),
+							'type'        => 'select',
+							'required'    => false,
+							'description' => __('Public ticket visible to all and Private ticket only visible to organizer.','wp-event-manager-migration'),
+							'priority'    => 7,
+							'std'  => 'public',
+							'options'     =>   
+							                array(							                    
+							                     'public'  => __( 'Public', 'wp-event-manager-migration' ),
+							                     'private'  => __( 'Private', 'wp-event-manager-migration' )
+							                    )
+					    ),							
+						'ticket_minimum' => array(
+							'label'       => __( 'Minimum Tickets', 'wp-event-manager-migration' ),
+							'type'        => 'number',
+							'required'    => false,
+							'placeholder' => __('Minimum tickets allowed per order','wp-event-manager-migration'),
+							'priority'    => 8
+						),
+						'ticket_maximum' => array(
+							'label'       => __( 'Maximum Tickets', 'wp-event-manager-migration' ),
+							'type'        => 'number',
+							'required'    => false,
+							'placeholder' => __('Maximum tickets allowed per order', 'wp-event-manager-migration' ),
+							'priority'    => 9
+						),	
+						'ticket_sales_start_date' => array(
+								'label'       => __( 'Sales start date', 'wp-event-manager-migration' ),
+								'type'        => 'text',
+								'required'    => false,
+								'placeholder' => __('Sales start date', 'wp-event-manager-migration' ),
+								'priority'    => 10
+						),
+						'ticket_sales_start_time' => array(
+								'label'       => __( 'Sales Start Time', 'wp-event-manager-migration' ),
+								'type'        => 'time',
+								'required'    => false,
+								'placeholder' => __('Tickets sales start time','wp-event-manager-migration' ),
+								'attribute'       => '',
+								'priority'    => 11
+						),
+						'ticket_sales_end_date' => array(
+								'label'       => __( 'Sales end date', 'wp-event-manager-migration' ),
+								'type'        => 'text',
+								'required'    => false,
+								'placeholder' => __('Sales end date', 'wp-event-manager-migration' ),
+								'priority'    => 12
+						),
+						'ticket_sales_end_time' => array(
+								'label'       => __( 'Sales End Time', 'wp-event-manager-migration' ),
+								'type'        => 'time',
+								'required'    => false,
+								'placeholder' => __('Tickets sales end time','wp-event-manager-migration' ),
+								'priority'    => 13
+						),
+						'show_remaining_tickets' => array(
+							'label'       => __( 'Show remainging tickets', 'wp-event-manager-migration' ),
+							'type'        => 'checkbox',
+							'required'    => false,
+							'placeholder' => '',
+							'description' => __('Show remaining tickets with tickets detail at single event page', 'wp-event-manager-migration' ),
+							'priority'    => 14
+						 ),
+						'ticket_individually' => array(
+							'label'       => __( 'Sold Tickets individually', 'wp-event-manager-migration' ),
+							'type'        => 'checkbox',
+						 	'std'  => '',
+							'required'    => false,
+							'description' => __('Tickets will be sold one ticket per customer','wp-event-manager-migration'),
+							'priority'    => 15    							
+				        )
+						
+				)			
+		);
+		
+		return $fields;
 	}
 
 

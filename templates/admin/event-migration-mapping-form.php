@@ -1,5 +1,5 @@
 <div class="wrap wp_event_manager_migration_wrap">
-	<h2><?php _e( 'Event Migration Mapping Form', 'wp-event-manager-migration' ); ?></h2>
+	<h2><?php _e('Event Migration Mapping Form', 'wp-event-manager-migration'); ?></h2>
 
 	<form method="post" class="wp-event-manager-migration-mapping-form">
 		<table class="widefat">
@@ -33,15 +33,23 @@
                                                 <option class="text" value="_post_id"><?php _e( 'ID', 'wp-event-manager-migration' ); ?></option>
                                             <?php endif; ?>
 
-											<?php foreach ( $group_fields as $name => $field ) : ?>
-
-                                                <?php if(!in_array($field['type'], ['term-select'])) : ?>
-
-                                                    <option class="text" value="_<?php echo esc_attr( $name ); ?>" <?php selected( $head_fields, '_'.$name ); ?> ><?php echo esc_html( $field['label'] ); ?></option>
-
+                                            <?php if($group_key == 'tickets') : ?>
+                                                <?php if($i == 1) : ?>
+                                                    <option class="text" value="_event_id"><?php _e( 'Event ID', 'wp-event-manager-migration' ); ?></option>
                                                 <?php endif; ?>
 
-											<?php endforeach; ?>
+                                                <?php foreach ( $group_fields as $name => $field ) : ?>
+                                                    <?php if(!in_array($field['type'], ['term-select'])) : ?>
+                                                        <option class="text" value="<?php echo esc_attr( $name ); ?>" <?php selected( $head_fields,$name ); ?> ><?php echo esc_html( $field['label'] ); ?></option>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            <?php else : ?>
+                                                <?php foreach ( $group_fields as $name => $field ) : ?>
+                                                    <?php if(!in_array($field['type'], ['term-select'])) : ?>
+                                                        <option class="text" value="_<?php echo esc_attr( $name ); ?>" <?php selected( $head_fields, '_'.$name ); ?> ><?php echo esc_html( $field['label'] ); ?></option>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
 
 										</optgroup>
 

@@ -1,5 +1,5 @@
 <div class="wrap wp_event_manager_migration_wrap">
-	<h2><?php _e( 'Event Migration', 'wp-event-manager-migration' ); ?></h2>
+	<h2><?php _e('Event Migration', 'wp-event-manager-migration'); ?></h2>
 
 	<form method="post" class="wp-event-mailchimp-migration-upload-file">
 		<table class="widefat">
