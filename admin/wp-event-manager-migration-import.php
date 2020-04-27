@@ -349,12 +349,17 @@ class WP_Event_Manager_Migration_Import {
 						}
 						else
         				{
-						    $arrID = [$meta_value];
+        					if(is_int($meta_value))
+        					{
+        						$arrID = [$meta_value];	
+        					}						    
 						}	        				
         			}
 
         			if(!empty($arrID))
         			{
+        				$arrID = array_filter($arrID);
+
         				if($meta_key == '_event_organizer_ids')
         				{
         					$ids = $this->get_migration_id('event_organizer', $arrID);
@@ -564,11 +569,11 @@ class WP_Event_Manager_Migration_Import {
             $ticket_minimum     = isset( $params['ticket_minimum'] ) ? $params['ticket_minimum'] : '';  
             $ticket_maximum     = isset( $params['ticket_maximum'] ) ? $params['ticket_maximum'] : '';
             $ticket_sales_start_date = isset( $params['ticket_sales_start_date'] ) ? $params['ticket_sales_start_date'] : '';
-            $sales_start_time 	= isset( $params['ticket_sales_start_time'] ) ? $params['ticket_sales_start_time'] : '';
+            $ticket_sales_start_time 	= isset( $params['ticket_sales_start_time'] ) ? $params['ticket_sales_start_time'] : '';
             $ticket_sales_end_date   = isset( $params['ticket_sales_end_date'] ) ? $params['ticket_sales_end_date'] : '';
-            $sales_end_time 	= isset( $params['ticket_sales_end_time'] ) ? $params['ticket_sales_end_time'] : '';
+            $ticket_sales_end_time 	= isset( $params['ticket_sales_end_time'] ) ? $params['ticket_sales_end_time'] : '';
             $show_remaining_tickets = isset( $params['show_remaining_tickets'] ) ? $params['show_remaining_tickets'] : '';
-            $sold_tickets_individually = isset( $params['ticket_individually'] ) ? $params['ticket_individually'] : '';
+            $ticket_individually = isset( $params['ticket_individually'] ) ? $params['ticket_individually'] : '';
             
             $ticket_type = isset( $params['ticket_type'] ) ? $params['ticket_type'] : '';
             $event_id = isset( $params['_event_id'] ) ? $params['_event_id'] : '';
@@ -578,11 +583,11 @@ class WP_Event_Manager_Migration_Import {
         		'post_status'   => $ticket_visibility
         	];
 
-	    	if($post_title != '')
+	    	if($ticket_name != '')
 	    	{
 	    		$update_event['post_title'] = $ticket_name;
 	    	}
-	    	if($post_content != '')
+	    	if($ticket_description != '')
 	    	{
 	    		$update_event['post_content'] = $ticket_description;
 	    	}
@@ -614,7 +619,7 @@ class WP_Event_Manager_Migration_Import {
     		update_post_meta($product_id, '_manage_stock', 'yes' );    				
     		update_post_meta($product_id, 'minimum_order', $ticket_minimum );  //woocommerce meta key
     		update_post_meta($product_id, 'maximum_order', $ticket_maximum );  //woocommerce meta key
-    		update_post_meta($product_id, '_sold_individually', $sold_tickets_individually );
+    		update_post_meta($product_id, '_sold_individually', $ticket_individually );
     
     		//add event id in product
     		update_post_meta($product_id, '_event_id', $event_id);
