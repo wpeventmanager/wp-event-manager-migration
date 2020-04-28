@@ -1,6 +1,12 @@
 <div class="wrap wp_event_manager_migration_wrap">
 	<h2><?php _e('Event Migration Mapping Form', 'wp-event-manager-migration'); ?></h2>
 
+    <?php if($migration_post_type == 'event_listing') : ?>
+    <div class="notice notice-warning">
+        <p><?php _e('While import event must be select Organizer ID and Venues ID.', 'wp-event-manager-migration'); ?></p>
+    </div>
+    <?php endif; ?>
+
 	<form method="post" class="wp-event-manager-migration-mapping-form">
 		<table class="widefat">
     		<thead>
@@ -68,6 +74,7 @@
                                         <option class="custom_field" value="custom_field" ><?php _e('Custom Field', 'wp-event-manager-migration') ?></option>
                                     </optgroup>
 								</select>
+                                <span class="wp-event-manager-migration-help-tip"></span>
             				</td>
             				<td>
             					<input type="hidden" name="custom_field[<?php echo $key; ?>]" class="migration_field_<?php echo $key; ?>" value="" />

@@ -34,7 +34,7 @@ class WP_Event_Manager_Migration_Import {
 			'event_venue'  => __( 'Venue', 'wp-event-manager-migration' ),
 		);
 
-		if(IS_ACTIVE_EVENT_MANAGER_SELL_TICKETS_PLUGIN && IS_ACTIVE_WOOCOMMERCE_PLUGIN)
+		if ( in_array('wp-event-manager/wp-event-manager.php', apply_filters('active_plugins', get_option('active_plugins'))) && in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) )
 		{
 			$post_types['product'] = __('Sell Tickets', 'wp-event-manager-migration');
 		}

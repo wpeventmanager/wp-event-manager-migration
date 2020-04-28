@@ -83,6 +83,24 @@ jQuery(document).ready(function($) {
                 $('body input.'+ field_id).attr('type', 'hidden');
             }
 
+            if(jQuery.inArray(field_val, ['_post_id', '_event_organizer_ids', '_event_venue_ids'])!='-1')
+            {
+                $(this).closest('tr').find('span.wp-event-manager-migration-help-tip').addClass('show-help-tip');
+
+                if(field_val == '_post_id')
+                {
+                    $(this).closest('tr').find('span.wp-event-manager-migration-help-tip').attr('title', event_manager_migration_admin._post_id);
+                }
+                else if(field_val == '_event_organizer_ids')
+                {
+                    $(this).closest('tr').find('span.wp-event-manager-migration-help-tip').attr('title', event_manager_migration_admin._event_organizer_ids);
+                }
+                else if(field_val == '_event_venue_ids')
+                {
+                    $(this).closest('tr').find('span.wp-event-manager-migration-help-tip').attr('title', event_manager_migration_admin._event_venue_ids);
+                }
+            }
+
             
         })
         .on( 'change', '.add_default_value', function() 

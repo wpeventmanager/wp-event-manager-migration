@@ -1,6 +1,10 @@
 <div class="wrap wp_event_manager_migration_wrap">
 	<h2><?php _e('Event Migration', 'wp-event-manager-migration'); ?></h2>
 
+	<div class="notice notice-warning">
+	    <p><?php _e('If you have separate Organizer and Venues file then first import Organizer then Venues. After import Organizer and Venues then import Event.', 'wp-event-manager-migration'); ?></p>
+	</div>
+
 	<form method="post" class="wp-event-mailchimp-migration-upload-file">
 		<table class="widefat">
 			<tr>
