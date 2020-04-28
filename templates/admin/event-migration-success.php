@@ -3,10 +3,10 @@
 
     <table class="widefat">
         <tr>
-            <th><?php echo sprintf( __( 'Total: <b>%s</b> Events Successfully Import', 'wp-event-manager-migration' ), $total_records ); ?></th>
+            <th><?php echo sprintf( __( 'Total: <b>%s</b> %s Successfully Import', 'wp-event-manager-migration' ), $total_records, $import_type_label ); ?></th>
         </tr>
         <tr>
-            <th><a href="<?php echo get_site_url(); ?>/wp-admin/admin.php?page=event-migration" class="button"><?php _e('Import new csv', 'wp-event-manager-migration'); ?></a></th>
+            <th><a href="<?php echo get_site_url(); ?>/wp-admin/admin.php?page=event-migration" class="button"><?php _e('Import new .csv or .xlsx', 'wp-event-manager-migration'); ?></a></th>
         </tr>
     </table>
 

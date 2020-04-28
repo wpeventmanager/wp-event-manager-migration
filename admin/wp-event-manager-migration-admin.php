@@ -42,7 +42,8 @@ class WP_Event_Manager_Migration_Admin {
 		wp_register_script( 'wp-event-manager-migration-admin', EVENT_MANAGER_MIGRATION_PLUGIN_URL . '/assets/js/admin-migration.js', array('jquery'), EVENT_MANAGER_MIGRATION_VERSION, true);
 		wp_localize_script( 'wp-event-manager-migration-admin', 'event_manager_migration_admin', array( 
 							'ajax_url' 	 => admin_url('admin-ajax.php'),
-							'file_type_error' => __( 'Please select csv file', 'wp-event-manager-migration'),
+							'media_box_title' => __( 'Choose .csv or .xlsx file', 'wp-event-manager-migration'),
+							'file_type_error' => __( 'Please select .csv or .xlsx file', 'wp-event-manager-migration'),
 							)
 						  );
 		
@@ -65,20 +66,25 @@ class WP_Event_Manager_Migration_Admin {
 			{
 				$file = get_attached_file($_POST['file_id']);
 
-                $csv_data = $this->import_class->get_csv_data($file);
+                $file_data = $this->import_class->get_file_data($_POST['file_type'], $file);
 
-                $csv_head_fields = array_shift($csv_data);
+                $file_head_fields = array_shift($file_data);
 
                 $migration_fields = $this->import_class->get_event_form_field_lists($_POST['migration_post_type']);
 
                 $taxonomies = get_object_taxonomies( $_POST['migration_post_type'], 'objects' );
 
+                $migration_post_type = $this->import_class->get_migration_post_type();
+                $import_type_label = $migration_post_type[$_POST['migration_post_type']];
+
                 get_event_manager_template( 
 					'event-migration-mapping-form.php', 
 					array(
 						'file_id' => $_POST['file_id'],
-						'csv_head_fields' => $csv_head_fields,
+						'file_type' => $_POST['file_type'],
+						'file_head_fields' => $file_head_fields,
 						'migration_fields' => $migration_fields,
+						'import_type_label' => $import_type_label,
 						'migration_post_type' => $_POST['migration_post_type'],
 						'taxonomies' => $taxonomies,
 					), 
@@ -101,13 +107,13 @@ class WP_Event_Manager_Migration_Admin {
 							$field = $_POST['custom_field'][$key];
 						}
 
-						$csv_field = [];
-						$csv_field['key'] = $key;
-						$csv_field['csv_field'] = $_POST['csv_field'][$key];
-						$csv_field['taxonomy'] = $_POST['taxonomy_field'][$key];
-						$csv_field['default_value'] = $_POST['default_value'][$key];
+						$file_field = [];
+						$file_field['key'] = $key;
+						$file_field['file_field'] = $_POST['file_field'][$key];
+						$file_field['taxonomy'] = $_POST['taxonomy_field'][$key];
+						$file_field['default_value'] = $_POST['default_value'][$key];
 
-						$migration_import_fields[$field] = $csv_field;
+						$migration_import_fields[$field] = $file_field;
 					}
 				}
 			}
@@ -118,15 +124,15 @@ class WP_Event_Manager_Migration_Admin {
 			{
 				$file = get_attached_file($_POST['file_id']);
 
-				$csv_data = $this->import_class->get_csv_data($file);
+				$file_data = $this->import_class->get_file_data($_POST['file_type'], $file);
 
-                $csv_head_fields = array_shift($csv_data);
-                $csv_sample_data = $csv_data[0];
+                $file_head_fields = array_shift($file_data);
+                $file_sample_data = $file_data[0];
 
                 $sample_data = [];
                 foreach ($migration_import_fields as $field_name => $field_data) 
                 {
-                	$value = ! empty( $csv_sample_data[$field_data['key']] ) ? $csv_sample_data[$field_data['key']] : $field_data['default_value'];
+                	$value = ! empty( $file_sample_data[$field_data['key']] ) ? $file_sample_data[$field_data['key']] : $field_data['default_value'];
 
                 	$sample_data[$field_name] = $value;
                 }
@@ -135,6 +141,7 @@ class WP_Event_Manager_Migration_Admin {
 					'event-migration-import.php', 
 					array(
 						'file_id' => $_POST['file_id'],
+						'file_type' => $_POST['file_type'],
 						'migration_import_fields' => $migration_import_fields,
 						'migration_post_type' => $_POST['migration_post_type'],
 						'sample_data' => $sample_data,
@@ -152,28 +159,32 @@ class WP_Event_Manager_Migration_Admin {
 
 				$file = get_attached_file($_POST['file_id']);
 
-                $csv_data = $this->import_class->get_csv_data($file);
+                $file_data = $this->import_class->get_file_data($_POST['file_type'], $file);
                 
-                $csv_head_fields = array_shift($csv_data);
+                $file_head_fields = array_shift($file_data);
 
-                if(!empty($csv_data))
+                if(!empty($file_data))
                 {
-                	for($i=0; $i < count($csv_data); $i++)
+                	for($i=0; $i < count($file_data); $i++)
                 	{
                 		$import_data = [];
                 		foreach ($migration_import_fields as $field_name => $field_date) 
 		                {
-		                	$import_data[$field_name] = $csv_data[$i][$field_date['key']];
+		                	$import_data[$field_name] = $file_data[$i][$field_date['key']];
 		                }
 
 		                $this->import_class->import_data($_POST['migration_post_type'], $import_data);
                 	}
                 }
 
+                $migration_post_type = $this->import_class->get_migration_post_type();
+                $import_type_label = $migration_post_type[$_POST['migration_post_type']];
+
                 get_event_manager_template( 
 					'event-migration-success.php', 
 					array(
-						'total_records' => count($csv_data),
+						'total_records' => count($file_data),
+						'import_type_label' => $import_type_label,
 					), 
 					'wp-event-manager-migration', 
 					EVENT_MANAGER_MIGRATION_PLUGIN_DIR . '/templates/admin/'

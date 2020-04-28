@@ -5,8 +5,8 @@
 		<table class="widefat">
     		<thead>
                 <tr>
-                    <th width="25%"><?php _e('CSV Field', 'wp-event-manager-migration' ); ?></th>
-                    <th width="25%"><?php _e('Event Field', 'wp-event-manager-migration' ); ?></th>
+                    <th width="25%"><?php _e('File Field', 'wp-event-manager-migration' ); ?></th>
+                    <th width="25%"><?php echo sprintf( __( '%s Field', 'wp-event-manager-migration' ), $import_type_label ); ?></th>
                     <th width="25%"><?php _e('Custom Field', 'wp-event-manager-migration' ); ?></th>
                     <th width="1%"><?php _e('&nbsp;', 'wp-event-manager-migration' ); ?></th>
                     <th width="24%"><?php _e('Default Value', 'wp-event-manager-migration' ); ?></th>
@@ -14,16 +14,16 @@
             </thead>
 
             <tbody>
-            	<?php if(!empty($csv_head_fields)) : ?>
-            		<?php foreach ( $csv_head_fields as $key => $head_fields ) : ?>
+            	<?php if(!empty($file_head_fields)) : ?>
+            		<?php foreach ( $file_head_fields as $key => $head_fields ) : ?>
 
             			<tr>
             				<td>
-            					<input readonly type="text" name="csv_field[<?php echo $key; ?>]" value="<?php echo $head_fields; ?>" />
+            					<input readonly type="text" name="file_field[<?php echo $key; ?>]" value="<?php echo $head_fields; ?>" />
             				</td>
             				<td>
             					<select class="migration_field" name="migration_field[<?php echo $key; ?>]" id="migration_field_<?php echo $key; ?>" data-type="text">
-									<option value=""><?php _e( 'Select Event Field', 'wp-event-manager-migration' ); ?>...</option>
+									<option value=""><?php echo sprintf( __( 'Select %s Field', 'wp-event-manager-migration' ), $import_type_label ); ?></option>
 
                                     <?php $i = 1; ?>
 									<?php foreach ( $migration_fields as $group_key => $group_fields ) : ?>
@@ -93,6 +93,7 @@
                         <input type="hidden" name="page" value="event-migration" />
                         <input type="hidden" name="migration_post_type" value="<?php echo $migration_post_type; ?>" />
                     	<input type="hidden" name="file_id" class="file_id" value="<?php echo $file_id; ?>" />
+                        <input type="hidden" name="file_type" class="file_type" value="<?php echo $file_type; ?>" />
 		        		<input type="hidden" name="action" value="mapping" />
 
                     	<input type="submit" class="button-primary" name="wp_event_manager_migration_mapping" value="<?php esc_attr_e( 'Step 2', 'wp-event-manager-migration' ); ?>" />

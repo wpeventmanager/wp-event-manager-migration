@@ -15,6 +15,8 @@ class WP_Event_Manager_Migration_Import {
 	 * @return void
 	 */
 	public function __construct() {
+		include_once ('SimpleXLSX.php');
+
 		// Ajax
 		add_action( 'wp_ajax_get_migration_terms', array( $this, 'get_migration_terms' ) );
 	}
@@ -131,6 +133,28 @@ class WP_Event_Manager_Migration_Import {
 		return $fields;		
 	}
 
+		/**
+	 * get_file_data function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function get_file_data($type, $file) {
+
+		$file_data = [];
+
+		if($type == 'csv')
+		{
+			$file_data = $this->get_csv_data($file);
+		}
+		else if($type == 'xlsx')
+		{
+			$file_data = $this->get_xlsx_data($file);
+		}
+
+		return $file_data;		
+	}
+
 	/**
 	 * get_csv_data function.
 	 *
@@ -148,6 +172,25 @@ class WP_Event_Manager_Migration_Import {
 		}
 
 		return $csv_data;		
+	}
+
+		/**
+	 * get_xlsx_data function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function get_xlsx_data($file) {
+
+		$xlsx_data = [];
+
+		if ( $xlsx = SimpleXLSX::parse($file) ) {
+			$xlsx_data = $xlsx->rows();
+		} else {
+			echo SimpleXLSX::parseError();
+		}
+
+		return $xlsx_data;		
 	}
 
 	/**

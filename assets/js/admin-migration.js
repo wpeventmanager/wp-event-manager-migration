@@ -3,7 +3,7 @@ jQuery(document).ready(function($) {
 	$('.wp-event-mailchimp-migration-upload-file')
 		.on( 'click', '.upload-file', function() {
 			var upload = wp.media({
-	            title: 'Choose CSV File', /*Title for Media Box*/
+	            title: event_manager_migration_admin.media_box_title, /*Title for Media Box*/
 	            multiple: false /*For limiting multiple image*/
 	        })
             .on('select', function ()
@@ -11,15 +11,19 @@ jQuery(document).ready(function($) {
                 var select = upload.state().get('selection');
                 var attach = select.first().toJSON();
 
-                //console.log(attach);
+                var file = attach.filename;
 
-                if (attach.subtype == 'csv')
+                var extension = file.substr( (file.lastIndexOf('.') +1) );
+
+                //console.log(extension);
+
+                if(jQuery.inArray(extension, ['csv', 'xlsx'])!='-1')
                 {
                     $('span.response_message').removeClass('error');
 
                     $('span.response_message').html(attach.filename);
                     $('input.file_id').attr('value', attach.id);
-                    $('input.file_type').attr('value', attach.subtype);
+                    $('input.file_type').attr('value', extension);
                     $('input[name="wp_event_manager_migration_upload"]').attr('type', 'submit');
                 } else
                 {
