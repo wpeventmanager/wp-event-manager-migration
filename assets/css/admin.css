@@ -1,7 +1,7 @@
-.wp-event-mailchimp-migration-upload-file span.response_message{
+.wp-event-manager-migration-upload-file span.response_message{
     color: green;
 }
-.wp-event-mailchimp-migration-upload-file span.error{
+.wp-event-manager-migration-upload-file span.error{
     color: red;
 }
 

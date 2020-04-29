@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
 
-	$('.wp-event-mailchimp-migration-upload-file')
+	$('.wp-event-manager-migration-upload-file')
 		.on( 'click', '.upload-file', function() {
 			var upload = wp.media({
 	            title: event_manager_migration_admin.media_box_title, /*Title for Media Box*/

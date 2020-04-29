@@ -26,6 +26,7 @@ class WP_Event_Manager_Migration_Admin {
 	/**
 	 * admin_menu function.
 	 *
+	 * @since 1.0
 	 * @access public
 	 * @return void
 	 */
@@ -37,9 +38,9 @@ class WP_Event_Manager_Migration_Admin {
 	 * Enqueue admin scripts
 	 */
 	public function admin_enqueue_scripts() {
-		wp_enqueue_style( 'wp-event-manager-integration-admin', EVENT_MANAGER_MIGRATION_PLUGIN_URL . '/assets/css/admin.css', '', EVENT_MANAGER_MIGRATION_VERSION );
+		wp_enqueue_style( 'wp-event-manager-integration-admin', EVENT_MANAGER_MIGRATION_PLUGIN_URL . '/assets/css/admin.min.css', '', EVENT_MANAGER_MIGRATION_VERSION );
 
-		wp_register_script( 'wp-event-manager-migration-admin', EVENT_MANAGER_MIGRATION_PLUGIN_URL . '/assets/js/admin-migration.js', array('jquery'), EVENT_MANAGER_MIGRATION_VERSION, true);
+		wp_register_script( 'wp-event-manager-migration-admin', EVENT_MANAGER_MIGRATION_PLUGIN_URL . '/assets/js/admin-migration.min.js', array('jquery'), EVENT_MANAGER_MIGRATION_VERSION, true);
 		wp_localize_script( 'wp-event-manager-migration-admin', 'event_manager_migration_admin', array( 
 							'ajax_url' 	 => admin_url('admin-ajax.php'),
 							'media_box_title' => __( 'Choose .csv or .xlsx file', 'wp-event-manager-migration'),
@@ -56,6 +57,7 @@ class WP_Event_Manager_Migration_Admin {
 	/**
 	 * event_migration function.
 	 *
+	 * @since 1.0
 	 * @access public
 	 * @return void
 	 */

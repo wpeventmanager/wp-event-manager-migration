@@ -15,8 +15,8 @@ class WP_Event_Manager_Migration_Import {
 	 * @return void
 	 */
 	public function __construct() {
-		include_once ('SimpleXLSX.php');
-
+		include_once ('lib/simple-xlsx.php');
+		
 		// Ajax
 		add_action( 'wp_ajax_get_migration_terms', array( $this, 'get_migration_terms' ) );
 	}
@@ -24,8 +24,9 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * get_event_form_field_lists function.
 	 *
+	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function get_migration_post_type() {
 		$post_types = array(
@@ -45,6 +46,7 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * get_migration_terms function.
 	 *
+	 * @since 1.0
 	 * @access public
 	 * @return void
 	 */
@@ -72,8 +74,9 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * get_event_form_field_lists function.
 	 *
+	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function get_event_form_field_lists($post_type) {
 
@@ -133,11 +136,12 @@ class WP_Event_Manager_Migration_Import {
 		return $fields;		
 	}
 
-		/**
+	/**
 	 * get_file_data function.
 	 *
+	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function get_file_data($type, $file) {
 
@@ -158,8 +162,9 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * get_csv_data function.
 	 *
+	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function get_csv_data($file) {
 
@@ -174,11 +179,12 @@ class WP_Event_Manager_Migration_Import {
 		return $csv_data;		
 	}
 
-		/**
+	/**
 	 * get_xlsx_data function.
 	 *
+	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function get_xlsx_data($file) {
 
@@ -196,6 +202,7 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_data function.
 	 *
+	 * @since 1.0
 	 * @access public
 	 * @return void
 	 */
@@ -293,6 +300,7 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_event function.
 	 *
+	 * @since 1.0
 	 * @access public
 	 * @return void
 	 */
@@ -466,6 +474,7 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_organizer function.
 	 *
+	 * @since 1.0
 	 * @access public
 	 * @return void
 	 */
@@ -529,6 +538,7 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_venue function.
 	 *
+	 * @since 1.0
 	 * @access public
 	 * @return void
 	 */
@@ -594,6 +604,7 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_ticket function.
 	 *
+	 * @since 1.0
 	 * @access public
 	 * @return void
 	 */
@@ -752,8 +763,9 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * upload_image function.
 	 *
+	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function upload_image($url) {
     	$arrData = [];
@@ -819,8 +831,9 @@ class WP_Event_Manager_Migration_Import {
     /**
 	 * image_exists function.
 	 *
+	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @return boolean
 	 */
     public function image_exists($url) {
 		$response = wp_remote_post($url);
@@ -833,8 +846,9 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * image_exists function.
 	 *
+	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
     public function get_migration_id($post_type, $arrID) {
 		global $wpdb;
@@ -864,8 +878,14 @@ class WP_Event_Manager_Migration_Import {
 
 	}
 
-
-	public static function event_listing_sell_tickets_fields() {
+	/**
+	 * event_listing_sell_tickets_fields function.
+	 *
+	 * @since 1.0
+	 * @access public
+	 * @return array
+	 */
+	public function event_listing_sell_tickets_fields() {
 		 
 		$fields = array(
 				'tickets' => array(  //fields attribute must
