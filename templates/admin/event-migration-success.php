@@ -1,4 +1,4 @@
-<div class="wrap wp_event_manager_migration_wrap">
+<div class="wrap wp-event-manager-migration-wrap">
 	<h2><?php _e('Event Migration Successfully', 'wp-event-manager-migration'); ?></h2>
 
     <table class="widefat">

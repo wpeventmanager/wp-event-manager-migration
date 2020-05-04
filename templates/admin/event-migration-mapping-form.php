@@ -1,4 +1,4 @@
-<div class="wrap wp_event_manager_migration_wrap">
+<div class="wrap wp-event-manager-migration-wrap">
 	<h2><?php _e('Event Migration Mapping Form', 'wp-event-manager-migration'); ?></h2>
 
     <?php if($migration_post_type == 'event_listing') : ?>
