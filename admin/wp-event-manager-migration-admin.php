@@ -26,16 +26,22 @@ class WP_Event_Manager_Migration_Admin {
 	/**
 	 * admin_menu function.
 	 *
-	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @param 
+	 * @return 
+	 * @since 1.0
 	 */
 	public function admin_menu() {
 		add_menu_page( __('Event Migration', 'wp-event-manager-migration'), __('Event Migration', 'wp-event-manager-migration'), 'manage_options', 'event-migration', [$this, 'event_migration'], 'dashicons-upload', 30);
 	}
 
 	/**
-	 * Enqueue admin scripts
+	 * admin_enqueue_scripts function.
+	 *
+	 * @access public
+	 * @param 
+	 * @return 
+	 * @since 1.0
 	 */
 	public function admin_enqueue_scripts() {
 		wp_enqueue_style( 'wp-event-manager-integration-admin', EVENT_MANAGER_MIGRATION_PLUGIN_URL . '/assets/css/admin.min.css', '', EVENT_MANAGER_MIGRATION_VERSION );
@@ -57,9 +63,10 @@ class WP_Event_Manager_Migration_Admin {
 	/**
 	 * event_migration function.
 	 *
-	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @param 
+	 * @return
+	 * @since 1.0
 	 */
 	public function event_migration() {
 		global $wpdb;

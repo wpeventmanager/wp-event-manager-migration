@@ -22,11 +22,12 @@ class WP_Event_Manager_Migration_Import {
 	}
 
 	/**
-	 * get_event_form_field_lists function.
+	 * get_migration_post_type function.
 	 *
-	 * @since 1.0
 	 * @access public
+	 * @param $post_type
 	 * @return array
+	 * @since 1.0
 	 */
 	public function get_migration_post_type() {
 		$post_types = array(
@@ -46,9 +47,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * get_migration_terms function.
 	 *
-	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @param $post_type
+	 * @return 
+	 * @since 1.0
 	 */
 	public function get_migration_terms() {
 
@@ -74,9 +76,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * get_event_form_field_lists function.
 	 *
-	 * @since 1.0
 	 * @access public
+	 * @param $post_type
 	 * @return array
+	 * @since 1.0
 	 */
 	public function get_event_form_field_lists($post_type) {
 
@@ -139,9 +142,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * get_file_data function.
 	 *
-	 * @since 1.0
 	 * @access public
+	 * @param $type, $file
 	 * @return array
+	 * @since 1.0
 	 */
 	public function get_file_data($type, $file) {
 
@@ -162,9 +166,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * get_csv_data function.
 	 *
-	 * @since 1.0
 	 * @access public
+	 * @param $file
 	 * @return array
+	 * @since 1.0
 	 */
 	public function get_csv_data($file) {
 
@@ -182,9 +187,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * get_xlsx_data function.
 	 *
-	 * @since 1.0
 	 * @access public
+	 * @param $file
 	 * @return array
+	 * @since 1.0
 	 */
 	public function get_xlsx_data($file) {
 
@@ -202,9 +208,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_data function.
 	 *
-	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @param $post_type, $params
+	 * @return 
+	 * @since 1.0
 	 */
 	public function import_data($post_type, $params) {
 
@@ -300,9 +307,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_event function.
 	 *
-	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @param $post_id, $post_type, $params
+	 * @return 
+	 * @since 1.0
 	 */
 	public function import_event($post_id, $post_type, $params) {
 		
@@ -474,9 +482,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_organizer function.
 	 *
-	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @param $post_id, $post_type, $params
+	 * @return 
+	 * @since 1.0
 	 */
 	public function import_organizer($post_id, $post_type, $params) {
 		
@@ -538,9 +547,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_venue function.
 	 *
-	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @param $post_id, $post_type, $params
+	 * @return 
+	 * @since 1.0
 	 */
 	public function import_venue($post_id, $post_type, $params) {
 		
@@ -604,9 +614,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * import_ticket function.
 	 *
-	 * @since 1.0
 	 * @access public
-	 * @return void
+	 * @param $post_id, $post_type, $params
+	 * @return 
+	 * @since 1.0
 	 */
 	public function import_ticket($post_id, $post_type, $params) {
 		
@@ -763,9 +774,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * upload_image function.
 	 *
-	 * @since 1.0
 	 * @access public
+	 * @param $url
 	 * @return array
+	 * @since 1.0
 	 */
 	public function upload_image($url) {
     	$arrData = [];
@@ -831,9 +843,10 @@ class WP_Event_Manager_Migration_Import {
     /**
 	 * image_exists function.
 	 *
-	 * @since 1.0
 	 * @access public
-	 * @return boolean
+	 * @param $url
+	 * @return boolen
+	 * @since 1.0
 	 */
     public function image_exists($url) {
 		$response = wp_remote_post($url);
@@ -844,11 +857,12 @@ class WP_Event_Manager_Migration_Import {
 	}
 
 	/**
-	 * image_exists function.
+	 * get_migration_id function.
 	 *
-	 * @since 1.0
 	 * @access public
+	 * @param $post_type, $arrID
 	 * @return array
+	 * @since 1.0
 	 */
     public function get_migration_id($post_type, $arrID) {
 		global $wpdb;
@@ -881,9 +895,10 @@ class WP_Event_Manager_Migration_Import {
 	/**
 	 * event_listing_sell_tickets_fields function.
 	 *
-	 * @since 1.0
 	 * @access public
+	 * @param $post_type
 	 * @return array
+	 * @since 1.0
 	 */
 	public function event_listing_sell_tickets_fields() {
 		 
