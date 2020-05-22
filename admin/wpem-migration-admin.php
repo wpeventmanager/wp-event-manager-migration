@@ -15,7 +15,7 @@ class WPEM_Migration_Admin {
 	 * @return void
 	 */
 	public function __construct() {
-		include ('wp-event-manager-migration-import.php');		
+		include ('wpem-migration-import.php');		
 
 		add_action( 'admin_menu', array( $this, 'admin_menu' ), 12 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -44,9 +44,9 @@ class WPEM_Migration_Admin {
 	 * @since 1.0
 	 */
 	public function admin_enqueue_scripts() {
-		wp_enqueue_style( 'wp-event-manager-integration-admin', EVENT_MANAGER_MIGRATION_PLUGIN_URL . '/assets/css/admin.min.css', '', EVENT_MANAGER_MIGRATION_VERSION );
+		wp_enqueue_style( 'wp-event-manager-integration-admin', WPEM_MIGRATION_PLUGIN_URL . '/assets/css/admin.min.css', '', WPEM_MIGRATION_VERSION );
 
-		wp_register_script( 'wp-event-manager-migration-admin', EVENT_MANAGER_MIGRATION_PLUGIN_URL . '/assets/js/admin-migration.js', array('jquery'), EVENT_MANAGER_MIGRATION_VERSION, true);
+		wp_register_script( 'wp-event-manager-migration-admin', WPEM_MIGRATION_PLUGIN_URL . '/assets/js/admin-migration.js', array('jquery'), WPEM_MIGRATION_VERSION, true);
 		wp_localize_script( 'wp-event-manager-migration-admin', 'event_manager_migration_admin', array( 
 							'ajax_url' 	 => admin_url('admin-ajax.php'),
 							'media_box_title' => __( 'Choose .csv or .xlsx file', 'wp-event-manager-migration'),
@@ -101,7 +101,7 @@ class WPEM_Migration_Admin {
 						'taxonomies' => $taxonomies,
 					), 
 					'wp-event-manager-migration', 
-					EVENT_MANAGER_MIGRATION_PLUGIN_DIR . '/templates/admin/'
+					WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
 				);
 			}
 		}
@@ -159,7 +159,7 @@ class WPEM_Migration_Admin {
 						'sample_data' => $sample_data,
 					), 
 					'wp-event-manager-migration', 
-					EVENT_MANAGER_MIGRATION_PLUGIN_DIR . '/templates/admin/'
+					WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
 				);
 			}
 		}
@@ -199,7 +199,7 @@ class WPEM_Migration_Admin {
 						'import_type_label' => $import_type_label,
 					), 
 					'wp-event-manager-migration', 
-					EVENT_MANAGER_MIGRATION_PLUGIN_DIR . '/templates/admin/'
+					WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
 				);
 
                 
@@ -226,7 +226,7 @@ class WPEM_Migration_Admin {
 					'migration_post_type' => $migration_post_type,
 				), 
 				'wp-event-manager-migration', 
-				EVENT_MANAGER_MIGRATION_PLUGIN_DIR . '/templates/admin/'
+				WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
 			);
 		}
 	}

@@ -70,12 +70,12 @@ class WPEM_Migration {
 	 */
 	public function __construct() {
 		// Define constants
-		define( 'EVENT_MANAGER_MIGRATION_VERSION', '1.0' );
-		define( 'EVENT_MANAGER_MIGRATION_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
-		define( 'EVENT_MANAGER_MIGRATION_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
+		define( 'WPEM_MIGRATION_VERSION', '1.0' );
+		define( 'WPEM_MIGRATION_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
+		define( 'WPEM_MIGRATION_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
 		
 		if ( is_admin() ) {
-			include( 'admin/wp-event-manager-migration-admin.php' );
+			include( 'admin/wpem-migration-admin.php' );
 		}
 		
 		// Actions
