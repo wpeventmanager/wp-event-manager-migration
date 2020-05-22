@@ -4,9 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WP_Event_Manager_Migration_Import class.
+ * WPEM_Migration_Import class.
  */
-class WP_Event_Manager_Migration_Import {
+class WPEM_Migration_Import {
 
 	/**
 	 * __construct function.
@@ -1044,4 +1044,4 @@ class WP_Event_Manager_Migration_Import {
 
 }
 
-new WP_Event_Manager_Migration_Import();
+new WPEM_Migration_Import();

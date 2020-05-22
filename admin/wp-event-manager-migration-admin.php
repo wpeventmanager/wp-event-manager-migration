@@ -4,9 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WP_Event_Manager_Migration_Admin class.
+ * WPEM_Migration_Admin class.
  */
-class WP_Event_Manager_Migration_Admin {
+class WPEM_Migration_Admin {
 
 	/**
 	 * __construct function.
@@ -20,7 +20,7 @@ class WP_Event_Manager_Migration_Admin {
 		add_action( 'admin_menu', array( $this, 'admin_menu' ), 12 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
-		$this->import_class = new WP_Event_Manager_Migration_Import();
+		$this->import_class = new WPEM_Migration_Import();
 	}
 
 	/**
@@ -233,4 +233,4 @@ class WP_Event_Manager_Migration_Admin {
 
 }
 
-new WP_Event_Manager_Migration_Admin();
+new WPEM_Migration_Admin();

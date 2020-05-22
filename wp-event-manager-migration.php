@@ -35,10 +35,35 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WP_Event_Manager class.
+ * WPEM_Migration class.
  */
 
-class WP_Event_Manager_Migration {
+class WPEM_Migration {
+
+	/**
+	 * The single instance of the class.
+	 *
+	 * @var self
+	 * @since  1.0
+	 */
+	private static $_instance = null;
+
+	/**
+	 * Main WP Event Manager Migration Instance.
+	 *
+	 * Ensures only one instance of WP Event Manager Migration is loaded or can be loaded.
+	 *
+	 * @since  1.0
+	 * @static
+	 * @see WPEM_Migration()
+	 * @return self Main instance.
+	 */
+	public static function instance() {
+		if ( is_null( self::$_instance ) ) {
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
 
 	/**
 	 * Constructor - get the plugin hooked in and ready
@@ -73,4 +98,15 @@ class WP_Event_Manager_Migration {
 
 }
 
-$GLOBALS['event_manager_migration'] = new WP_Event_Manager_Migration();
+/**
+ * Main instance of WP Event Manager Migration.
+ *
+ * Returns the main instance of WP Event Manager Migration to prevent the need to use globals.
+ *
+ * @since  1.0
+ * @return WPEM_Migration
+ */
+function WPEM_Migration() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName
+	return WPEM_Migration::instance();
+}
+$GLOBALS['event_manager_migration'] =  WPEM_Migration();
