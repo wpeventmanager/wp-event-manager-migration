@@ -1,148 +1,218 @@
-jQuery(document).ready(function($) {
+var AdminMigration = function () {
 
-	$('.wp-event-manager-migration-upload-file')
-		.on( 'click', '.upload-file', function() {
-			var upload = wp.media({
-	            title: event_manager_migration_admin.media_box_title, /*Title for Media Box*/
-	            multiple: false /*For limiting multiple image*/
-	        })
-            .on('select', function ()
-            {
-                var select = upload.state().get('selection');
-                var attach = select.first().toJSON();
+    return {
 
-                var file = attach.filename;
-
-                var extension = file.substr( (file.lastIndexOf('.') +1) );
-
-                //console.log(extension);
-
-                if(jQuery.inArray(extension, ['csv', 'xlsx'])!='-1')
-                {
-                    $('span.response_message').removeClass('error');
-
-                    $('span.response_message').html(attach.filename);
-                    $('input.file_id').attr('value', attach.id);
-                    $('input.file_type').attr('value', extension);
-                    $('input[name="wp_event_manager_migration_upload"]').attr('type', 'submit');
-                } else
-                {
-                    $('span.response_message').addClass('error');
-                    $('input.file_id').attr('value', '');
-                    $('input.file_type').attr('value', '');
-                    $('span.response_message').html(event_manager_migration_admin.file_type_error);
-                    $('input[name="wp_event_manager_migration_upload"]').attr('type', 'button');
-                }
-            })
-            .open();
-		})
-        .on( 'click', 'input[type="button"]', function() {
-            $('span.response_message').addClass('error');
-            $('span.response_message').html(event_manager_migration_admin.file_type_error);
-        });
-
-
-    $('.wp-event-manager-migration-mapping-form')
-        .on( 'change', '.migration_field', function() 
-        {  
-            var field_val = $(this).val();            
-            var field_id = $(this).attr('id');
-            var field_type = $(this).find("option:selected").attr('class');
-
-            $(this).attr( "data-type", field_type );
-            $(this).attr( "data-val", field_val );
-
-            if($(this).closest('tr').find('.add_default_value').prop("checked") == true)
-            {
-                $(this).closest('tr').find('.add_default_value').prop('checked', false);
-
-                $(this).closest('tr').find('select[class*="default_value_"]').html('');
-                $(this).closest('tr').find('select[class*="default_value_"]').hide();
-                
-                $(this).closest('tr').find('input[class*="default_value_"]').val('');
-                $(this).closest('tr').find('input[class*="default_value_"]').attr('type', 'hidden');
-            }
-
-
-            $('body input.'+ field_id).val('');
-            $('body input.'+ field_id).attr('type', 'hidden');
-            $(this).closest('tr').find('input[class*="taxonomy_field_"]').val('');
-
-            if(field_type == 'custom_field')
-            {
-                $('body input.'+ field_id).val('');
-                $('body input.'+ field_id).attr('type', 'text');
-            }
-            else if(field_type == 'taxonomy')
-            {
-                $(this).closest('tr').find('input[class*="taxonomy_field_"]').val(field_val);
-            }
-            else
-            {
-                $('body input.'+ field_id).val(field_val);
-                $('body input.'+ field_id).attr('type', 'hidden');
-            }
-
-            if(jQuery.inArray(field_val, ['_post_id', '_event_organizer_ids', '_event_venue_ids'])!='-1')
-            {
-                $(this).closest('tr').find('span.wp-event-manager-migration-help-tip').addClass('show-help-tip');
-
-                if(field_val == '_post_id')
-                {
-                    $(this).closest('tr').find('span.wp-event-manager-migration-help-tip').attr('title', event_manager_migration_admin._post_id);
-                }
-                else if(field_val == '_event_organizer_ids')
-                {
-                    $(this).closest('tr').find('span.wp-event-manager-migration-help-tip').attr('title', event_manager_migration_admin._event_organizer_ids);
-                }
-                else if(field_val == '_event_venue_ids')
-                {
-                    $(this).closest('tr').find('span.wp-event-manager-migration-help-tip').attr('title', event_manager_migration_admin._event_venue_ids);
-                }
-            }
-
-            
-        })
-        .on( 'change', '.add_default_value', function() 
+        init: function() 
         {
-            var migration_field_type = $(this).closest('tr').find('.migration_field').attr('data-type');
-            var migration_field_val = $(this).closest('tr').find('.migration_field').attr('data-val');
+            jQuery( 'body' ).on('click', '.wp-event-manager-migration-upload-file input[type="button"]', AdminMigration.actions.checkFile);
+            jQuery( 'body' ).on('click', '.wp-event-manager-migration-upload-file .upload-file', AdminMigration.actions.uploadFile);
 
-            var field_id = $(this).attr('id');
+            jQuery( 'body' ).on('change', '.wp-event-manager-migration-mapping-form .migration-field', AdminMigration.actions.selectDataField);
+            jQuery( 'body' ).on('click', '.wp-event-manager-migration-mapping-form .add-default-value', AdminMigration.actions.addDefaultValue);
+            jQuery( 'body' ).on('change', '.wp-event-manager-migration-mapping-form select[class*="default_value_"]', AdminMigration.actions.selectDefaultValue);
+        },
 
-            if($(this).prop("checked") == true)
+
+        actions:
+        {
+            /**
+             * checkFile function.
+             *
+             * @access public
+             * @param 
+             * @return 
+             * @since 1.0
+             */
+            checkFile: function (e) 
             {
-                $('body input.'+ field_id).val('');
+                jQuery('span.response-message').addClass('error');
+                jQuery('span.response-message').html(event_manager_migration_admin.file_type_error);
+            },
 
-                if(migration_field_type == 'taxonomy')
+            /**
+             * uploadFile function.
+             *
+             * @access public
+             * @param 
+             * @return 
+             * @since 1.0
+             */
+            uploadFile: function (e) 
+            {
+                var upload = wp.media({
+                    title: event_manager_migration_admin.media_box_title, /*Title for Media Box*/
+                    multiple: false /*For limiting multiple image*/
+                })
+                .on('select', function ()
                 {
-                    $('body select.'+ field_id).show();
+                    var select = upload.state().get('selection');
+                    var attach = select.first().toJSON();
 
-                    var data = {
-                        action: 'get_migration_terms',
-                        taxonomy: migration_field_val,
-                    };
-                    $.post( event_manager_migration_admin.ajax_url, data, function( response ) {
-                        $('body select.'+ field_id).html(response);
-                    },'html');
+                    var file = attach.filename;
+
+                    var extension = file.substr( (file.lastIndexOf('.') +1) );
+
+                    //console.log(extension);
+
+                    if(jQuery.inArray(extension, ['csv', 'xlsx'])!='-1')
+                    {
+                        jQuery('span.response-message').removeClass('error');
+
+                        jQuery('span.response-message').html(attach.filename);
+                        jQuery('input#file_id').attr('value', attach.id);
+                        jQuery('input#file_type').attr('value', extension);
+                        jQuery('input[name="wp_event_manager_migration_upload"]').attr('type', 'submit');
+                    } else
+                    {
+                        jQuery('span.response-message').addClass('error');
+                        jQuery('input#file_id').attr('value', '');
+                        jQuery('input#file_type').attr('value', '');
+                        jQuery('span.response-message').html(event_manager_migration_admin.file_type_error);
+                        jQuery('input[name="wp_event_manager_migration_upload"]').attr('type', 'button');
+                    }
+                })
+                .open();
+            },
+
+            /**
+             * selectDataField function.
+             *
+             * @access public
+             * @param 
+             * @return 
+             * @since 1.0
+             */
+            selectDataField: function (e) 
+            {   
+                var field_val = jQuery(e.target).val();            
+                var field_id = jQuery(e.target).attr('id');
+                var field_type = jQuery(e.target).find("option:selected").attr('class');
+
+                jQuery(e.target).attr( "data-type", field_type );
+                jQuery(e.target).attr( "data-val", field_val );
+
+                if(jQuery(e.target).closest('tr').find('.add-default-value').prop("checked") == true)
+                {
+                    jQuery(e.target).closest('tr').find('.add-default-value').prop('checked', false);
+
+                    jQuery(e.target).closest('tr').find('select[class*="default_value_"]').html('');
+                    jQuery(e.target).closest('tr').find('select[class*="default_value_"]').hide();
+                    
+                    jQuery(e.target).closest('tr').find('input[class*="default_value_"]').val('');
+                    jQuery(e.target).closest('tr').find('input[class*="default_value_"]').attr('type', 'hidden');
+                }
+
+
+                jQuery('body input.'+ field_id).val('');
+                jQuery('body input.'+ field_id).attr('type', 'hidden');
+                jQuery(e.target).closest('tr').find('input[class*="taxonomy_field_"]').val('');
+
+                if(field_type == 'custom-field')
+                {
+                    jQuery('body input.'+ field_id).val('');
+                    jQuery('body input.'+ field_id).attr('type', 'text');
+                }
+                else if(field_type == 'taxonomy')
+                {
+                    jQuery(e.target).closest('tr').find('input[class*="taxonomy_field_"]').val(field_val);
                 }
                 else
                 {
-                    $('body input.'+ field_id).attr('type', 'text');
-                }                
-            }
-            else
+                    jQuery('body input.'+ field_id).val(field_val);
+                    jQuery('body input.'+ field_id).attr('type', 'hidden');
+                }
+
+                if(jQuery.inArray(field_val, ['_post_id', '_event_organizer_ids', '_event_venue_ids'])!='-1')
+                {
+                    jQuery(e.target).closest('tr').find('span.wp-event-manager-migration-help-tip').addClass('show-help-tip');
+
+                    if(field_val == '_post_id')
+                    {
+                        jQuery(e.target).closest('tr').find('span.wp-event-manager-migration-help-tip').attr('title', event_manager_migration_admin._post_id);
+                    }
+                    else if(field_val == '_event_organizer_ids')
+                    {
+                        jQuery(e.target).closest('tr').find('span.wp-event-manager-migration-help-tip').attr('title', event_manager_migration_admin._event_organizer_ids);
+                    }
+                    else if(field_val == '_event_venue_ids')
+                    {
+                        jQuery(e.target).closest('tr').find('span.wp-event-manager-migration-help-tip').attr('title', event_manager_migration_admin._event_venue_ids);
+                    }
+                }
+            },
+
+            /**
+             * addDefaultValue function.
+             *
+             * @access public
+             * @param 
+             * @return 
+             * @since 1.0
+             */
+            addDefaultValue: function (e) 
             {
-                $('body input.'+ field_id).val('');
-                $('body input.'+ field_id).attr('type', 'hidden');
-            }
-        })
-        .on( 'change', 'select[class*="default_value_"]', function() 
-        {
-            var field_class = $(this).attr('class');
-            var field_val = $(this).val();
+                var migration_field_type = jQuery(e.target).closest('tr').find('.migration-field').attr('data-type');
+                var migration_field_val = jQuery(e.target).closest('tr').find('.migration-field').attr('data-val');
 
-            $('body input.'+ field_class).val(field_val);
-        });
+                var field_id = jQuery(e.target).attr('id');
 
+                if(jQuery(e.target).prop("checked") == true)
+                {
+                    jQuery('body input.'+ field_id).val('');
+
+                    if(migration_field_type == 'taxonomy')
+                    {
+                        jQuery('body select.'+ field_id).show();
+
+                        var data = {
+                            action: 'get_migration_terms',
+                            taxonomy: migration_field_val,
+                        };
+                        jQuery.post( event_manager_migration_admin.ajax_url, data, function( response ) {
+                            jQuery('body select.'+ field_id).html(response);
+                        },'html');
+                    }
+                    else
+                    {
+                        jQuery('body input.'+ field_id).attr('type', 'text');
+                    }                
+                }
+                else
+                {
+                    jQuery('body input.'+ field_id).val('');
+                    jQuery('body input.'+ field_id).attr('type', 'hidden');
+
+                    jQuery('body select.'+ field_id).html('');
+                    jQuery('body select.'+ field_id).hide();
+                }
+            },
+
+            /**
+             * selectDefaultValue function.
+             *
+             * @access public
+             * @param 
+             * @return 
+             * @since 1.0
+             */
+            selectDefaultValue: function (e) 
+            {
+                var field_class = jQuery(e.target).attr('class');
+                var field_val = jQuery(e.target).val();
+
+                jQuery('body input.'+ field_class).val(field_val);
+            },
+
+        
+        } /* end of action */
+
+    }; /* enf of return */
+
+}; /* end of class */
+
+AdminMigration = AdminMigration();
+
+jQuery(document).ready(function($) 
+{
+   AdminMigration.init();
 });

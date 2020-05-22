@@ -11,15 +11,15 @@
 		        <th><?php _e('Choose File', 'wp-event-manager-migration' ); ?></th>
 		        <td>
 					<a href="javascript:void(0)" class="upload-file"><?php _e('Upload .csv or .xlsx file', 'wp-event-manager-migration' ); ?></a>
-					<span class="response_message"></span>
-					<input type="hidden" name="file_id" class="file_id" value="" />
-					<input type="hidden" name="file_type" class="file_type" value="" />
+					<span class="response-message"></span>
+					<input type="hidden" name="file_id" id="file_id" value="" />
+					<input type="hidden" name="file_type" id="file_type" value="" />
 		        </td>
 		    </tr>
 		    <tr>
 		        <th><?php _e('Content Type', 'wp-event-manager-migration' ); ?></th>
 		        <td>
-					<select class="migration_post_type" name="migration_post_type">
+					<select id="migration_post_type" name="migration_post_type">
 						<?php foreach ( $migration_post_type as $name => $label ) : ?>
 							<option value="<?php echo esc_attr( $name ); ?>" ><?php echo esc_html( $label ); ?></option>
 						<?php endforeach; ?>

@@ -28,7 +28,7 @@
             					<input readonly type="text" name="file_field[<?php echo $key; ?>]" value="<?php echo $head_fields; ?>" />
             				</td>
             				<td>
-            					<select class="migration_field" name="migration_field[<?php echo $key; ?>]" id="migration_field_<?php echo $key; ?>" data-type="text">
+            					<select class="migration-field" name="migration_field[<?php echo $key; ?>]" id="migration_field_<?php echo $key; ?>" data-type="text">
 									<option value=""><?php echo sprintf( __( 'Select %s Field', 'wp-event-manager-migration' ), $import_type_label ); ?></option>
 
                                     <?php $i = 1; ?>
@@ -71,7 +71,7 @@
                                     <?php endif; ?>
 
                                     <optgroup label="<?php _e('Other', 'wp-event-manager-migration') ?>">
-                                        <option class="custom_field" value="custom_field" ><?php _e('Custom Field', 'wp-event-manager-migration') ?></option>
+                                        <option class="custom-field" value="custom_field" ><?php _e('Custom Field', 'wp-event-manager-migration') ?></option>
                                     </optgroup>
 								</select>
                                 <span class="wp-event-manager-migration-help-tip"></span>
@@ -81,7 +81,7 @@
                                 <input type="hidden" name="taxonomy_field[<?php echo $key; ?>]" class="taxonomy_field_<?php echo $key; ?>" value="" />
             				</td>
                             <td>
-                                <input type="checkbox" class="add_default_value" id="default_value_<?php echo $key; ?>">
+                                <input type="checkbox" class="add-default-value" id="default_value_<?php echo $key; ?>">
                             </td>
                             <td>
                                 <input type="hidden" name="default_value[<?php echo $key; ?>]" class="default_value_<?php echo $key; ?>" value="" />
@@ -99,8 +99,8 @@
                     <td colspan="4">
                         <input type="hidden" name="page" value="event-migration" />
                         <input type="hidden" name="migration_post_type" value="<?php echo $migration_post_type; ?>" />
-                    	<input type="hidden" name="file_id" class="file_id" value="<?php echo $file_id; ?>" />
-                        <input type="hidden" name="file_type" class="file_type" value="<?php echo $file_type; ?>" />
+                    	<input type="hidden" name="file_id" id="file_id" value="<?php echo $file_id; ?>" />
+                        <input type="hidden" name="file_type" id="file_type" value="<?php echo $file_type; ?>" />
 		        		<input type="hidden" name="action" value="mapping" />
 
                     	<input type="submit" class="button-primary" name="wp_event_manager_migration_mapping" value="<?php esc_attr_e( 'Step 2', 'wp-event-manager-migration' ); ?>" />
