@@ -74,17 +74,58 @@ class WPEM_Migration {
 		define( 'WPEM_MIGRATION_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 		define( 'WPEM_MIGRATION_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
 		
+		include( 'includes/wpem-migration-install.php' );
+
 		if ( is_admin() ) {
 			include( 'admin/wpem-migration-admin.php' );
 		}
+
+		// Activation - works with symlinks
+		register_activation_hook( basename( dirname( __FILE__ ) ) . '/' . basename( __FILE__ ), array( $this, 'activate' ) );
 		
 		// Actions
-		add_action( 'after_setup_theme', array( $this, 'load_plugin_textdomain' ) );	
+		add_action( 'after_setup_theme', array( $this, 'load_plugin_textdomain' ) );
+
+		add_action( 'admin_init', array( $this, 'updater' ) );
 	}
 
 	/**
-	 * Localisation
-	 */
+     * activate function.
+     *
+     * @access public
+     * @param 
+     * @return 
+     * @since 1.0
+     */
+	public function activate() {
+
+		WPEM_Migration_Install::install();
+	}
+
+	/**
+     * updater function.
+     *
+     * @access public
+     * @param 
+     * @return 
+     * @since 1.0
+     */
+	public function updater() {
+		if ( version_compare( WPEM_MIGRATION_VERSION, get_option( 'wpem_migration_version' ), '>' ) ) {
+
+			WPEM_Migration_Install::install();
+			flush_rewrite_rules();
+		}
+	}
+
+	/**
+     * Localisation function.
+     *
+     * @access public
+     * @param 
+     * @return 
+     * @since 1.0
+     */
 	public function load_plugin_textdomain() {
 
 		$domain = 'wp-event-manager-migration';       
