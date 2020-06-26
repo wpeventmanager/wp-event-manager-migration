@@ -1,29 +1,17 @@
 <?php
 /**
-Plugin Name: WP Event Manager - Migration
-
+Plugin Name: WP Event Manager Migration
 Plugin URI: https://www.wp-eventmanager.com/
-
-Description: Event Migration
-
+Description: Migrate your events in few seconds from The Event Calendar, Modern Event Calendar, Event Manager, Meetups, Eventon, Event Expresso and others.
 Author: WP Event Manager
-
-Author URI: https://www.wp-eventmanager.com
-
+Author URI: https://www.wp-eventmanager.com/the-team
 Text Domain: wp-event-manager-migration
-
 Domain Path: /languages
-
 Version: 1.0
-
 Since: 1.0
-
 Requires WordPress Version at least: 4.1
-
 Copyright: 2020 WP Event Manager
-
 License: GNU General Public License v3.0
-
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 **/
