@@ -92,12 +92,12 @@ class WPEM_Migration_Admin {
                 get_event_manager_template( 
 					'event-migration-mapping-form.php', 
 					array(
-						'file_id' => $_POST['file_id'],
-						'file_type' => $_POST['file_type'],
-						'file_head_fields' => $file_head_fields,
-						'migration_fields' => $migration_fields,
+						'file_id' 			=>  sanitize_text_field($_POST['file_id']),
+						'file_type' 		=>  sanitize_text_field($_POST['file_type']),
+						'file_head_fields' 	=> $file_head_fields,
+						'migration_fields' 	=> $migration_fields,
 						'import_type_label' => $import_type_label,
-						'migration_post_type' => $_POST['migration_post_type'],
+						'migration_post_type' => sanitize_text_field($_POST['migration_post_type']),
 						'taxonomies' => $taxonomies,
 					), 
 					'wp-event-manager-migration', 
