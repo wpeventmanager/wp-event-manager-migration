@@ -76,18 +76,18 @@ class WPEM_Migration_Admin {
 		{
 			if($_POST['action'] == 'upload' && $_POST['file_id'] != '')
 			{
-				$file = get_attached_file($_POST['file_id']);
+				$file = get_attached_file(absint($_POST['file_id']) );
 
-                $file_data = $this->import_class->get_file_data($_POST['file_type'], $file);
+                $file_data = $this->import_class->get_file_data(absint($_POST['file_type']), $file);
 
                 $file_head_fields = array_shift($file_data);
 
-                $migration_fields = $this->import_class->get_event_form_field_lists($_POST['migration_post_type']);
+                $migration_fields = $this->import_class->get_event_form_field_lists(sanitize_text_field($_POST['migration_post_type']) );
 
-                $taxonomies = get_object_taxonomies( $_POST['migration_post_type'], 'objects' );
+                $taxonomies = get_object_taxonomies( sanitize_text_field($_POST['migration_post_type']), 'objects' );
 
                 $migration_post_type = $this->import_class->get_migration_post_type();
-                $import_type_label = $migration_post_type[$_POST['migration_post_type']];
+                $import_type_label = $migration_post_type[sanitize_text_field($_POST['migration_post_type'])];
 
                 get_event_manager_template( 
 					'event-migration-mapping-form.php', 
@@ -108,7 +108,7 @@ class WPEM_Migration_Admin {
 		else if ( ! empty( $_POST['wp_event_manager_migration_mapping'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'event_manager_migration_mapping' ) ) 
 		{
 			$migration_import_fields = [];
-			if(!empty($_POST['migration_field']))
+			if(!empty($_POST['migration_field']) && is_array($_POST['migration_field']))
 			{
 				foreach ($_POST['migration_field'] as $key => $field) 
 				{
@@ -116,14 +116,14 @@ class WPEM_Migration_Admin {
 					{
 						if( $field == 'custom_field')
 						{
-							$field = $_POST['custom_field'][$key];
+							$field = sanitize_text_field($_POST['custom_field'][$key]);
 						}
 
 						$file_field = [];
 						$file_field['key'] = $key;
-						$file_field['file_field'] = $_POST['file_field'][$key];
-						$file_field['taxonomy'] = $_POST['taxonomy_field'][$key];
-						$file_field['default_value'] = $_POST['default_value'][$key];
+						$file_field['file_field'] = sanitize_text_field($_POST['file_field'][$key]);
+						$file_field['taxonomy'] = sanitize_text_field($_POST['taxonomy_field'][$key]);
+						$file_field['default_value'] = sanitize_text_field($_POST['default_value'][$key]);
 
 						$migration_import_fields[$field] = $file_field;
 					}
@@ -136,7 +136,7 @@ class WPEM_Migration_Admin {
 			{
 				$file = get_attached_file($_POST['file_id']);
 
-				$file_data = $this->import_class->get_file_data($_POST['file_type'], $file);
+				$file_data = $this->import_class->get_file_data(sanitize_text_field($_POST['file_type']), $file);
 
                 $file_head_fields = array_shift($file_data);
                 $file_sample_data = $file_data[0];
@@ -152,10 +152,10 @@ class WPEM_Migration_Admin {
 				get_event_manager_template( 
 					'event-migration-import.php', 
 					array(
-						'file_id' => $_POST['file_id'],
-						'file_type' => $_POST['file_type'],
+						'file_id' => sanitize_text_field($_POST['file_id']),
+						'file_type' => sanitize_text_field($_POST['file_type']),
 						'migration_import_fields' => $migration_import_fields,
-						'migration_post_type' => $_POST['migration_post_type'],
+						'migration_post_type' => sanitize_text_field($_POST['migration_post_type']),
 						'sample_data' => $sample_data,
 					), 
 					'wp-event-manager-migration', 
@@ -169,9 +169,9 @@ class WPEM_Migration_Admin {
 			{
 				$migration_import_fields = get_option('migration_import_fields', true);
 
-				$file = get_attached_file($_POST['file_id']);
+				$file = get_attached_file(sanitize_text_field($_POST['file_id']) );
 
-                $file_data = $this->import_class->get_file_data($_POST['file_type'], $file);
+                $file_data = $this->import_class->get_file_data(sanitize_text_field($_POST['file_type']), $file);
                 
                 $file_head_fields = array_shift($file_data);
 
@@ -185,12 +185,12 @@ class WPEM_Migration_Admin {
 		                	$import_data[$field_name] = $file_data[$i][$field_date['key']];
 		                }
 
-		                $this->import_class->import_data($_POST['migration_post_type'], $import_data);
+		                $this->import_class->import_data(sanitize_text_field($_POST['migration_post_type']), $import_data);
                 	}
                 }
 
                 $migration_post_type = $this->import_class->get_migration_post_type();
-                $import_type_label = $migration_post_type[$_POST['migration_post_type']];
+                $import_type_label = $migration_post_type[sanitize_text_field($_POST['migration_post_type'])];
 
                 get_event_manager_template( 
 					'event-migration-success.php', 

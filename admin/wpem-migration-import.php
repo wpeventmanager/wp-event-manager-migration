@@ -56,7 +56,7 @@ class WPEM_Migration_Import {
 
 		if(isset($_POST['taxonomy']))
 		{
-			$terms = get_categories(array('taxonomy' => $_POST['taxonomy'], 'hide_empty' => false));
+			$terms = get_categories(array('taxonomy' => sanitize_text_field($_POST['taxonomy']), 'hide_empty' => false));
 		}
 
 		$output = '<option value="">'. __('Select option', 'wp-event-manager-migration').'...</option>';
