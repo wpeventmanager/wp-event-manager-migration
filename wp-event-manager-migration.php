@@ -61,8 +61,6 @@ class WPEM_Migration {
 		define( 'WPEM_MIGRATION_VERSION', '1.0.0' );
 		define( 'WPEM_MIGRATION_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 		define( 'WPEM_MIGRATION_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
-		
-		include( 'includes/wpem-migration-install.php' );
 
 		if ( is_admin() ) {
 			include( 'admin/wpem-migration-admin.php' );
