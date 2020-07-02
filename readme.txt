@@ -1,4 +1,4 @@
-=== WP Event Manager - Migration ===
+=== WP Event Manager Migration ===
 
 Contributors: wpeventmanager,ashokdudhat,hiteshmakvana
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=55FRYATTFLA5N
@@ -69,7 +69,7 @@ The manual installation method involves downloading the plugin and uploading it 
 
 == Changelog ==
 
-= 1.0 [June 26TH, 2020] =
+= 1.0 [July 2nd, 2020] =
 
 * First release.
 
