@@ -12,7 +12,7 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 == Description ==
 
-Migrate your events in few seconds from The Event Calendar, Modern Event Calendar, Event Manager, Meetups, Eventon, Event Expresso and others.
+WP Event Manager Migration help you to facilitate the migration of events, venues and organizers from *The Event Calendar, Modern Event Calendar, Events Manager, Meetups, Eventon, Event Expresso* to **WP Event Manager**. Your event data will be exported and saved in CSV files that can be used to import events, venues and organizers.
 
 = Be a contributor =
 
