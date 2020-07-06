@@ -14,6 +14,8 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 WP Event Manager Migration help you to facilitate the migration of events, venues and organizers from *The Event Calendar, Modern Event Calendar, Events Manager, Meetups, Eventon, Event Expresso* to **WP Event Manager**. Your event data will be exported and saved in CSV files that can be used to import events, venues and organizers.
 
+You need to have **[WP Event Manager](https://wordpress.org/plugins/wp-event-manager/)** plugin before installing this plugin.
+
 = Be a contributor =
 
 If you want to contribute, go to our [WP Event Manager Migration GitHub Repository](https://github.com/wpeventmanager/wp-event-manager-migration) and see where you can help.
