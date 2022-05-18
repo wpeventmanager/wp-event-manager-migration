@@ -22,6 +22,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+
+function pre_check_before_installing_migration() 
+{
+	/*
+	 * Check weather WP Event Manager is installed or not
+ 	 */
+	if (! in_array( 'wp-event-manager/wp-event-manager.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
+	{
+	        global $pagenow;
+	    	if( $pagenow == 'plugins.php' )
+	    	{
+	            echo '<div id="error" class="error notice is-dismissible"><p>';
+	            echo __( 'WP Event Manager is require to use WP Event Manager - Migration' , 'wp-event-manager-migration');
+	            echo '</p></div>';		
+	    	}
+    	    		
+	}
+}
+add_action( 'admin_notices', 'pre_check_before_installing_migration' );
+
 /**
  * WPEM_Migration class.
  */
