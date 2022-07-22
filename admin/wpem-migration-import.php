@@ -204,7 +204,7 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function import_data($post_type, $params) {
-
+    
         $user_id = get_current_user_id();
 
         $post_id = '';
@@ -340,25 +340,28 @@ class WPEM_Migration_Import {
                     }
                 } else if (in_array($meta_key, ['_event_organizer_ids', '_event_venue_ids'])) {
                     $is_json = is_string($meta_value) && is_array(json_decode($meta_value, true)) ? true : false;
-
                     if ($is_json) {
                         $arrID = json_decode($meta_value, true);
                     } else {
+
                         if (strpos($meta_value, ',') !== false) {
                             $arrID = explode(',', $meta_value);
                         } else if (strpos($meta_value, '|') !== false) {
                             $arrID = explode('|', $meta_value);
-                        } else {
-                            if (is_int($meta_value)) {
+                        } 
+                        else {
+                            if (is_numeric($meta_value)) {
                                 $arrID = [$meta_value];
+                            }else{
+                                $arrID = unserialize($meta_value);
                             }
                         }
                     }
 
                     if (!empty($arrID)) {
-                        $arrID = array_filter($arrID);
 
-                        if ($meta_key == '_event_organizer_ids') {
+              $arrID = array_filter($arrID);                   
+              if ($meta_key == '_event_organizer_ids') {
                             $ids = $this->get_migration_id('event_organizer', $arrID);
                         } else if ($meta_key == '_event_venue_ids') {
                             $ids = $this->get_migration_id('event_venue', $arrID);
@@ -785,10 +788,9 @@ class WPEM_Migration_Import {
         global $wpdb;
 
         $arr_ID = [];
-
+       
         if (!empty($arrID)) {
             $ids = implode(",", $arrID);
-
             $query = "SELECT `post_id` FROM `" . $wpdb->prefix . "postmeta` WHERE 1
 							AND `meta_value` IN (" . $ids . ") 
 							AND `meta_key` = '_migration_id' 
