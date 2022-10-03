@@ -77,7 +77,7 @@ class WPEM_Migration_Admin {
             if ($_POST['action'] == 'upload' && $_POST['file_id'] != '') {
                 $file = get_attached_file(absint($_POST['file_id']));
 
-                $file_data = $this->import_class->get_file_data(absint($_POST['file_type']), $file);
+                $file_data = $this->import_class->get_file_data($_POST['file_type'], $file);
 
                 $file_head_fields = array_shift($file_data);
 
@@ -86,8 +86,9 @@ class WPEM_Migration_Admin {
                 $taxonomies = get_object_taxonomies(sanitize_text_field($_POST['migration_post_type']), 'objects');
 
                 $migration_post_type = $this->import_class->get_migration_post_type();
+				
                 $import_type_label = $migration_post_type[sanitize_text_field($_POST['migration_post_type'])];
-
+				
                 get_event_manager_template(
                         'event-migration-mapping-form.php',
                         array(
