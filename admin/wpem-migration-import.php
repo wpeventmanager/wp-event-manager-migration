@@ -770,11 +770,14 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function image_exists($url) {
-        $response = wp_remote_post($url);
 
-        $response_code = wp_remote_retrieve_response_code($response);
-
-        return $response_code == 200 ? true : false;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_exec($ch);
+        $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        // $retcode >= 400 -> not found, $retcode = 200, found.
+        curl_close($ch);
+        return $retcode == 200 ? true : false;
     }
 
     /**
