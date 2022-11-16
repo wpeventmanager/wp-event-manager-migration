@@ -431,7 +431,8 @@ class WPEM_Migration_Import {
             $migration_import_fields = get_option('migration_import_fields', true);
 
             foreach ($params as $meta_key => $meta_value) {
-                if ($meta_value == '') {
+                $import_fields = $migration_import_fields[$meta_key];
+                if ($meta_value == '' ) {
                     $meta_value = $import_fields['default_value'];
                 }
 
