@@ -775,9 +775,12 @@ class WPEM_Migration_Import {
         curl_setopt($ch, CURLOPT_NOBODY, true);
         curl_exec($ch);
         $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        // $retcode >= 400 -> not found, $retcode = 200, found.
         curl_close($ch);
-        return $retcode == 200 ? true : false;
+
+        if($retcode == 200) 
+            return true;
+        else
+            return false;
     }
 
     /**
