@@ -123,3 +123,22 @@ function WPEM_Migration() { // phpcs:ignore WordPress.NamingConventions.ValidFun
 	return WPEM_Migration::instance();
 }
 $GLOBALS['event_manager_migration'] =  WPEM_Migration();
+
+function xls_sheet_data($sheet) {
+	$re = '<table>';     // starts html table
+  
+	$x = 1;
+	while($x <= $sheet['numRows']) {
+	  $re .= "<tr>\n";
+	  $y = 1;
+	  while($y <= $sheet['numCols']) {
+		$cell = isset($sheet['cells'][$x][$y]) ? $sheet['cells'][$x][$y] : '';
+		$re .= " <td>$cell</td>\n";  
+		$y++;
+	  }  
+	  $re .= "</tr>\n";
+	  $x++;
+	}
+  
+	return $re .'</table>';     // ends and returns the html table
+  }

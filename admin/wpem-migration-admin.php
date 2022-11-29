@@ -161,16 +161,16 @@ class WPEM_Migration_Admin {
                 $file = get_attached_file(sanitize_text_field($_POST['file_id']));
 
                 $file_data = $this->import_class->get_file_data(sanitize_text_field($_POST['file_type']), $file);
-
                 $file_head_fields = array_shift($file_data);
 
                 if (!empty($file_data)) {
                     for ($i = 0; $i < count($file_data); $i++) {
                         $import_data = [];
-                        foreach ($migration_import_fields as $field_name => $field_date) {
-                            $import_data[$field_name] = $file_data[$i][$field_date['key']];
-                        }
-
+                            foreach ($migration_import_fields as $field_name => $field_date) {
+                                if(array_key_exists($field_date['key'],$file_data[$i])){
+                                    $import_data[$field_name] = $file_data[$i][$field_date['key']];
+                                }
+                            }
                         $this->import_class->import_data(sanitize_text_field($_POST['migration_post_type']), $import_data);
                     }
                 }

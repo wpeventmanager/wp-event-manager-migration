@@ -54,7 +54,7 @@ var AdminMigration = function () {
 
                     //console.log(extension);
 
-                    if(jQuery.inArray(extension, ['csv', 'xlsx'])!='-1')
+                    if(jQuery.inArray(extension, ['csv', 'xlsx', 'xls'])!='-1')
                     {
                         jQuery('span.response-message').removeClass('error');
 

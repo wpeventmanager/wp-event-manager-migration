@@ -17,6 +17,7 @@ class WPEM_Migration_Import {
      */
     public function __construct() {
         include_once ('lib/simple-xlsx.php');
+        require_once ('lib/excel-reader.php');
 
         // Ajax
         add_action('wp_ajax_get_migration_terms', array($this, 'get_migration_terms'));
@@ -148,6 +149,8 @@ class WPEM_Migration_Import {
             $file_data = $this->get_csv_data($file);
         } else if ($type == 'xlsx') {
             $file_data = $this->get_xlsx_data($file);
+        }else if($type == 'xls'){
+            $file_data = $this->get_xls_data($file);
         }
 
         return $file_data;
@@ -196,6 +199,23 @@ class WPEM_Migration_Import {
     }
 
     /**
+     * get_xls_data function.
+     *
+     * @access public
+     * @param $file
+     * @return array
+     * @since 1.0.1
+     */
+    public function get_xls_data($file) {
+
+        $xls_data = [];
+        $excel = new PhpExcelReader;
+        $excel->read($file);
+        $xls_data = $excel->sheets[0]['cells'];
+       return $xls_data;
+    }
+
+    /**
      * import_data function.
      *
      * @access public
@@ -230,7 +250,6 @@ class WPEM_Migration_Import {
                 }
             }
         }
-
 
         if ($post_type == 'event_listing') {
             $post_title = !empty($params['_event_title']) ? $params['_event_title'] : '';
