@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: event, events migration, migration, calendar, meetups, eventon, event expresso.
 Requires at least: 4.1
 Tested up to: 5.2.2
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 5.4
 License: GNU General Public License v3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -70,6 +70,8 @@ The manual installation method involves downloading the plugin and uploading it 
 * Activate the plugin from the Plugins menu within the WordPress admin.
 
 == Changelog ==
+
+= 1.0.1 [December 2nd, 2022] =
 
 = 1.0 [July 2nd, 2020] =
 
