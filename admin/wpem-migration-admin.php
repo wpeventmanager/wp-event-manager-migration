@@ -1,5 +1,4 @@
 <?php
-
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -47,7 +46,7 @@ class WPEM_Migration_Admin {
     public function admin_enqueue_scripts() {
         wp_enqueue_style('wp-event-manager-integration-admin', WPEM_MIGRATION_PLUGIN_URL . '/assets/css/admin.min.css', '', WPEM_MIGRATION_VERSION);
 
-        wp_register_script('wp-event-manager-migration-admin', WPEM_MIGRATION_PLUGIN_URL . '/assets/js/admin-migration.js', array('jquery'), WPEM_MIGRATION_VERSION, true);
+        wp_register_script('wp-event-manager-migration-admin', WPEM_MIGRATION_PLUGIN_URL . '/assets/js/admin-migration.min.js', array('jquery'), WPEM_MIGRATION_VERSION, true);
         wp_localize_script('wp-event-manager-migration-admin', 'event_manager_migration_admin', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'media_box_title' => __('Choose .csv or .xlsx file', 'wp-event-manager-migration'),
@@ -55,9 +54,8 @@ class WPEM_Migration_Admin {
             '_event_organizer_ids' => __('Must select Organizer ID', 'wp-event-manager-migration'),
             '_event_venue_ids' => __('Must select Venue ID', 'wp-event-manager-migration'),
             'file_type_error' => __('Please select .csv or .xlsx file', 'wp-event-manager-migration'),
-                )
+            )
         );
-
         wp_enqueue_script('wp-event-manager-migration-admin');
     }
 
@@ -78,30 +76,25 @@ class WPEM_Migration_Admin {
                 $file = get_attached_file(absint($_POST['file_id']));
 
                 $file_data = $this->import_class->get_file_data($_POST['file_type'], $file);
-
                 $file_head_fields = array_shift($file_data);
-
                 $migration_fields = $this->import_class->get_event_form_field_lists(sanitize_text_field($_POST['migration_post_type']));
-
                 $taxonomies = get_object_taxonomies(sanitize_text_field($_POST['migration_post_type']), 'objects');
-
                 $migration_post_type = $this->import_class->get_migration_post_type();
-				
                 $import_type_label = $migration_post_type[sanitize_text_field($_POST['migration_post_type'])];
 				
                 get_event_manager_template(
-                        'event-migration-mapping-form.php',
-                        array(
-                            'file_id' => sanitize_text_field($_POST['file_id']),
-                            'file_type' => sanitize_text_field($_POST['file_type']),
-                            'file_head_fields' => $file_head_fields,
-                            'migration_fields' => $migration_fields,
-                            'import_type_label' => $import_type_label,
-                            'migration_post_type' => sanitize_text_field($_POST['migration_post_type']),
-                            'taxonomies' => $taxonomies,
-                        ),
-                        'wp-event-manager-migration',
-                        WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
+                    'event-migration-mapping-form.php',
+                    array(
+                        'file_id' => sanitize_text_field($_POST['file_id']),
+                        'file_type' => sanitize_text_field($_POST['file_type']),
+                        'file_head_fields' => $file_head_fields,
+                        'migration_fields' => $migration_fields,
+                        'import_type_label' => $import_type_label,
+                        'migration_post_type' => sanitize_text_field($_POST['migration_post_type']),
+                        'taxonomies' => $taxonomies,
+                    ),
+                    'wp-event-manager-migration',
+                    WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
                 );
             }
         } else if (!empty($_POST['wp_event_manager_migration_mapping']) && wp_verify_nonce($_POST['_wpnonce'], 'event_manager_migration_mapping')) {
@@ -142,16 +135,16 @@ class WPEM_Migration_Admin {
                 }
 
                 get_event_manager_template(
-                        'event-migration-import.php',
-                        array(
-                            'file_id' => sanitize_text_field($_POST['file_id']),
-                            'file_type' => sanitize_text_field($_POST['file_type']),
-                            'migration_import_fields' => $migration_import_fields,
-                            'migration_post_type' => sanitize_text_field($_POST['migration_post_type']),
-                            'sample_data' => $sample_data,
-                        ),
-                        'wp-event-manager-migration',
-                        WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
+                    'event-migration-import.php',
+                    array(
+                        'file_id' => sanitize_text_field($_POST['file_id']),
+                        'file_type' => sanitize_text_field($_POST['file_type']),
+                        'migration_import_fields' => $migration_import_fields,
+                        'migration_post_type' => sanitize_text_field($_POST['migration_post_type']),
+                        'sample_data' => $sample_data,
+                    ),
+                    'wp-event-manager-migration',
+                    WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
                 );
             }
         } else if (!empty($_POST['wp_event_manager_migration_import']) && wp_verify_nonce($_POST['_wpnonce'], 'event_manager_migration_import')) {
@@ -166,11 +159,11 @@ class WPEM_Migration_Admin {
                 if (!empty($file_data)) {
                     for ($i = 0; $i < count($file_data); $i++) {
                         $import_data = [];
-                            foreach ($migration_import_fields as $field_name => $field_date) {
-                                if(array_key_exists($field_date['key'],$file_data[$i])){
-                                    $import_data[$field_name] = $file_data[$i][$field_date['key']];
-                                }
+                        foreach ($migration_import_fields as $field_name => $field_date) {
+                            if(array_key_exists($field_date['key'],$file_data[$i])){
+                                $import_data[$field_name] = $file_data[$i][$field_date['key']];
                             }
+                        }
                         $this->import_class->import_data(sanitize_text_field($_POST['migration_post_type']), $import_data);
                     }
                 }
@@ -179,40 +172,26 @@ class WPEM_Migration_Admin {
                 $import_type_label = $migration_post_type[sanitize_text_field($_POST['migration_post_type'])];
 
                 get_event_manager_template(
-                        'event-migration-success.php',
-                        array(
-                            'total_records' => count($file_data),
-                            'import_type_label' => $import_type_label,
-                        ),
-                        'wp-event-manager-migration',
-                        WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
-                );
-            }
-        } else {
-            /*
-              $term = term_exists('Appearance or Signing', 'event_listing_type');
-              wp_set_post_terms(276, $term['term_id'],'event_listing_type', true);
-              $ids = $this->import_class->get_migration_id('event_organizer', ['10','12']);
-
-              echo '<pre>';
-              print_r($term);
-              echo '</pre>' . __FILE__ . ' ( Line Number ' . __LINE__ . ')';
-              die;
-             */
-
-            $migration_post_type = $this->import_class->get_migration_post_type();
-
-            get_event_manager_template(
-                    'event-migration-file-upload.php',
+                    'event-migration-success.php',
                     array(
-                        'migration_post_type' => $migration_post_type,
+                        'total_records' => count($file_data),
+                        'import_type_label' => $import_type_label,
                     ),
                     'wp-event-manager-migration',
                     WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
+                );
+            }
+        } else {
+            $migration_post_type = $this->import_class->get_migration_post_type();
+            get_event_manager_template(
+                'event-migration-file-upload.php',
+                array(
+                    'migration_post_type' => $migration_post_type,
+                ),
+                'wp-event-manager-migration',
+                WPEM_MIGRATION_PLUGIN_DIR . '/templates/admin/'
             );
         }
     }
-
 }
-
 new WPEM_Migration_Admin();
