@@ -81,7 +81,7 @@
                                         foreach ($migration_fields as $group_key => $group_fields) : ?>
                                             <optgroup label="<?php echo $group_key; ?>">
                                                 <?php if ($i == 1) : ?>
-                                                    <option class="text" value="_post_id"><?php _e('ID', 'wp-event-manager-migration'); ?></option>
+                                                    <option class="text" value="_post_id" <?php selected($head_fields, '_post_id'); ?>><?php _e('ID', 'wp-event-manager-migration'); ?></option>
                                                 <?php endif; 
 
                                                 if ($group_key == 'tickets'){ 

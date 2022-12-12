@@ -190,7 +190,6 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function import_data($post_type, $params) {
-    
         $user_id = get_current_user_id();
 
         $post_id = '';
@@ -214,7 +213,6 @@ class WPEM_Migration_Import {
                 }
             }
         }
-
         if ($post_type == 'event_listing') {
             $post_title = !empty($params['_event_title']) ? $params['_event_title'] : '';
         } else if ($post_type == 'event_organizer') {
@@ -226,7 +224,6 @@ class WPEM_Migration_Import {
         } else if ($post_type == 'product') {
             $post_title = !empty($params['ticket_name']) ? $params['ticket_name'] : '';
         }
-
         if ($post_id == '' && $post_title != '') {
             $args = [
                 'post_title' => $post_title,
@@ -284,7 +281,6 @@ class WPEM_Migration_Import {
             $migration_id = get_post_meta($post_id, '_migration_id', true);
             foreach ($params as $meta_key => $meta_value) {
                 $import_fields = $migration_import_fields[$meta_key];
-
                 if ($meta_key == '_event_banner') {
                     $is_json = is_string($meta_value) && is_array(json_decode($meta_value, true)) ? true : false;
 
@@ -320,6 +316,7 @@ class WPEM_Migration_Import {
                     }
                 } else if (in_array($meta_key, ['_event_organizer_ids', '_event_venue_ids'])) {
                     $is_json = is_string($meta_value) && is_array(json_decode($meta_value, true)) ? true : false;
+                     
                     if ($is_json) {
                         $arrID = json_decode($meta_value, true);
                     } else {
@@ -336,7 +333,6 @@ class WPEM_Migration_Import {
                             }
                         }
                     }
-
                     if (!empty($arrID)) {
                         $arrID = array_filter($arrID);                   
                         if ($meta_key == '_event_organizer_ids') {
@@ -346,7 +342,6 @@ class WPEM_Migration_Import {
                             } else {
                                 $ids = '';
                             }
-
                             update_post_meta($post_id, $meta_key, $ids);
                         }
                 } else {
@@ -779,7 +774,6 @@ class WPEM_Migration_Import {
 							AND `meta_value` IN (" . $ids . ") 
 							AND `meta_key` = '_migration_id' 
 							AND `post_id` IN (SELECT ID FROM `" . $wpdb->prefix . "posts` WHERE `post_type` = '" . $post_type . "' AND `post_status` = 'publish')";
-
             $results = $wpdb->get_results($query, ARRAY_A);
 
             if (!empty($results)) {
