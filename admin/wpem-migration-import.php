@@ -193,7 +193,6 @@ class WPEM_Migration_Import {
         $user_id = get_current_user_id();
 
         $post_id = '';
-
         if (isset($params['_post_id']) && $params['_post_id'] != '') {
             $type = get_post_type($params['_post_id']);
             if ($post_type == $type) {
@@ -334,16 +333,17 @@ class WPEM_Migration_Import {
                         }
                     }
                     if (!empty($arrID)) {
-                        $arrID = array_filter($arrID);                   
+                        $arrID = array_filter($arrID);
                         if ($meta_key == '_event_organizer_ids') {
-                                $ids = $this->get_migration_id('event_organizer', $arrID);
-                            } else if ($meta_key == '_event_venue_ids') {
-                                $ids = $this->get_migration_id('event_venue', $arrID);
-                            } else {
-                                $ids = '';
-                            }
-                            update_post_meta($post_id, $meta_key, $ids);
+                            $ids = $this->get_migration_id('event_organizer', $arrID);
+                        } else if ($meta_key == '_event_venue_ids') {
+                            $ids = implode(" ",$this->get_migration_id('event_venue', $arrID));
+                        } else {
+                            $ids = '';
                         }
+                        
+                        update_post_meta($post_id, $meta_key, $ids);
+                    }
                 } else {
                     if ($import_fields['taxonomy'] != '') {
                         if ($meta_value != '') {
