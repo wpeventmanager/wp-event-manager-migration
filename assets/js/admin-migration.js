@@ -42,12 +42,10 @@ var AdminMigration = function () {
                     var attach = select.first().toJSON();
 
                     var file = attach.filename;
-
                     var extension = file.substr( (file.lastIndexOf('.') +1) );
 
-                    if(jQuery.inArray(extension, ['csv', 'xlsx', 'xls'])!='-1'){
+                    if(jQuery.inArray(extension, ['csv', 'xlsx', 'xls', 'xml'])!='-1'){
                         jQuery('span.response-message').removeClass('error');
-
                         jQuery('span.response-message').html(attach.filename);
                         jQuery('input#file_id').attr('value', attach.id);
                         jQuery('input#file_type').attr('value', extension);

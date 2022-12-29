@@ -117,10 +117,8 @@ class WPEM_Migration_Import {
 
         if ($type == 'csv') {
             $file_data = $this->get_csv_data($file);
-        } else if ($type == 'xlsx') {
-            $file_data = $this->get_xlsx_data($file);
-        }else if($type == 'xls'){
-            $file_data = $this->get_xls_data($file);
+        } else if ($type == 'xml') {
+            $file_data = $this->get_xml_data($file);
         }
 
         return $file_data;
@@ -143,42 +141,64 @@ class WPEM_Migration_Import {
             }
             fclose($handle);
         }
+        error_log("csv");
+        error_log(print_r($csv_data, true));
         return $csv_data;
     }
 
     /**
-     * get_xlsx_data function.
+     * get_xml_data function.
      *
      * @access public
      * @param $file
      * @return array
      * @since 1.0
      */
-    public function get_xlsx_data($file) {
+    public function get_xml_data($file) {
 
-        $xlsx_data = [];
-        if ($xlsx = SimpleXLSX::parse($file)) {
-            $xlsx_data = $xlsx->rows();
-        } else {
-            echo SimpleXLSX::parseError();
+        $xmlReader = new XMLReader();		
+        // reader the XML file.
+        $xmlReader->open($file);
+        
+        $xmlEvents = array();
+        $key=array();
+        while($xmlReader->read()) {
+            // take action based on the kind of node returned
+            if ($xmlReader->localName == "source") {
+                continue;
+            }
+			switch($xmlReader->nodeType) {
+
+                case (XMLREADER::ELEMENT):  
+                    if ($xmlReader->localName == "events") {
+                        $event=array();
+                    }else{
+                        if(empty($xmlEvents)){
+                            $key[] = $xmlReader->localName;
+                        }
+                        $xmlReader->read();		              	   
+                        $event[]=$xmlReader->value;
+                    }
+                    break;
+                case (XMLREADER::END_ELEMENT):
+                    // do something based on when the element closes.
+                    if ($xmlReader->localName == "events" && !empty($event)){
+                        if(!empty($key)){
+                            array_push($xmlEvents, $key);
+                            $key = null;
+                        }
+                        array_push($xmlEvents, $event);
+                    }
+                    break;			       	      	 
+            }
         }
-        return $xlsx_data;
-    }
-
-    /**
-     * get_xls_data function.
-     *
-     * @access public
-     * @param $file
-     * @return array
-     * @since 1.0.1
-     */
-    public function get_xls_data($file) {
-        $xls_data = [];
-        $excel = new PhpExcelReader;
-        $excel->read($file);
-        $xls_data = $excel->sheets[0]['cells'];
-        return $xls_data;
+        //close file
+        $xmlReader->close();
+        // File is too old, refresh cache	
+        // file_put_contents: If filename does not exist, the file is created. Otherwise, the existing file is overwritten, unless the FILE_APPEND flag is set.              
+        $json_results = json_encode($xmlEvents); 
+        $dataArray=json_decode($json_results, TRUE);	   
+        return $xmlEvents;
     }
 
     /**
