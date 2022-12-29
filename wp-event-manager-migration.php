@@ -1,43 +1,37 @@
 <?php
 /**
-Plugin Name: WP Event Manager Migration
-Plugin URI: https://www.wp-eventmanager.com/
-Description: Migrate your events in few seconds from The Event Calendar, Modern Event Calendar, Event Manager, Meetups, Eventon, Event Expresso and others.
-Author: WP Event Manager
-Author URI: https://www.wp-eventmanager.com/the-team
-Text Domain: wp-event-manager-migration
-Domain Path: /languages
-Version: 1.0.1
-Since: 1.0.0
-Requires WordPress Version at least: 4.1
-Copyright: 2020 WP Event Manager
-License: GNU General Public License v3.0
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
-
+* Plugin Name: WP Event Manager Migration
+* Plugin URI: https://www.wp-eventmanager.com/
+* Description: Migrate your events in few seconds from The Event Calendar, Modern Event Calendar, Event Manager, Meetups, Eventon, Event Expresso and others.
+* Author: WP Event Manager
+* Author URI: https://www.wp-eventmanager.com/the-team
+* Text Domain: wp-event-manager-migration
+* Domain Path: /languages
+* Version: 1.0.1
+* Since: 1.0.0
+* Requires WordPress Version at least: 4.1
+* Copyright: 2020 WP Event Manager
+* License: GNU General Public License v3.0
+* License URI: http://www.gnu.org/licenses/gpl-3.0.html
+*
 **/
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
-	
 	exit;
 }
 
-
-function pre_check_before_installing_migration() 
-{
+function pre_check_before_installing_migration() {
 	/*
 	 * Check weather WP Event Manager is installed or not
  	 */
-	if (! in_array( 'wp-event-manager/wp-event-manager.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) 
-	{
-	        global $pagenow;
-	    	if( $pagenow == 'plugins.php' )
-	    	{
-	            echo '<div id="error" class="error notice is-dismissible"><p>';
-	            echo __( 'WP Event Manager is require to use WP Event Manager - Migration' , 'wp-event-manager-migration');
-	            echo '</p></div>';		
-	    	}
-    	    		
+	if (! in_array( 'wp-event-manager/wp-event-manager.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+		global $pagenow;
+		if( $pagenow == 'plugins.php' ){
+			echo '<div id="error" class="error notice is-dismissible"><p>';
+			echo __( 'WP Event Manager is require to use WP Event Manager - Migration' , 'wp-event-manager-migration');
+			echo '</p></div>';		
+		}
 	}
 }
 add_action( 'admin_notices', 'pre_check_before_installing_migration' );
@@ -101,14 +95,10 @@ class WPEM_Migration {
 	public function load_plugin_textdomain() {
 
 		$domain = 'wp-event-manager-migration';       
-
         $locale = apply_filters('plugin_locale', get_locale(), $domain);
-
 		load_textdomain( $domain, WP_LANG_DIR . "/wp-event-manager-migration/".$domain."-" .$locale. ".mo" );
-
 		load_plugin_textdomain($domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
-
 }
 
 /**
@@ -123,22 +113,3 @@ function WPEM_Migration() { // phpcs:ignore WordPress.NamingConventions.ValidFun
 	return WPEM_Migration::instance();
 }
 $GLOBALS['event_manager_migration'] =  WPEM_Migration();
-
-function xls_sheet_data($sheet) {
-	$re = '<table>';     // starts html table
-  
-	$x = 1;
-	while($x <= $sheet['numRows']) {
-	  $re .= "<tr>\n";
-	  $y = 1;
-	  while($y <= $sheet['numCols']) {
-		$cell = isset($sheet['cells'][$x][$y]) ? $sheet['cells'][$x][$y] : '';
-		$re .= " <td>$cell</td>\n";  
-		$y++;
-	  }  
-	  $re .= "</tr>\n";
-	  $x++;
-	}
-  
-	return $re .'</table>';     // ends and returns the html table
-  }

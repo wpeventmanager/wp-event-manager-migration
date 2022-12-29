@@ -35,24 +35,16 @@
 
                                         <optgroup label="Registrations">
                                             <?php
-                                            foreach ($migration_fields as $name => $field) :
-                                                ?>
-
-                                                <?php if ($i == 1) : ?>
+                                            foreach ($migration_fields as $name => $field) :       
+                                                if ($i == 1) : ?>
                                                     <option class="text" value="_post_id"><?php _e('ID', 'wp-event-manager-migration'); ?></option>
-                                                <?php endif; ?>
-
-                                                <?php if (!in_array($field['type'], ['term-select'])) : ?>
+                                                <?php endif; 
+                                                if (!in_array($field['type'], ['term-select'])) : ?>
                                                     <option class="text" value="_<?php echo esc_attr($name); ?>" <?php selected($head_fields, '_' . $name); ?> ><?php echo esc_html($field['label']); ?></option>
-                                                <?php endif; ?>
-
-
-                                                <?php $i++; ?>
-                                            <?php endforeach; ?>
-
+                                                <?php endif;
+                                                $i++; 
+                                            endforeach; ?>
                                         </optgroup>
-
-
                                         <optgroup label="<?php _e('Other', 'wp-event-manager-migration') ?>">
                                             <option class="custom-field" value="custom_field" ><?php _e('Custom Field', 'wp-event-manager-migration') ?></option>
                                         </optgroup>
@@ -75,10 +67,8 @@
                         <?php endforeach; ?>
                     <?php endif; ?>
                 <?php else : ?>
-
                     <?php if (!empty($file_head_fields)) : ?>
                         <?php foreach ($file_head_fields as $key => $head_fields) : ?>
-
                             <tr>
                                 <td>
                                     <input readonly type="text" name="file_field[<?php echo $key; ?>]" value="<?php echo $head_fields; ?>" />
@@ -87,38 +77,36 @@
                                     <select class="migration-field" name="migration_field[<?php echo $key; ?>]" id="migration_field_<?php echo $key; ?>" data-type="text">
                                         <option value=""><?php echo sprintf(__('Select %s Field', 'wp-event-manager-migration'), $import_type_label); ?></option>
 
-                                        <?php $i = 1; ?>
-                                        <?php foreach ($migration_fields as $group_key => $group_fields) : ?>
+                                        <?php $i = 1; 
+                                        foreach ($migration_fields as $group_key => $group_fields) : ?>
                                             <optgroup label="<?php echo $group_key; ?>">
-
                                                 <?php if ($i == 1) : ?>
-                                                    <option class="text" value="_post_id"><?php _e('ID', 'wp-event-manager-migration'); ?></option>
-                                                <?php endif; ?>
+                                                    <option class="text" value="_post_id" <?php selected($head_fields, '_post_id'); ?>><?php _e('ID', 'wp-event-manager-migration'); ?></option>
+                                                <?php endif; 
 
-                                                <?php if ($group_key == 'tickets') : ?>
-                                                    <?php if ($i == 1) : ?>
+                                                if ($group_key == 'tickets'){ 
+                                                    if ($i == 1) : ?>
                                                         <option class="text" value="_event_id"><?php _e('Event ID', 'wp-event-manager-migration'); ?></option>
-                                                    <?php endif; ?>
+                                                    <?php endif; 
 
-                                                    <?php foreach ($group_fields as $name => $field) : ?>
-                                                        <?php if (!in_array($field['type'], ['term-select'])) : ?>
+                                                    foreach ($group_fields as $name => $field) : 
+                                                        if (!in_array($field['type'], ['term-select'])) : ?>
                                                             <option class="text" value="<?php echo esc_attr($name); ?>" <?php selected($head_fields, $name); ?> ><?php echo esc_html($field['label']); ?></option>
-                                                        <?php endif; ?>
-                                                    <?php endforeach; ?>
-                                                <?php else : ?>
-                                                    <?php foreach ($group_fields as $name => $field) : ?>
-                                                        <?php if (!in_array($field['type'], ['term-select'])) : ?>
+                                                        <?php endif;
+                                                    endforeach;
+                                                }else {
+                                                    foreach ($group_fields as $name => $field) : 
+                                                        if (!in_array($field['type'], ['term-select'])) : ?>
                                                             <option class="text" value="_<?php echo esc_attr($name); ?>" <?php selected($head_fields, '_' . $name); ?> ><?php echo esc_html($field['label']); ?></option>
-                                                        <?php endif; ?>
-                                                    <?php endforeach; ?>
-                                                <?php endif; ?>
-
+                                                        <?php endif;
+                                                    endforeach;
+                                                } ?>
                                             </optgroup>
 
-                                            <?php $i++; ?>
-                                        <?php endforeach; ?>
+                                            <?php $i++; 
+                                        endforeach;
 
-                                        <?php if (!empty($taxonomies)) : ?>
+                                        if (!empty($taxonomies)) : ?>
                                             <optgroup label="<?php _e('Taxonomy', 'wp-event-manager-migration') ?>">
                                                 <?php foreach ($taxonomies as $name => $taxonomy) : ?>
                                                     <option class="taxonomy" value="<?php echo esc_attr($name); ?>" ><?php echo esc_html($taxonomy->label); ?></option>
@@ -145,7 +133,6 @@
                                     </select>
                                 </td>
                             </tr>
-
                         <?php endforeach; ?>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -166,8 +153,6 @@
                     </td>
                 </tr>
             </tfoot>
-
         </table>
     </form>
-
 </div>

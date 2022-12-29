@@ -19,7 +19,6 @@
 * @see        OLE, Spreadsheet_Excel_Writer
 */
 
-
 require_once 'oleread.inc';
 
 define('SPREADSHEET_EXCEL_READER_BIFF8',             0x600);
@@ -174,8 +173,7 @@ class PhpExcelReader {
      *
      * Some basic initialisation
      */ 
-    public function __construct()
-    {
+    public function __construct(){
         $this->_ole = new OLERead();
         $this->setUTFEncoder('iconv');
     }
@@ -185,8 +183,7 @@ class PhpExcelReader {
      *
      * @param string Encoding to use
      */
-    public function setOutputEncoding($encoding)
-    {
+    public function setOutputEncoding($encoding){
         $this->_defaultEncoding = $encoding;
     }
 
@@ -197,8 +194,7 @@ class PhpExcelReader {
      *
      * @param string Encoding type to use.  Either 'iconv' or 'mb'
      */
-    public function setUTFEncoder($encoder = 'iconv')
-    {
+    public function setUTFEncoder($encoder = 'iconv'){
         $this->_encoderFunction = '';
 
         if ($encoder == 'iconv') {
@@ -213,8 +209,7 @@ class PhpExcelReader {
     /**
      * todo
      */
-    public function setRowColOffset($iOffset)
-    {
+    public function setRowColOffset($iOffset){
         $this->_rowoffset = $iOffset;
         $this->_coloffset = $iOffset;
     }
@@ -224,8 +219,7 @@ class PhpExcelReader {
      *
      * @param Default format
      */
-    public function setDefaultFormat($sFormat)
-    {
+    public function setDefaultFormat($sFormat){
         $this->_defaultFormat = $sFormat;
     }
 
@@ -235,8 +229,7 @@ class PhpExcelReader {
      * @param integer Column number
      * @param string Format
      */
-    public function setColumnFormat($column, $sFormat)
-    {
+    public function setColumnFormat($column, $sFormat){
         $this->_columnsFormat[$column] = $sFormat;
     }
 
@@ -246,8 +239,7 @@ class PhpExcelReader {
      * @param filename
      * @todo return a valid value
      */
-    public function read($sFileName)
-    {
+    public function read($sFileName){
 
         $res = $this->_ole->read($sFileName);
 
@@ -271,8 +263,7 @@ class PhpExcelReader {
      *
      * @return bool
      */
-    private function _parse()
-    {
+    private function _parse(){
         $pos = 0;
 
         $code = ord($this->data[$pos]) | ord($this->data[$pos+1])<<8;
@@ -298,112 +289,111 @@ class PhpExcelReader {
         while ($code != SPREADSHEET_EXCEL_READER_TYPE_EOF) {
             switch ($code) {
                 case SPREADSHEET_EXCEL_READER_TYPE_SST:
-                    //echo "Type_SST\n";
-                     $spos = $pos + 4;
-                     $limitpos = $spos + $length;
-                     $uniqueStrings = $this->_GetInt4d($this->data, $spos+4);
-                                                $spos += 8;
-                                       for ($i = 0; $i < $uniqueStrings; $i++) {
-        // Read in the number of characters
-                                                if ($spos == $limitpos) {
-                                                $opcode = ord($this->data[$spos]) | ord($this->data[$spos+1])<<8;
-                                                $conlength = ord($this->data[$spos+2]) | ord($this->data[$spos+3])<<8;
-                                                        if ($opcode != 0x3c) {
-                                                                return -1;
-                                                        }
-                                                $spos += 4;
-                                                $limitpos = $spos + $conlength;
-                                                }
-                                                $numChars = ord($this->data[$spos]) | (ord($this->data[$spos+1]) << 8);
-                                                $spos += 2;
-                                                $optionFlags = ord($this->data[$spos]);
-                                                $spos++;
-                                        $asciiEncoding = (($optionFlags & 0x01) == 0) ;
-                                                $extendedString = ( ($optionFlags & 0x04) != 0);
+                    $spos = $pos + 4;
+                    $limitpos = $spos + $length;
+                    $uniqueStrings = $this->_GetInt4d($this->data, $spos+4);
+                    $spos += 8;
+                    for ($i = 0; $i < $uniqueStrings; $i++) {
+                        // Read in the number of characters
+                        if ($spos == $limitpos) {
+                            $opcode = ord($this->data[$spos]) | ord($this->data[$spos+1])<<8;
+                            $conlength = ord($this->data[$spos+2]) | ord($this->data[$spos+3])<<8;
+                            if ($opcode != 0x3c) {
+                                    return -1;
+                            }
+                            $spos += 4;
+                            $limitpos = $spos + $conlength;
+                        }
+                        $numChars = ord($this->data[$spos]) | (ord($this->data[$spos+1]) << 8);
+                        $spos += 2;
+                        $optionFlags = ord($this->data[$spos]);
+                        $spos++;
+                        $asciiEncoding = (($optionFlags & 0x01) == 0) ;
+                        $extendedString = ( ($optionFlags & 0x04) != 0);
 
-                                                // See if string contains formatting information
-                                                $richString = ( ($optionFlags & 0x08) != 0);
+                        // See if string contains formatting information
+                        $richString = ( ($optionFlags & 0x08) != 0);
 
-                                                if ($richString) {
-                                        // Read in the crun
-                                                        $formattingRuns = ord($this->data[$spos]) | (ord($this->data[$spos+1]) << 8);
-                                                        $spos += 2;
-                                                }
+                        if ($richString) {
+                            // Read in the crun
+                            $formattingRuns = ord($this->data[$spos]) | (ord($this->data[$spos+1]) << 8);
+                            $spos += 2;
+                        }
 
-                                                if ($extendedString) {
-                                                  // Read in cchExtRst
-                                                  $extendedRunLength = $this->_GetInt4d($this->data, $spos);
-                                                  $spos += 4;
-                                                }
+                        if ($extendedString) {
+                            // Read in cchExtRst
+                            $extendedRunLength = $this->_GetInt4d($this->data, $spos);
+                            $spos += 4;
+                        }
 
-                                                $len = ($asciiEncoding)? $numChars : $numChars*2;
-                                                if ($spos + $len < $limitpos) {
-                                                                $retstr = substr($this->data, $spos, $len);
-                                                                $spos += $len;
-                                                }else{
-                                                        // found countinue
-                                                        $retstr = substr($this->data, $spos, $limitpos - $spos);
-                                                        $bytesRead = $limitpos - $spos;
-                                                        $charsLeft = $numChars - (($asciiEncoding) ? $bytesRead : ($bytesRead / 2));
-                                                        $spos = $limitpos;
+                        $len = ($asciiEncoding)? $numChars : $numChars*2;
+                        if ($spos + $len < $limitpos) {
+                                        $retstr = substr($this->data, $spos, $len);
+                                        $spos += $len;
+                        }else{
+                            // found countinue
+                            $retstr = substr($this->data, $spos, $limitpos - $spos);
+                            $bytesRead = $limitpos - $spos;
+                            $charsLeft = $numChars - (($asciiEncoding) ? $bytesRead : ($bytesRead / 2));
+                            $spos = $limitpos;
 
-                                                         while ($charsLeft > 0){
-                                                                $opcode = ord($this->data[$spos]) | ord($this->data[$spos+1])<<8;
-                                                                $conlength = ord($this->data[$spos+2]) | ord($this->data[$spos+3])<<8;
-                                                                        if ($opcode != 0x3c) {
-                                                                                return -1;
-                                                                        }
-                                                                $spos += 4;
-                                                                $limitpos = $spos + $conlength;
-                                                                $option = ord($this->data[$spos]);
-                                                                $spos += 1;
-                                                                  if ($asciiEncoding && ($option == 0)) {
-                                                                                $len = min($charsLeft, $limitpos - $spos); // min($charsLeft, $conlength);
-                                                                    $retstr .= substr($this->data, $spos, $len);
-                                                                    $charsLeft -= $len;
-                                                                    $asciiEncoding = true;
-                                                                  }elseif (!$asciiEncoding && ($option != 0)){
-                                                                                $len = min($charsLeft * 2, $limitpos - $spos); // min($charsLeft, $conlength);
-                                                                    $retstr .= substr($this->data, $spos, $len);
-                                                                    $charsLeft -= $len/2;
-                                                                    $asciiEncoding = false;
-                                                                  }elseif (!$asciiEncoding && ($option == 0)) {
-                                                                // Bummer - the string starts off as Unicode, but after the
-                                                                // continuation it is in straightforward ASCII encoding
-                                                                                $len = min($charsLeft, $limitpos - $spos); // min($charsLeft, $conlength);
-                                                                        for ($j = 0; $j < $len; $j++) {
-                                                                 $retstr .= $this->data[$spos + $j].chr(0);
-                                                                }
-                                                            $charsLeft -= $len;
-                                                                $asciiEncoding = false;
-                                                                  }else{
-                                                            $newstr = '';
-                                                                    for ($j = 0; $j < strlen($retstr); $j++) {
-                                                                      $newstr = $retstr[$j].chr(0);
-                                                                    }
-                                                                    $retstr = $newstr;
-                                                                                $len = min($charsLeft * 2, $limitpos - $spos); // min($charsLeft, $conlength);
-                                                                    $retstr .= substr($this->data, $spos, $len);
-                                                                    $charsLeft -= $len/2;
-                                                                    $asciiEncoding = false;
-                                                                        //echo "Izavrat\n";
-                                                                  }
-                                                          $spos += $len;
+                            while ($charsLeft > 0){
+                                $opcode = ord($this->data[$spos]) | ord($this->data[$spos+1])<<8;
+                                $conlength = ord($this->data[$spos+2]) | ord($this->data[$spos+3])<<8;
+                                if ($opcode != 0x3c) {
+                                        return -1;
+                                }
+                                $spos += 4;
+                                $limitpos = $spos + $conlength;
+                                $option = ord($this->data[$spos]);
+                                $spos += 1;
+                                if ($asciiEncoding && ($option == 0)) {
+                                    $len = min($charsLeft, $limitpos - $spos); // min($charsLeft, $conlength);
+                                    $retstr .= substr($this->data, $spos, $len);
+                                    $charsLeft -= $len;
+                                    $asciiEncoding = true;
+                                }elseif (!$asciiEncoding && ($option != 0)){
+                                    $len = min($charsLeft * 2, $limitpos - $spos); // min($charsLeft, $conlength);
+                                    $retstr .= substr($this->data, $spos, $len);
+                                    $charsLeft -= $len/2;
+                                    $asciiEncoding = false;
+                                }elseif (!$asciiEncoding && ($option == 0)) {
+                                // Bummer - the string starts off as Unicode, but after the
+                                // continuation it is in straightforward ASCII encoding
+                                    $len = min($charsLeft, $limitpos - $spos); // min($charsLeft, $conlength);
+                                    for ($j = 0; $j < $len; $j++) {
+                                        $retstr .= $this->data[$spos + $j].chr(0);
+                                    }
+                                        $charsLeft -= $len;
+                                    $asciiEncoding = false;
+                                }else{
+                                    $newstr = '';
+                                    for ($j = 0; $j < strlen($retstr); $j++) {
+                                        $newstr = $retstr[$j].chr(0);
+                                    }
+                                    $retstr = $newstr;
+                                    $len = min($charsLeft * 2, $limitpos - $spos); // min($charsLeft, $conlength);
+                                    $retstr .= substr($this->data, $spos, $len);
+                                    $charsLeft -= $len/2;
+                                    $asciiEncoding = false;
+                                        //echo "Izavrat\n";
+                                }
+                                $spos += $len;
 
-                                                         }
-                                                }
-                                                $retstr = ($asciiEncoding) ? $retstr : $this->_encodeUTF16($retstr);
+                            }
+                        }
+                        $retstr = ($asciiEncoding) ? $retstr : $this->_encodeUTF16($retstr);
 
-                                        if ($richString){
-                                                  $spos += 4 * $formattingRuns;
-                                                }
+                        if ($richString){
+                            $spos += 4 * $formattingRuns;
+                        }
 
-                                                // For extended strings, skip over the extended string data
-                                                if ($extendedString) {
-                                                  $spos += $extendedRunLength;
-                                                }
-                                                $this->sst[]=$retstr;
-                                       }
+                        // For extended strings, skip over the extended string data
+                        if ($extendedString) {
+                            $spos += $extendedRunLength;
+                        }
+                        $this->sst[]=$retstr;
+                    }
                     break;
 
                 case SPREADSHEET_EXCEL_READER_TYPE_FILEPASS:
@@ -412,61 +402,61 @@ class PhpExcelReader {
                 case SPREADSHEET_EXCEL_READER_TYPE_NAME:
                     break;
                 case SPREADSHEET_EXCEL_READER_TYPE_FORMAT:
-                        $indexCode = ord($this->data[$pos+4]) | ord($this->data[$pos+5]) << 8;
+                    $indexCode = ord($this->data[$pos+4]) | ord($this->data[$pos+5]) << 8;
 
-                        if ($version == SPREADSHEET_EXCEL_READER_BIFF8) {
-                            $numchars = ord($this->data[$pos+6]) | ord($this->data[$pos+7]) << 8;
-                            if (ord($this->data[$pos+8]) == 0){
-                                $formatString = substr($this->data, $pos+9, $numchars);
-                            } else {
-                                $formatString = substr($this->data, $pos+9, $numchars*2);
-                            }
+                    if ($version == SPREADSHEET_EXCEL_READER_BIFF8) {
+                        $numchars = ord($this->data[$pos+6]) | ord($this->data[$pos+7]) << 8;
+                        if (ord($this->data[$pos+8]) == 0){
+                            $formatString = substr($this->data, $pos+9, $numchars);
                         } else {
-                            $numchars = ord($this->data[$pos+6]);
-                            $formatString = substr($this->data, $pos+7, $numchars*2);
+                            $formatString = substr($this->data, $pos+9, $numchars*2);
                         }
+                    } else {
+                        $numchars = ord($this->data[$pos+6]);
+                        $formatString = substr($this->data, $pos+7, $numchars*2);
+                    }
 
                     $this->formatRecords[$indexCode] = $formatString;
                     break;
                 case SPREADSHEET_EXCEL_READER_TYPE_XF:
-                        //global $dateFormats, $numberFormats;
-                        $indexCode = ord($this->data[$pos+6]) | ord($this->data[$pos+7]) << 8;
-                        if (array_key_exists($indexCode, $this->dateFormats)) {
-                            $this->formatRecords['xfrecords'][] = array(
-                                    'type' => 'date',
-                                    'format' => $this->dateFormats[$indexCode]
-                                    );
-                        }elseif (array_key_exists($indexCode, $this->numberFormats)) {
-                            $this->formatRecords['xfrecords'][] = array(
-                                    'type' => 'number',
-                                    'format' => $this->numberFormats[$indexCode]
-                                    );
-                        }else{
-                            $isdate = FALSE;
-                            if ($indexCode > 0){
-                                if (isset($this->formatRecords[$indexCode]))
-                                    $formatstr = $this->formatRecords[$indexCode];
-                                if ($formatstr)
-                                if (preg_match("/[^hmsday\/\-:\s]/i", $formatstr) == 0) { // found day and time format
-                                    $isdate = TRUE;
-                                    $formatstr = str_replace('mm', 'i', $formatstr);
-                                    $formatstr = str_replace('h', 'H', $formatstr);
-                                }
-                            }
-
-                            if ($isdate){
-                                $this->formatRecords['xfrecords'][] = array(
-                                        'type' => 'date',
-                                        'format' => $formatstr,
-                                        );
-                            }else{
-                                $this->formatRecords['xfrecords'][] = array(
-                                        'type' => 'other',
-                                        'format' => '',
-                                        'code' => $indexCode
-                                        );
+                    //global $dateFormats, $numberFormats;
+                    $indexCode = ord($this->data[$pos+6]) | ord($this->data[$pos+7]) << 8;
+                    if (array_key_exists($indexCode, $this->dateFormats)) {
+                        $this->formatRecords['xfrecords'][] = array(
+                                'type' => 'date',
+                                'format' => $this->dateFormats[$indexCode]
+                                );
+                    }elseif (array_key_exists($indexCode, $this->numberFormats)) {
+                        $this->formatRecords['xfrecords'][] = array(
+                                'type' => 'number',
+                                'format' => $this->numberFormats[$indexCode]
+                                );
+                    }else{
+                        $isdate = FALSE;
+                        if ($indexCode > 0){
+                            if (isset($this->formatRecords[$indexCode]))
+                                $formatstr = $this->formatRecords[$indexCode];
+                            if ($formatstr)
+                            if (preg_match("/[^hmsday\/\-:\s]/i", $formatstr) == 0) { // found day and time format
+                                $isdate = TRUE;
+                                $formatstr = str_replace('mm', 'i', $formatstr);
+                                $formatstr = str_replace('h', 'H', $formatstr);
                             }
                         }
+
+                        if ($isdate){
+                            $this->formatRecords['xfrecords'][] = array(
+                                    'type' => 'date',
+                                    'format' => $formatstr,
+                                    );
+                        }else{
+                            $this->formatRecords['xfrecords'][] = array(
+                                    'type' => 'other',
+                                    'format' => '',
+                                    'code' => $indexCode
+                                    );
+                        }
+                    }
                     break;
                 case SPREADSHEET_EXCEL_READER_TYPE_NINETEENFOUR:
                     $this->nineteenFour = (ord($this->data[$pos+4]) == 1);
@@ -491,28 +481,23 @@ class PhpExcelReader {
                                                  'offset'=>$rec_offset);
 
                     break;
-
             }
-
             $pos += $length + 4;
             $code = ord($this->data[$pos]) | ord($this->data[$pos+1])<<8;
             $length = ord($this->data[$pos+2]) | ord($this->data[$pos+3])<<8;
         }
-
         foreach ($this->boundsheets as $key=>$val){
             $this->sn = $key;
             $this->_parsesheet($val['offset']);
         }
         return true;
-
     }
 
     /**
      * Parse a worksheet
      *
      */
-    private function _parsesheet($spos)
-    {
+    private function _parsesheet($spos){
         $cont = true;
         // read BOF
         $code = ord($this->data[$spos]) | ord($this->data[$spos+1])<<8;
@@ -689,7 +674,6 @@ class PhpExcelReader {
              $this->sheets[$this->sn]['numRows'] = $this->sheets[$this->sn]['maxrow'];
         if (!isset($this->sheets[$this->sn]['numCols']))
              $this->sheets[$this->sn]['numCols'] = $this->sheets[$this->sn]['maxcol'];
-
     }
 
     /**
@@ -697,8 +681,7 @@ class PhpExcelReader {
      *
      * @return boolean True if date, false otherwise
      */
-    public function isDate($spos)
-    {
+    public function isDate($spos){
         $xfindex = ord($this->data[$spos+4]) | ord($this->data[$spos+5]) << 8;
         if ($this->formatRecords['xfrecords'][$xfindex]['type'] == 'date') {
             $this->curformat = $this->formatRecords['xfrecords'][$xfindex]['format'];
@@ -728,8 +711,7 @@ class PhpExcelReader {
      * @param integer The raw Excel value to convert
      * @return array First element is the converted date, the second element is number a unix timestamp
      */ 
-    private function createDate($numValue)
-    {
+    private function createDate($numValue){
         if ($numValue > 1) {
             $utcDays = $numValue - ($this->nineteenFour ? SPREADSHEET_EXCEL_READER_UTCOFFSETDAYS1904 : SPREADSHEET_EXCEL_READER_UTCOFFSETDAYS);
             $utcValue = round(($utcDays+1) * SPREADSHEET_EXCEL_READER_MSINADAY);
@@ -746,8 +728,7 @@ class PhpExcelReader {
         return array($string, $raw);
     }
 
-    function createNumber($spos)
-    {
+    function createNumber($spos){
         $rknumhigh = $this->_GetInt4d($this->data, $spos + 10);
         $rknumlow = $this->_GetInt4d($this->data, $spos + 6);
         //for ($i=0; $i<8; $i++) { echo ord($this->data[$i+$spos+6]) . " "; } echo "<br>";
@@ -763,8 +744,7 @@ class PhpExcelReader {
         return  $value;
     }
 
-    function addcell($row, $col, $string, $raw = '')
-    {
+    function addcell($row, $col, $string, $raw = ''){
         $this->sheets[$this->sn]['maxrow'] = max($this->sheets[$this->sn]['maxrow'], $row + $this->_rowoffset);
         $this->sheets[$this->sn]['maxcol'] = max($this->sheets[$this->sn]['maxcol'], $col + $this->_coloffset);
         $this->sheets[$this->sn]['cells'][$row + $this->_rowoffset][$col + $this->_coloffset] = $string;
@@ -775,23 +755,22 @@ class PhpExcelReader {
     }
 
 
-    function _GetIEEE754($rknum)
-    {
+    function _GetIEEE754($rknum){
         if (($rknum & 0x02) != 0) {
                 $value = $rknum >> 2;
         } else {
 
-// I got my info on IEEE754 encoding from
-// http://research.microsoft.com/~hollasch/cgindex/coding/ieeefloat.html
-// The RK format calls for using only the most significant 30 bits of the
-// 64 bit floating point value. The other 34 bits are assumed to be 0
-// So, we use the upper 30 bits of $rknum as follows...
-         $sign = ($rknum & 0x80000000) >> 31;
-        $exp = ($rknum & 0x7ff00000) >> 20;
-        $mantissa = (0x100000 | ($rknum & 0x000ffffc));
-        $value = $mantissa / pow( 2 , (20- ($exp - 1023)));
-        if ($sign) {$value = -1 * $value;}
-      }
+            // I got my info on IEEE754 encoding from
+            // http://research.microsoft.com/~hollasch/cgindex/coding/ieeefloat.html
+            // The RK format calls for using only the most significant 30 bits of the
+            // 64 bit floating point value. The other 34 bits are assumed to be 0
+            // So, we use the upper 30 bits of $rknum as follows...
+            $sign = ($rknum & 0x80000000) >> 31;
+            $exp = ($rknum & 0x7ff00000) >> 20;
+            $mantissa = (0x100000 | ($rknum & 0x000ffffc));
+            $value = $mantissa / pow( 2 , (20- ($exp - 1023)));
+            if ($sign) {$value = -1 * $value;}
+        }
 
         if (($rknum & 0x01) != 0) {
             $value /= 100;
@@ -799,28 +778,26 @@ class PhpExcelReader {
         return $value;
     }
 
-    function _encodeUTF16($string)
-    {
+    function _encodeUTF16($string)   {
         $result = $string;
         if ($this->_defaultEncoding){
             switch ($this->_encoderFunction){
-                case 'iconv' :     $result = iconv('UTF-16LE', $this->_defaultEncoding, $string);
-                                break;
-                case 'mb_convert_encoding' :     $result = mb_convert_encoding($string, $this->_defaultEncoding, 'UTF-16LE' );
-                                break;
+                case 'iconv' :     
+                    $result = iconv('UTF-16LE', $this->_defaultEncoding, $string);
+                    break;
+                case 'mb_convert_encoding' :     
+                    $result = mb_convert_encoding($string, $this->_defaultEncoding, 'UTF-16LE' );
+                    break;
             }
         }
         return $result;
     }
 
-    function _GetInt4d($data, $pos)
-    {
+    function _GetInt4d($data, $pos){
         $value = ord($data[$pos]) | (ord($data[$pos+1]) << 8) | (ord($data[$pos+2]) << 16) | (ord($data[$pos+3]) << 24);
-        if ($value>=4294967294)
-        {
+        if ($value>=4294967294){
             $value=-2;
         }
         return $value;
     }
-
 }
