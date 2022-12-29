@@ -170,7 +170,7 @@ class WPEM_Migration_Import {
 			switch($xmlReader->nodeType) {
 
                 case (XMLREADER::ELEMENT):  
-                    if ($xmlReader->localName == "events") {
+                    if ($xmlReader->localName == "events" || $xmlReader->localName == "organizers" ||  $xmlReader->localName == "venues") {
                         $event=array();
                     }else{
                         if(empty($xmlEvents)){
@@ -182,7 +182,7 @@ class WPEM_Migration_Import {
                     break;
                 case (XMLREADER::END_ELEMENT):
                     // do something based on when the element closes.
-                    if ($xmlReader->localName == "events" && !empty($event)){
+                    if (($xmlReader->localName == "events" || $xmlReader->localName == "organizers" ||  $xmlReader->localName == "venues") && !empty($event)){
                         if(!empty($key)){
                             array_push($xmlEvents, $key);
                             $key = null;
