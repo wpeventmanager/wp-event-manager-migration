@@ -346,13 +346,7 @@ class WPEM_Migration_Import {
                             if (is_numeric($meta_value)) {
                                 $arrID = [$meta_value];
                             }else{
-                                
-                                // $arrID = unserialize($meta_value);
-                                // if ( FALSE === $arrID && isset( $php_errormsg ) && strpos( $php_errormsg, 'unserialize' ) !== FALSE )
-                                // {
-                                    $arrID = array($meta_value);
-                                    // error_log(print_r($arrID, true));
-                                // } 
+                                $arrID = array($meta_value);
                             }
                         }
                     }
