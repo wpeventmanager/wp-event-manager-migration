@@ -141,8 +141,6 @@ class WPEM_Migration_Import {
             }
             fclose($handle);
         }
-        error_log("csv");
-        error_log(print_r($csv_data, true));
         return $csv_data;
     }
 
@@ -348,7 +346,13 @@ class WPEM_Migration_Import {
                             if (is_numeric($meta_value)) {
                                 $arrID = [$meta_value];
                             }else{
-                                $arrID = unserialize($meta_value);
+                                
+                                // $arrID = unserialize($meta_value);
+                                // if ( FALSE === $arrID && isset( $php_errormsg ) && strpos( $php_errormsg, 'unserialize' ) !== FALSE )
+                                // {
+                                    $arrID = array($meta_value);
+                                    // error_log(print_r($arrID, true));
+                                // } 
                             }
                         }
                     }
