@@ -365,8 +365,8 @@ class WPEM_Migration_Import {
                 } else {
                     if ($import_fields['taxonomy'] != '') {
                         if ($meta_value != '') {
+                        
                             $term = term_exists($meta_value, $import_fields['taxonomy']);
-
                             if (empty($term)) {
                                 $term = wp_insert_term(
                                         $meta_value,
