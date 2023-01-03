@@ -96,9 +96,13 @@
                                                     endforeach;
                                                 }else {
                                                     foreach ($group_fields as $name => $field) : 
-                                                        if (!in_array($field['type'], ['term-select'])) : ?>
-                                                            <option class="text" value="_<?php echo esc_attr($name); ?>" <?php selected($head_fields, '_' . $name); ?> ><?php echo esc_html($field['label']); ?></option>
-                                                        <?php endif;
+                                                        if (!in_array($field['type'], ['term-select'])) : 
+                                                            if($head_fields == '_thumbnail_id' && $group_key=='event' && $name=='event_banner'){ ?>
+                                                                <option class="text" value="_<?php echo esc_attr($name); ?>" selected ><?php echo esc_html($field['label']); ?></option>
+                                                            <?php }else{  ?>
+                                                                <option class="text" value="_<?php echo esc_attr($name); ?>" <?php selected($head_fields, '_' . $name); ?> ><?php echo esc_html($field['label']); ?></option>
+                                                            <?php }
+                                                        endif;
                                                     endforeach;
                                                 } ?>
                                             </optgroup>
