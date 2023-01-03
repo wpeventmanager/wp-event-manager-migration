@@ -84,11 +84,6 @@ class WPEM_Migration {
 		add_action( 'after_setup_theme', array( $this, 'load_plugin_textdomain' ) );
 	}
 	
-
-	public function custom_upload_xml($mimes) {
-		$mimes = array_merge($mimes, array('xml' => 'text/xml'));
-return $mimes;
-	}
 	/**
      * Localisation function.
      *
@@ -103,7 +98,6 @@ return $mimes;
         $locale = apply_filters('plugin_locale', get_locale(), $domain);
 		load_textdomain( $domain, WP_LANG_DIR . "/wp-event-manager-migration/".$domain."-" .$locale. ".mo" );
 		load_plugin_textdomain($domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-		// add_filter('upload_mimes', 'custom_upload_xml');
 	}
 }
 

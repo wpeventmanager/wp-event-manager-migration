@@ -35,7 +35,7 @@
 
                                         <optgroup label="Registrations">
                                             <?php
-                                            foreach ($migration_fields as $name => $field) :       
+                                            foreach ($migration_fields as $name => $field) :                                    
                                                 if ($i == 1) : ?>
                                                     <option class="text" value="_post_id"><?php _e('ID', 'wp-event-manager-migration'); ?></option>
                                                 <?php endif; 
@@ -83,7 +83,7 @@
                                                 <?php if ($i == 1) : ?>
                                                     <option class="text" value="_post_id" <?php selected($head_fields, '_post_id'); ?>><?php _e('ID', 'wp-event-manager-migration'); ?></option>
                                                 <?php endif; 
-
+   
                                                 if ($group_key == 'tickets'){ 
                                                     if ($i == 1) : ?>
                                                         <option class="text" value="_event_id"><?php _e('Event ID', 'wp-event-manager-migration'); ?></option>
@@ -109,7 +109,7 @@
                                         if (!empty($taxonomies)) : ?>
                                             <optgroup label="<?php _e('Taxonomy', 'wp-event-manager-migration') ?>">
                                                 <?php foreach ($taxonomies as $name => $taxonomy) : ?>
-                                                    <option class="taxonomy" value="<?php echo esc_attr($name); ?>" ><?php echo esc_html($taxonomy->label); ?></option>
+                                                    <option class="taxonomy" value="<?php echo esc_attr($name); ?>" <?php selected($head_fields, $name); ?> ><?php echo esc_html($taxonomy->label); ?></option>
                                                 <?php endforeach; ?>
                                             </optgroup>
                                         <?php endif; ?>
