@@ -38,9 +38,14 @@ class WPEM_Migration_Import {
             'event_registration' => __('Event Registration', 'wp-event-manager-migration'),
         );
 
-        if (in_array('wp-event-manager/wp-event-manager.php', apply_filters('active_plugins', get_option('active_plugins'))) && in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
-            $post_types['product'] = __('Sell Tickets', 'wp-event-manager-migration');
-        }
+		if ( in_array('wp-event-manager-registrations/wp-event-manager-registrations.php', apply_filters('active_plugins', get_option('active_plugins'))) ){
+			$post_types['event_registration'] = __('Registrations', 'wp-event-manager-migration');
+		}
+
+		// if ( in_array('wp-event-manager/wp-event-manager.php', apply_filters('active_plugins', get_option('active_plugins'))) && in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) )
+		// {
+		// 	$post_types['product'] = __('Sell Tickets', 'wp-event-manager-migration');
+		// }
 
         return apply_filters('migration_post_type', $post_types);
     }
@@ -279,7 +284,6 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function import_event($post_id, $post_type, $params) {
-
         if ($post_id != '') {
             $post_title = !empty($params['_event_title']) ? $params['_event_title'] : '';
             $post_content = !empty($params['_event_description']) ? $params['_event_description'] : '';
@@ -512,29 +516,59 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function import_registration($post_id, $post_type, $params) {
-
         if ($post_id != '') {
-            $update_event = ['ID' => $post_id];
             $attendee_name = isset($params['_attendee_name']) ? $params['_attendee_name'] : '';
+			$registration_status = isset($params['_registration_status']) ? $params['_registration_status'] : '';
+			$event_id = isset($params['_event_id']) ? $params['_event_id'] : '';
+			$registration_date = isset($params['_registration_date']) ? $params['_registration_date'] : '';
+            $args = array (
+				'post_type'  => 'event_listing',
+				'meta_query' => array(
+					array(
+						'key'   => '_migration_id',
+						'value' => $event_id,
+					),
+				),
+			);
+			
+			$events = new WP_Query( $args );
+			if ( $events->have_posts() ) {
+				while ( $events->have_posts() ) {
+					$events->the_post();
+					$event_id = the_ID();
+				}
+			} 
 
-            if ($attendee_name != '') {
-                $update_event['post_title'] = $attendee_name;
-                update_post_meta($post_id, '_attendee_name', $attendee_name);
-            }
+			if ($attendee_name != '') {
+				$registration_data = array(
+					'ID'             => $post_id,
+					'post_status'    => strtolower($registration_status),
+					'post_date'      => date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $registration_date))),
+					'post_parent'    => (int)$event_id
+				);
+				wp_update_post($registration_data);
 
-            wp_update_post($update_event);
+				update_post_meta($post_id, '_attendee_name', $attendee_name);
+				$migration_import_fields = get_option('migration_import_fields', true);
 
-            $migration_import_fields = get_option('migration_import_fields', true);
+				foreach ($params as $meta_key => $meta_value) {
+					if($meta_key != '_registration_status' && $meta_key != '_registration_date' && $meta_key != '_event_id'){
+						$import_fields = $migration_import_fields[$meta_key];
 
-            foreach ($params as $meta_key => $meta_value) {
-                $import_fields = $migration_import_fields[$meta_key];
-
-                if ($meta_value == '') {
-                    $meta_value = $import_fields['default_value'];
-                }
-
-                update_post_meta($post_id, $meta_key, $meta_value);
-            }
+						if ($meta_value == '') {
+							$meta_value = $import_fields['default_value'];
+						}
+						if($meta_key == '_check_in'){
+							if($meta_value == 'No'){
+								update_post_meta($post_id, $meta_key, 0);
+							}else{
+								update_post_meta($post_id, $meta_key, 1);
+							}
+						}
+						update_post_meta($post_id, $meta_key, $meta_value);
+					}
+				}
+			}
         }
     }
 

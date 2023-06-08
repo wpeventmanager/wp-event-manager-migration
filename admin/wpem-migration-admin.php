@@ -81,7 +81,7 @@ class WPEM_Migration_Admin {
                 $taxonomies = get_object_taxonomies(sanitize_text_field($_POST['migration_post_type']), 'objects');
                 $migration_post_type = $this->import_class->get_migration_post_type();
                 $import_type_label = $migration_post_type[sanitize_text_field($_POST['migration_post_type'])];
-				
+
                 get_event_manager_template(
                     'event-migration-mapping-form.php',
                     array(
