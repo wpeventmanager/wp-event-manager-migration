@@ -149,7 +149,7 @@
 
             <tfoot>
                 <tr>
-                    <td colspan="4">
+                    <td colspan="5">
                         <input type="hidden" name="page" value="event-migration" />
                         <input type="hidden" name="migration_post_type" value="<?php echo $migration_post_type; ?>" />
                         <input type="hidden" name="file_id" id="file_id" value="<?php echo $file_id; ?>" />
