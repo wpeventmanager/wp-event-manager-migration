@@ -15,8 +15,8 @@ class WPEM_Migration_Import {
      * @return void
      */
     public function __construct() {
-        include_once ('lib/simple-xlsx.php');
-        require_once ('lib/excel-reader.php');
+        include_once(WPEM_MIGRATION_PLUGIN_DIR.'/includes/lib/simple-xlsx.php');
+        include_once(WPEM_MIGRATION_PLUGIN_DIR.'/includes/lib/excel-reader.php');
 
         // Ajax
         add_action('wp_ajax_get_migration_terms', array($this, 'get_migration_terms'));
@@ -37,7 +37,6 @@ class WPEM_Migration_Import {
             'event_venue' => __('Venue', 'wp-event-manager-migration'),
             'event_registration' => __('Event Registration', 'wp-event-manager-migration'),
         );
-
 		if ( in_array('wp-event-manager-registrations/wp-event-manager-registrations.php', apply_filters('active_plugins', get_option('active_plugins'))) ){
 			$post_types['event_registration'] = __('Registrations', 'wp-event-manager-migration');
 		}
@@ -59,19 +58,16 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function get_migration_terms() {
-
         if (isset($_POST['taxonomy'])) {
             $terms = get_categories(array('taxonomy' => sanitize_text_field($_POST['taxonomy']), 'hide_empty' => false));
         }
-
         $output = '<option value="">' . __('Select option', 'wp-event-manager-migration') . '...</option>';
-
         if (!empty($terms)) {
             foreach ($terms as $key => $term) {
                 $output .= '<option value="' . $term->term_id . '">' . $term->name . '</option>';
             }
         }
-
+        $output = apply_filters('customize_migration_terms', $output);
         print($output);
         wp_die();
     }
@@ -85,7 +81,6 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function get_event_form_field_lists($post_type) {
-
         $fields = [];
         if ($post_type == 'event_listing') {
             $GLOBALS['event_manager']->forms->get_form('submit-event', array());
@@ -104,7 +99,7 @@ class WPEM_Migration_Import {
         } else if ($post_type == 'product') {
             $fields = $this->event_listing_sell_tickets_fields();
         }
-
+        $fields = apply_filters('wpem_migration_event_form_field_lists', $fields, $post_type);
         return $fields;
     }
 
@@ -117,15 +112,14 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function get_file_data($type, $file) {
-
         $file_data = [];
-
         if ($type == 'csv') {
             $file_data = $this->get_csv_data($file);
         } else if ($type == 'xml') {
             $file_data = $this->get_xml_data($file);
         }
-
+        do_action('wpem_migration_get_file_data', $file, $type);
+        $file_data = apply_filters('wpem_migration_update_file_data', $file_data, $type);
         return $file_data;
     }
 
@@ -138,7 +132,6 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function get_csv_data($file) {
-
         $csv_data = [];
         if (($handle = fopen($file, "r")) !== FALSE) {
             while (($data = fgetcsv($handle)) !== FALSE) {
@@ -158,7 +151,6 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function get_xml_data($file) {
-
         $xmlReader = new XMLReader();		
         // reader the XML file.
         $xmlReader->open($file);
@@ -171,7 +163,6 @@ class WPEM_Migration_Import {
                 continue;
             }
 			switch($xmlReader->nodeType) {
-
                 case (XMLREADER::ELEMENT):  
                     if ($xmlReader->localName == "events" || $xmlReader->localName == "organizers" ||  $xmlReader->localName == "venues") {
                         $event=array();
@@ -221,7 +212,6 @@ class WPEM_Migration_Import {
             if ($post_type == $type) {
                 $post_id = $params['_post_id'];
             }
-
             if ($post_type == 'product') {
                 $product = wc_get_product($params['_post_id']);
                 if (!empty($product)) {
@@ -246,6 +236,7 @@ class WPEM_Migration_Import {
         } else if ($post_type == 'product') {
             $post_title = !empty($params['ticket_name']) ? $params['ticket_name'] : '';
         }
+        $post_title = apply_filters('wpem_migration_set_post_title', $params, $post_type);
         if ($post_id == '' && $post_title != '') {
             $args = [
                 'post_title' => $post_title,
@@ -254,14 +245,11 @@ class WPEM_Migration_Import {
                 'comment_status' => 'closed',
                 'post_status' => 'publish',
             ];
-
             $post_id = wp_insert_post($args);
-
             if (isset($params['_post_id']) && $params['_post_id'] != '') {
                 update_post_meta($post_id, '_migration_id', $params['_post_id']);
             }
         }
-
         if ($post_type == 'event_listing') {
             $this->import_event($post_id, $post_type, $params);
         } else if ($post_type == 'event_organizer') {
@@ -273,6 +261,7 @@ class WPEM_Migration_Import {
         } else if ($post_type == 'product') {
             $this->import_ticket($post_id, $post_type, $params);
         }
+        do_action('wpem_migration_import_file_data', $post_id, $post_type, $params);
     }
 
     /**
@@ -287,9 +276,7 @@ class WPEM_Migration_Import {
         if ($post_id != '') {
             $post_title = !empty($params['_event_title']) ? $params['_event_title'] : '';
             $post_content = !empty($params['_event_description']) ? $params['_event_description'] : '';
-
             $update_event = ['ID' => $post_id];
-
             if ($post_title != '') {
                 $update_event['post_title'] = $post_title;
             }
@@ -316,7 +303,6 @@ class WPEM_Migration_Import {
                             $arrImages = [$meta_value];
                         }
                     }
-
                     if (!empty($arrImages)) {
                         $imageData = [];
                         foreach ($arrImages as $key => $url) {
@@ -337,7 +323,6 @@ class WPEM_Migration_Import {
                     }
                 } else if (in_array($meta_key, ['_event_organizer_ids', '_event_venue_ids'])) {
                     $is_json = is_string($meta_value) && is_array(json_decode($meta_value, true)) ? true : false;
-                     
                     if ($is_json) {
                         $arrID = json_decode($meta_value, true);
                     } else {
@@ -369,7 +354,6 @@ class WPEM_Migration_Import {
                 } else {
                     if ($import_fields['taxonomy'] != '') {
                         if ($meta_value != '') {
-                        
                             $term = term_exists($meta_value, $import_fields['taxonomy']);
                             if (empty($term)) {
                                 $term = wp_insert_term(
@@ -377,11 +361,9 @@ class WPEM_Migration_Import {
                                         $import_fields['taxonomy']
                                 );
                             }
-
                             wp_set_post_terms($post_id, $term['term_id'], $import_fields['taxonomy'], true);
                         } else {
                             $term_id = $import_fields['default_value'];
-
                             if ($term_id != '') {
                                 wp_set_post_terms($post_id, $term_id, $import_fields['taxonomy'], true);
                             }
@@ -390,7 +372,6 @@ class WPEM_Migration_Import {
                         if ($meta_value == '') {
                             $meta_value = $import_fields['default_value'];
                         }
-
                         update_post_meta($post_id, $meta_key, $meta_value);
                     }
                 }
@@ -407,43 +388,34 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function import_organizer($post_id, $post_type, $params) {
-
         if ($post_id != '') {
             $post_title = !empty($params['_organizer_name']) ? $params['_organizer_name'] : '';
             $post_content = !empty($params['_organizer_description']) ? $params['_organizer_description'] : '';
-
             $update_event = ['ID' => $post_id];
-
             if ($post_title != '') {
                 $update_event['post_title'] = $post_title;
             }
             if ($post_content != '') {
                 $update_event['post_content'] = $post_content;
             }
-
             wp_update_post($update_event);
 
             $migration_import_fields = get_option('migration_import_fields', true);
-
             foreach ($params as $meta_key => $meta_value) {
                 $import_fields = $migration_import_fields[$meta_key];
                 if ($meta_value == '' ) {
                     $meta_value = $import_fields['default_value'];
                 }
-
                 if ($meta_key == '_organizer_logo') {
                     $response = $this->image_exists($meta_value);
-
                     if ($response) {
                         $imageData = $this->upload_image($meta_value);
-
                         if (!empty($imageData)) {
                             $thumbnail_id = $imageData['image_id'];
                         }
                     } else {
                         $thumbnail_id = '';
                     }
-
                     update_post_meta($post_id, '_thumbnail_id', $thumbnail_id);
                 } else {
                     update_post_meta($post_id, $meta_key, $meta_value);
@@ -461,11 +433,9 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function import_venue($post_id, $post_type, $params) {
-
         if ($post_id != '') {
             $post_title = !empty($params['_venue_name']) ? $params['_venue_name'] : '';
             $post_content = !empty($params['_venue_description']) ? $params['_venue_description'] : '';
-
             $update_event = ['ID' => $post_id];
 
             if ($post_title != '') {
@@ -474,31 +444,25 @@ class WPEM_Migration_Import {
             if ($post_content != '') {
                 $update_event['post_content'] = $post_content;
             }
-
             wp_update_post($update_event);
 
             $migration_import_fields = get_option('migration_import_fields', true);
-
             foreach ($params as $meta_key => $meta_value) {
                 $import_fields = $migration_import_fields[$meta_key];
 
                 if ($meta_value == '') {
                     $meta_value = $import_fields['default_value'];
                 }
-
                 if ($meta_key == '_venue_logo') {
                     $response = $this->image_exists($meta_value);
-
                     if ($response) {
                         $imageData = $this->upload_image($meta_value);
-
                         if (!empty($imageData)) {
                             $thumbnail_id = $imageData['image_id'];
                         }
                     } else {
                         $thumbnail_id = '';
                     }
-
                     update_post_meta($post_id, '_thumbnail_id', $thumbnail_id);
                 } else {
                     update_post_meta($post_id, $meta_key, $meta_value);
@@ -530,7 +494,6 @@ class WPEM_Migration_Import {
 					),
 				),
 			);
-			
 			$events = new WP_Query( $args );
 			if ( $events->have_posts() ) {
 				while ( $events->have_posts() ) {
@@ -538,7 +501,6 @@ class WPEM_Migration_Import {
 					$event_id = the_ID();
 				}
 			} 
-
 			if ($attendee_name != '') {
 				$registration_data = array(
 					'ID'             => $post_id,
@@ -550,7 +512,6 @@ class WPEM_Migration_Import {
 
 				update_post_meta($post_id, '_attendee_name', $attendee_name);
 				$migration_import_fields = get_option('migration_import_fields', true);
-
 				foreach ($params as $meta_key => $meta_value) {
 					if($meta_key != '_registration_status' && $meta_key != '_registration_date' && $meta_key != '_event_id'){
 						$import_fields = $migration_import_fields[$meta_key];
@@ -599,7 +560,6 @@ class WPEM_Migration_Import {
             $ticket_sales_end_time = isset($params['ticket_sales_end_time']) ? $params['ticket_sales_end_time'] : '';
             $show_remaining_tickets = isset($params['show_remaining_tickets']) ? $params['show_remaining_tickets'] : '';
             $ticket_individually = isset($params['ticket_individually']) ? $params['ticket_individually'] : '';
-
             $ticket_type = isset($params['ticket_type']) ? $params['ticket_type'] : '';
             $event_id = isset($params['_event_id']) ? $params['_event_id'] : '';
 
@@ -607,23 +567,19 @@ class WPEM_Migration_Import {
                 'ID' => $product_id,
                 'post_status' => $ticket_visibility
             ];
-
             if ($ticket_name != '') {
                 $update_event['post_title'] = $ticket_name;
             }
             if ($ticket_description != '') {
                 $update_event['post_content'] = $ticket_description;
             }
-
             wp_update_post($update_event);
 
             //set product type as event ticket
             wp_set_object_terms($product_id, 'event_ticket', 'product_type');
 
             $is_virtual = apply_filters('event_ticket_is_virtual', 'yes');
-
             $migration_import_fields = get_option('migration_import_fields', true);
-
 
             if ($ticket_type == '' && $ticket_price == '') {
                 $ticket_type = 'free';
@@ -655,11 +611,8 @@ class WPEM_Migration_Import {
 
             if ($event_id != '') {
                 $updated_tickets = [];
-
                 $get_tickets = get_post_meta($event_id, '_' . $ticket_type . '_tickets', true);
-
                 $updated_new_tickets = [];
-
                 $is_add_ticket = true;
                 if (!empty($get_tickets)) {
                     foreach ($get_tickets as $ticket) {
@@ -680,9 +633,7 @@ class WPEM_Migration_Import {
                             $ticket['ticket_sales_end_time'] = $ticket_sales_end_time;
                             $ticket['show_remaining_tickets'] = $show_remaining_tickets;
                             $ticket['ticket_individually'] = $ticket_individually;
-
                             $updated_new_tickets[] = $ticket;
-
                             $is_add_ticket = false;
                         } else {
                             $updated_new_tickets[] = $ticket;
@@ -692,7 +643,6 @@ class WPEM_Migration_Import {
 
                 if ($is_add_ticket) {
                     $new_ticket = [];
-
                     $new_ticket['product_id'] = $product_id;
                     $new_ticket['ticket_name'] = $ticket_name;
                     $new_ticket['ticket_quantity'] = $ticket_quantity;
@@ -709,7 +659,6 @@ class WPEM_Migration_Import {
                     $new_ticket['ticket_sales_end_time'] = $ticket_sales_end_time;
                     $new_ticket['show_remaining_tickets'] = $show_remaining_tickets;
                     $new_ticket['ticket_individually'] = $ticket_individually;
-
                     $updated_new_tickets[] = $new_ticket;
                 }
                 update_post_meta($event_id, '_' . $ticket_type . '_tickets', $updated_new_tickets);
@@ -729,14 +678,12 @@ class WPEM_Migration_Import {
         $arrData = [];
 
         if ($url != '') {
-            $url = stripslashes($url);
-
+            
             require_once(ABSPATH . 'wp-admin' . '/includes/image.php');
             require_once(ABSPATH . 'wp-admin' . '/includes/file.php');
             require_once(ABSPATH . 'wp-admin' . '/includes/media.php');
-
+            $url = stripslashes($url);
             $tmp = download_url($url);
-
             $file_array = array(
                 'name' => basename($url),
                 'tmp_name' => $tmp
@@ -758,7 +705,6 @@ class WPEM_Migration_Import {
              * $post_id can be set to '0' to not attach it to any particular post
              */
             $post_id = '0';
-
             $image_id = media_handle_sideload($file_array, $post_id);
 
             /**
@@ -777,11 +723,9 @@ class WPEM_Migration_Import {
              * $id is the attachment id
              */
             $image_url = wp_get_attachment_url($image_id);
-
             $arrData['image_id'] = $image_id;
             $arrData['image_url'] = $image_url;
         }
-
         return $arrData;
     }
 
@@ -794,7 +738,6 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function image_exists($url) {
-
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_NOBODY, true);
         curl_exec($ch);
@@ -819,7 +762,6 @@ class WPEM_Migration_Import {
         global $wpdb;
 
         $arr_ID = [];
-       
         if (!empty($arrID)) {
             $ids = implode(",", $arrID);
             $query = "SELECT `post_id` FROM `" . $wpdb->prefix . "postmeta` WHERE 1
@@ -827,14 +769,12 @@ class WPEM_Migration_Import {
 							AND `meta_key` = '_migration_id' 
 							AND `post_id` IN (SELECT ID FROM `" . $wpdb->prefix . "posts` WHERE `post_type` = '" . $post_type . "' AND `post_status` = 'publish')";
             $results = $wpdb->get_results($query, ARRAY_A);
-
             if (!empty($results)) {
                 foreach ($results as $key => $result) {
                     $arr_ID[] = $result['post_id'];
                 }
             }
         }
-
         return $arr_ID;
     }
 
@@ -847,7 +787,6 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function event_listing_sell_tickets_fields() {
-
         $fields = array(
             'tickets' => array(//fields attribute must
                 'ticket_name' => array(
@@ -981,7 +920,7 @@ class WPEM_Migration_Import {
                 )
             )
         );
-        return $fields;
+        return apply_filters('wpem_migration_set_sell_ticket_fields', $fields);
     }
 }
 

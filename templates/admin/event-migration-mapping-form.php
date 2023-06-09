@@ -20,8 +20,8 @@
             </thead>
 
             <tbody>
-                <?php if ($migration_post_type == 'event_registration') : ?>
-                    <?php if (!empty($file_head_fields)) : 
+                <?php if ($migration_post_type == 'event_registration') :
+                    if (!empty($file_head_fields)) : 
                         $file_fields = array();
                         foreach( $file_head_fields as $element ) {
                             $file_fields[str_replace(" ", "_", strtolower($element))] = array("label" => ucwords($element), "type" => "text");
@@ -69,11 +69,11 @@
                                     </select>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                <?php else : ?>
-                    <?php if (!empty($file_head_fields)) : ?>
-                        <?php foreach ($file_head_fields as $key => $head_fields) : ?>
+                        <?php endforeach;
+                    endif; ?>
+                <?php else : 
+                    if (!empty($file_head_fields)) : 
+                        foreach ($file_head_fields as $key => $head_fields) : ?>
                             <tr>
                                 <td>
                                     <input readonly type="text" name="file_field[<?php echo $key; ?>]" value="<?php echo $head_fields; ?>" />
@@ -138,13 +138,12 @@
                                 </td>
                                 <td>
                                     <input type="hidden" name="default_value[<?php echo $key; ?>]" class="default_value_<?php echo $key; ?>" value="" />
-                                    <select style="display: none;" class="default_value_<?php echo $key; ?>">
-                                    </select>
+                                    <select style="display: none;" class="default_value_<?php echo $key; ?>"></select>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                <?php endif; ?>
+                        <?php endforeach;
+                    endif;
+                 endif; ?>
             </tbody>
 
             <tfoot>
@@ -155,9 +154,7 @@
                         <input type="hidden" name="file_id" id="file_id" value="<?php echo $file_id; ?>" />
                         <input type="hidden" name="file_type" id="file_type" value="<?php echo $file_type; ?>" />
                         <input type="hidden" name="action" value="mapping" />
-
                         <input type="submit" class="button-primary" name="wp_event_manager_migration_mapping" value="<?php esc_attr_e('Step 2', 'wp-event-manager-migration'); ?>" />
-
                         <?php wp_nonce_field('event_manager_migration_mapping'); ?>
                     </td>
                 </tr>
