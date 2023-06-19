@@ -203,7 +203,6 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function import_data($post_type, $params) {
-        error_log("import_data");
         $user_id = get_current_user_id();
 
         $post_id = '';
@@ -245,7 +244,6 @@ class WPEM_Migration_Import {
                 'comment_status' => 'closed',
                 'post_status' => 'publish',
             ];
-            error_log(print_r($args, true));
             $post_id = wp_insert_post($args);
             if (isset($params['_post_id']) && $params['_post_id'] != '') {
                 update_post_meta($post_id, '_migration_id', $params['_post_id']);
