@@ -41,8 +41,7 @@ class WPEM_Migration_Import {
 			$post_types['event_registration'] = __('Registrations', 'wp-event-manager-migration');
 		}
 
-		// if ( in_array('wp-event-manager/wp-event-manager.php', apply_filters('active_plugins', get_option('active_plugins'))) && in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) )
-		// {
+		// if ( in_array('wp-event-manager/wp-event-manager.php', apply_filters('active_plugins', get_option('active_plugins'))) && in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) ) {
 		// 	$post_types['product'] = __('Sell Tickets', 'wp-event-manager-migration');
 		// }
 
@@ -204,6 +203,7 @@ class WPEM_Migration_Import {
      * @since 1.0
      */
     public function import_data($post_type, $params) {
+        error_log("import_data");
         $user_id = get_current_user_id();
 
         $post_id = '';
@@ -236,7 +236,7 @@ class WPEM_Migration_Import {
         } else if ($post_type == 'product') {
             $post_title = !empty($params['ticket_name']) ? $params['ticket_name'] : '';
         }
-        $post_title = apply_filters('wpem_migration_set_post_title', $params, $post_type);
+        $post_title = apply_filters('wpem_migration_set_post_title', $post_title, $params);
         if ($post_id == '' && $post_title != '') {
             $args = [
                 'post_title' => $post_title,
@@ -245,6 +245,7 @@ class WPEM_Migration_Import {
                 'comment_status' => 'closed',
                 'post_status' => 'publish',
             ];
+            error_log(print_r($args, true));
             $post_id = wp_insert_post($args);
             if (isset($params['_post_id']) && $params['_post_id'] != '') {
                 update_post_meta($post_id, '_migration_id', $params['_post_id']);
