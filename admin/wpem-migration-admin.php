@@ -114,7 +114,7 @@ class WPEM_Migration_Admin {
                 }
             }
 
-            update_option('migration_import_fields', $migration_import_fields);
+            update_option('wpem_migration_import_fields', $migration_import_fields);
 
             if ($_POST['action'] == 'mapping' && $_POST['file_id'] != '') {
                 $file = get_attached_file($_POST['file_id']);
@@ -142,7 +142,7 @@ class WPEM_Migration_Admin {
             }
         } else if (!empty($_POST['wp_event_manager_migration_import']) && wp_verify_nonce($_POST['_wpnonce'], 'event_manager_migration_import')) {
             if ($_POST['action'] == 'import' && $_POST['file_id'] != '') {
-                $migration_import_fields = get_option('migration_import_fields', true);
+                $migration_import_fields = get_option('wpem_migration_import_fields', true);
 
                 $file = get_attached_file(sanitize_text_field($_POST['file_id']));
                 $file_data = $this->import_class->get_file_data(sanitize_text_field($_POST['file_type']), $file);

@@ -41,9 +41,9 @@ class WPEM_Migration_Import {
 			$post_types['event_registration'] = __('Registrations', 'wp-event-manager-migration');
 		}
 
-		// if ( in_array('wp-event-manager/wp-event-manager.php', apply_filters('active_plugins', get_option('active_plugins'))) && in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) ) {
-		// 	$post_types['product'] = __('Sell Tickets', 'wp-event-manager-migration');
-		// }
+		if ( in_array('wp-event-manager/wp-event-manager.php', apply_filters('active_plugins', get_option('active_plugins'))) && in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) ) {
+			$post_types['product'] = __('Sell Tickets', 'wp-event-manager-migration');
+		}
 
         return apply_filters('migration_post_type', $post_types);
     }
@@ -284,7 +284,7 @@ class WPEM_Migration_Import {
             }
 
             wp_update_post($update_event);
-            $migration_import_fields = get_option('migration_import_fields', true);
+            $migration_import_fields = get_option('wpem_migration_import_fields', true);
             $migration_id = get_post_meta($post_id, '_migration_id', true);
             foreach ($params as $meta_key => $meta_value) {
                 $import_fields = $migration_import_fields[$meta_key];
@@ -399,7 +399,7 @@ class WPEM_Migration_Import {
             }
             wp_update_post($update_event);
 
-            $migration_import_fields = get_option('migration_import_fields', true);
+            $migration_import_fields = get_option('wpem_migration_import_fields', true);
             foreach ($params as $meta_key => $meta_value) {
                 $import_fields = $migration_import_fields[$meta_key];
                 if ($meta_value == '' ) {
@@ -445,7 +445,7 @@ class WPEM_Migration_Import {
             }
             wp_update_post($update_event);
 
-            $migration_import_fields = get_option('migration_import_fields', true);
+            $migration_import_fields = get_option('wpem_migration_import_fields', true);
             foreach ($params as $meta_key => $meta_value) {
                 $import_fields = $migration_import_fields[$meta_key];
 
@@ -510,7 +510,7 @@ class WPEM_Migration_Import {
 				wp_update_post($registration_data);
 
 				update_post_meta($post_id, '_attendee_name', $attendee_name);
-				$migration_import_fields = get_option('migration_import_fields', true);
+				$migration_import_fields = get_option('wpem_migration_import_fields', true);
 				foreach ($params as $meta_key => $meta_value) {
 					if($meta_key != '_registration_status' && $meta_key != '_registration_date' && $meta_key != '_event_id'){
 						$import_fields = $migration_import_fields[$meta_key];
@@ -578,7 +578,7 @@ class WPEM_Migration_Import {
             wp_set_object_terms($product_id, 'event_ticket', 'product_type');
 
             $is_virtual = apply_filters('event_ticket_is_virtual', 'yes');
-            $migration_import_fields = get_option('migration_import_fields', true);
+            $migration_import_fields = get_option('wpem_migration_import_fields', true);
 
             if ($ticket_type == '' && $ticket_price == '') {
                 $ticket_type = 'free';

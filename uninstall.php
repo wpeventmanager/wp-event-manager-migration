@@ -5,7 +5,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 $options = array(
-	'migration_import_fields'
+	'wpem_migration_import_fields'
 );
 
 foreach ( $options as $option ) {
