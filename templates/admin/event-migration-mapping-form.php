@@ -27,7 +27,9 @@
                             $file_fields[str_replace(" ", "_", strtolower($element))] = array("label" => ucwords($element), "type" => "text");
                         }
                         $migration_fields = array_merge ($file_fields, $migration_fields);
-                        foreach ($file_head_fields as $key => $head_fields) : ?>
+                        foreach ($file_head_fields as $key => $head_fields) : 
+                            error_log("key :".$key);
+                        error_log(print_r($head_fields, true));?>
                             <tr>
                                 <td>
                                     <input readonly type="text" name="file_field[<?php echo $key; ?>]" value="<?php echo $head_fields; ?>" />
@@ -45,7 +47,7 @@
                                                     <option class="text" value="_post_id"><?php _e('ID', 'wp-event-manager-migration'); ?></option>
                                                 <?php endif; 
                                                 if (!in_array($field['type'], ['term-select'])) : ?>
-                                                    <option class="text" value="_<?php echo esc_attr($name); ?>" <?php selected($head_fields, '_' . $name); ?> ><?php echo esc_html($field['label']); ?></option>
+                                                    <option class="text" value="_<?php echo esc_attr(ltrim($name, "_")); ?>" <?php selected(str_replace(" ", "_", strtolower("_".ltrim($head_fields, " "))), '_' . ltrim($name, "_")); ?> ><?php echo esc_html($field['label']); ?></option>
                                                 <?php endif;
                                                 $i++; 
                                             endforeach; ?>
@@ -103,9 +105,9 @@
                                                     foreach ($group_fields as $name => $field) : 
                                                         if (!in_array($field['type'], ['term-select'])) : 
                                                             if($head_fields == '_thumbnail_id' && $group_key=='event' && $name=='event_banner'){ ?>
-                                                                <option class="text" value="_<?php echo esc_attr($name); ?>" selected ><?php echo esc_html($field['label']); ?></option>
+                                                                <option class="text" value="_<?php echo esc_attr(ltrim($name, "_")); ?>" selected ><?php echo esc_html($field['label']); ?></option>
                                                             <?php }else{  ?>
-                                                                <option class="text" value="_<?php echo esc_attr($name); ?>" <?php selected($head_fields, '_' . $name); ?> ><?php echo esc_html($field['label']); ?></option>
+                                                                <option class="text" value="_<?php echo esc_attr(ltrim($name, "_")); ?>" <?php selected(str_replace(" ", "_", strtolower("_".ltrim($head_fields, " "))), '_' . ltrim($name, "_")); ?> ><?php echo esc_html($field['label']); ?></option>
                                                             <?php }
                                                         endif;
                                                     endforeach;
