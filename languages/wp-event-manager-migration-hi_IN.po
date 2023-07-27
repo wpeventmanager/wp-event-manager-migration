@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
 "Project-Id-Version: WP Event Manager Migration\n"
-"POT-Creation-Date: 2023-06-09 14:40+0530\n"
-"PO-Revision-Date: 2023-06-09 14:41+0530\n"
+"POT-Creation-Date: 2023-07-27 13:12+0530\n"
+"PO-Revision-Date: 2023-07-27 13:13+0530\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,8 +29,8 @@ msgstr "इवेंट माइग्रेशन"
 
 #: admin/wpem-migration-admin.php:52
 
-msgid "Choose .csv or.xml or.xls or .xlsx file"
-msgstr ".csv या.xml या.xls या .xlsx फ़ाइल चुनें"
+msgid "Choose .csv or.xml file"
+msgstr ".csv या.xml फ़ाइल चुनें"
 
 #: admin/wpem-migration-admin.php:53
 
@@ -45,12 +45,12 @@ msgstr "आयोजक ID का चयन करना होगा"
 #: admin/wpem-migration-admin.php:55
 
 msgid "Must select Venue ID"
-msgstr "स्थान ID का चयन करना होगा"
+msgstr "स्थल ID का चयन करना होगा"
 
 #: admin/wpem-migration-admin.php:56
 
-msgid "Please select .csv or.xml or.xls or .xlsx file"
-msgstr "कृपया .csv या.xml या.xls या फ़ाइल .xlsx चयन करें"
+msgid "Please select .csv or.xml or file"
+msgstr "कृपया .csv या.xml या फ़ाइल का चयन करें"
 
 #: admin/wpem-migration-import.php:35
 msgid "Events"
@@ -73,60 +73,64 @@ msgstr "इवेंट पंजीकरण ऐडऑन प्रपत्र
 msgid "Registrations"
 msgstr "पंजीकृत उपयोगकर्ता"
 
-#: admin/wpem-migration-import.php:64
+#: admin/wpem-migration-import.php:45
+msgid "Sell Tickets"
+msgstr "टिकट बेचें"
+
+#: admin/wpem-migration-import.php:63
 
 msgid "Select option"
 msgstr "विकल्प का चयन करें"
 
-#: admin/wpem-migration-import.php:793
+#: admin/wpem-migration-import.php:792
 msgid "Ticket Name"
 msgstr "टिकट का नाम"
 
-#: admin/wpem-migration-import.php:796
+#: admin/wpem-migration-import.php:795
 msgid "Give your ticket name"
 msgstr "अपना टिकट का नाम बताएं"
 
-#: admin/wpem-migration-import.php:800
+#: admin/wpem-migration-import.php:799
 msgid "Ticket Quantity"
 msgstr "टिकट की मात्रा"
 
-#: admin/wpem-migration-import.php:803
+#: admin/wpem-migration-import.php:802
 msgid "Enter number of tickets"
 msgstr "टिकटों की संख्या दर्ज करें"
 
-#: admin/wpem-migration-import.php:807 admin/wpem-migration-import.php:810
+#: admin/wpem-migration-import.php:806 admin/wpem-migration-import.php:809
 msgid "Ticket Type"
 msgstr "टिकट प्रकार"
 
-#: admin/wpem-migration-import.php:814
+#: admin/wpem-migration-import.php:813
 msgid "Ticket Price"
 msgstr "टिकट की कीमत"
 
-#: admin/wpem-migration-import.php:817
+#: admin/wpem-migration-import.php:816
 msgid "Ticket price"
 msgstr "टिकट की कीमत"
 
-#: admin/wpem-migration-import.php:821
+#: admin/wpem-migration-import.php:820
 msgid "Ticket Description"
 msgstr "टिकट का विवरण"
 
-#: admin/wpem-migration-import.php:824
+#: admin/wpem-migration-import.php:823
 msgid "Tell your attendees more about this ticket type"
 msgstr "अपने सहभागियों को इस टिकट प्रकार के बारे में अधिक बताएं"
 
-#: admin/wpem-migration-import.php:828
+#: admin/wpem-migration-import.php:827
 msgid "Show Ticket Description"
 msgstr "टिकट विवरण दिखाएँ"
 
-#: admin/wpem-migration-import.php:833
+#: admin/wpem-migration-import.php:832
 msgid "Show ticket description on event page"
 msgstr "ईवेंट पृष्ठ पर टिकट विवरण दिखाएँ"
 
-#: admin/wpem-migration-import.php:837
+#: admin/wpem-migration-import.php:836
 msgid "Fees Pay By"
 msgstr "फीस द्वारा भुगतान करें"
 
-#: admin/wpem-migration-import.php:840
+#: admin/wpem-migration-import.php:839
 msgid ""
 "Pay by attendee : fees will be added to the ticket price and paid by the "
 "attendee."
@@ -134,85 +138,85 @@ msgstr ""
 "उपस्थित व्यक्ति द्वारा भुगतान करें: शुल्क टिकट की कीमत में जोड़ा जाएगा और उपस्थित व्यक्ति "
 "द्वारा भुगतान किया जाएगा।"
 
-#: admin/wpem-migration-import.php:845
+#: admin/wpem-migration-import.php:844
 msgid "Pay By Attendee"
 msgstr "सहभागी द्वारा भुगतान करें"
 
-#: admin/wpem-migration-import.php:846
+#: admin/wpem-migration-import.php:845
 msgid "Pay By Organizer"
 msgstr "आयोजक द्वारा भुगतान करें"
 
-#: admin/wpem-migration-import.php:850
+#: admin/wpem-migration-import.php:849
 msgid "Tickets Visibility"
 msgstr "टिकट दृश्यता"
 
-#: admin/wpem-migration-import.php:853
+#: admin/wpem-migration-import.php:852
 msgid ""
 "Public ticket visible to all and Private ticket only visible to organizer."
 msgstr ""
 "सार्वजनिक टिकट सभी के लिए दिखाई देता है और निजी टिकट केवल आयोजक को दिखाई देता है।"
 
-#: admin/wpem-migration-import.php:858
+#: admin/wpem-migration-import.php:857
 msgid "Public"
 msgstr "सार्वजनिक"
 
-#: admin/wpem-migration-import.php:859
+#: admin/wpem-migration-import.php:858
 msgid "Private"
 msgstr "निजी"
 
-#: admin/wpem-migration-import.php:863
+#: admin/wpem-migration-import.php:862
 msgid "Minimum Tickets"
 msgstr "न्यूनतम टिकट"
 
-#: admin/wpem-migration-import.php:866
+#: admin/wpem-migration-import.php:865
 msgid "Minimum tickets allowed per order"
 msgstr "प्रति आदेश न्यूनतम टिकट की अनुमति"
 
-#: admin/wpem-migration-import.php:870
+#: admin/wpem-migration-import.php:869
 msgid "Maximum Tickets"
 msgstr "अधिकतम टिकट"
 
-#: admin/wpem-migration-import.php:873
+#: admin/wpem-migration-import.php:872
 msgid "Maximum tickets allowed per order"
 msgstr "प्रति आदेश अधिकतम टिकट की अनुमति"
 
-#: admin/wpem-migration-import.php:877 admin/wpem-migration-import.php:880
+#: admin/wpem-migration-import.php:876 admin/wpem-migration-import.php:879
 msgid "Sales start date"
 msgstr "विक्रय प्रारंभ होने की दिनांक"
 
-#: admin/wpem-migration-import.php:884
+#: admin/wpem-migration-import.php:883
 msgid "Sales Start Time"
 msgstr "विक्रय प्रारंभ समय"
 
-#: admin/wpem-migration-import.php:887
+#: admin/wpem-migration-import.php:886
 msgid "Tickets sales start time"
 msgstr "टिकटों की बिक्री शुरू होने का समय"
 
-#: admin/wpem-migration-import.php:892 admin/wpem-migration-import.php:895
+#: admin/wpem-migration-import.php:891 admin/wpem-migration-import.php:894
 msgid "Sales end date"
 msgstr "विक्रय समाप्ति दिनांक"
 
-#: admin/wpem-migration-import.php:899
+#: admin/wpem-migration-import.php:898
 msgid "Sales End Time"
 msgstr "विक्रय समाप्ति समय"
 
-#: admin/wpem-migration-import.php:902
+#: admin/wpem-migration-import.php:901
 msgid "Tickets sales end time"
 msgstr "टिकटों की बिक्री समाप्त होने का समय"
 
-#: admin/wpem-migration-import.php:906
+#: admin/wpem-migration-import.php:905
 msgid "Show remainging tickets"
 msgstr "शेष टिकट दिखाएँ"
 
-#: admin/wpem-migration-import.php:910
+#: admin/wpem-migration-import.php:909
 msgid "Show remaining tickets with tickets detail at single event page"
 msgstr "एकल ईवेंट पृष्ठ पर टिकट विवरण के साथ शेष टिकट दिखाएँ"
 
-#: admin/wpem-migration-import.php:914
+#: admin/wpem-migration-import.php:913
 msgid "Sold Tickets individually"
 msgstr "व्यक्तिगत रूप से बेचे गए टिकट"
 
-#: admin/wpem-migration-import.php:918
+#: admin/wpem-migration-import.php:917
 msgid "Tickets will be sold one ticket per customer"
 msgstr "टिकट प्रति ग्राहक एक टिकट बेचा जाएगा"
 
@@ -222,8 +226,8 @@ msgid ""
 "If you have separate Organizer and Venues file then first import Organizer "
 "then Venues. After import Organizer and Venues then import Event."
 msgstr ""
-"यदि आपके पास अलग-अलग आयोजक और स्थान फ़ाइल है तो पहले आयोजक फिर स्थान आयात करें। "
-"आयात करने के बाद आयोजक और स्थान फिर इवेंट आयात करें."
+"यदि आपके पास अलग आयोजक और स्थान फ़ाइल है, तो पहले आयोजक फिर वेन्यू आयात करें। आयोजक "
+"और स्थान आयात करने के बाद फिर इवेंट आयात करें."
 
 #: templates/admin/event-migration-file-upload.php:11
 
@@ -232,8 +236,8 @@ msgstr "फ़ाइल चुनें"
 
 #: templates/admin/event-migration-file-upload.php:13
 
-msgid "Upload .csv or.xml or.xls or .xlsx  file"
-msgstr ".csv या.xml या.xls या .xlsx फ़ाइल अपलोड करें"
+msgid "Upload .csv or.xml file"
+msgstr ".csv या.xml फ़ाइल अपलोड करें"
 
 #: templates/admin/event-migration-file-upload.php:20
 
@@ -273,7 +277,7 @@ msgstr "इवेंट माइग्रेशन मैपिंग प्र
 #: templates/admin/event-migration-mapping-form.php:6
 
 msgid "While import event must be select Organizer ID and Venues ID."
-msgstr "आयात ईवेंट के दौरान आयोजक ID और Venues ID का चयन करना आवश्यक है."
+msgstr "जबकि आयात इवेंट को आयोजक ID और स्थान ID का चयन करना आवश्यक है."
 
 #: templates/admin/event-migration-mapping-form.php:14
 
@@ -283,11 +287,11 @@ msgstr "फ़ाइल फ़ील्ड"
 #: templates/admin/event-migration-mapping-form.php:15
 #, php-format
 msgid "%s Field"
-msgstr "%s क्षेत्र"
+msgstr "%s फ़ील्ड"
 
 #: templates/admin/event-migration-mapping-form.php:16
-#: templates/admin/event-migration-mapping-form.php:54
-#: templates/admin/event-migration-mapping-form.php:127
+#: templates/admin/event-migration-mapping-form.php:56
+#: templates/admin/event-migration-mapping-form.php:129
 
 msgid "Custom Field"
 msgstr "कस्टम फ़ील्ड"
@@ -302,32 +306,32 @@ msgstr " "
 msgid "Default Value"
 msgstr "डिफ़ॉल्ट मान"
 
-#: templates/admin/event-migration-mapping-form.php:37
-#: templates/admin/event-migration-mapping-form.php:83
+#: templates/admin/event-migration-mapping-form.php:39
+#: templates/admin/event-migration-mapping-form.php:85
 #, php-format
 msgid "Select %s Field"
 msgstr "%s फ़ील्ड का चयन करें"
 
-#: templates/admin/event-migration-mapping-form.php:45
-#: templates/admin/event-migration-mapping-form.php:89
+#: templates/admin/event-migration-mapping-form.php:47
+#: templates/admin/event-migration-mapping-form.php:91
 msgid "ID"
 msgstr "आईडी"
 
-#: templates/admin/event-migration-mapping-form.php:53
-#: templates/admin/event-migration-mapping-form.php:126
+#: templates/admin/event-migration-mapping-form.php:55
+#: templates/admin/event-migration-mapping-form.php:128
 msgid "Other"
 msgstr "अन्य"
 
-#: templates/admin/event-migration-mapping-form.php:94
+#: templates/admin/event-migration-mapping-form.php:96
 msgid "Event ID"
 msgstr "इवेंट आईडी"
 
-#: templates/admin/event-migration-mapping-form.php:119
+#: templates/admin/event-migration-mapping-form.php:121
 
 msgid "Taxonomy"
 msgstr "वर्गीकरण विज्ञान"
 
-#: templates/admin/event-migration-mapping-form.php:157
+#: templates/admin/event-migration-mapping-form.php:159
 
 msgid "Step 2"
 msgstr "चरण 2"
@@ -344,18 +348,18 @@ msgstr "कुल: <b>%s</b> %s सफलतापूर्वक आयात"
 
 #: templates/admin/event-migration-success.php:12
 
-msgid "Import new .csv or .xlsx"
-msgstr "नई .csv या .xlsx आयात करें"
+msgid "Import new .csv or .xml"
+msgstr "नया .csv आयात करें या .xml"
 
 #: wpem-migration.php:32
 
 msgid "WP Event Manager is require to use WP Event Manager - Migration"
-msgstr "WP इवेंट प्रबंधक WP इवेंट प्रबंधक - माइग्रेशन का उपयोग करने की आवश्यकता है"
+msgstr "WP इवेंट मैनेजर WP इवेंट मैनेजर - माइग्रेशन का उपयोग करने के लिए आवश्यक है"
 
 #. Plugin Name of the plugin/theme
 
 msgid "WP Event Manager Migration"
-msgstr "WP इवेंट मैनेजर माइग्रेशन"
+msgstr "WP इवेंट प्रबंधक माइग्रेशन"
 
 #. Plugin URI of the plugin/theme
 msgid "https://www.wp-eventmanager.com/"
@@ -367,8 +371,8 @@ msgid ""
 "Migrate your events in few seconds from The Event Calendar, Modern Event "
 "Calendar, Event Manager, Meetups, Eventon, Event Expresso and others."
 msgstr ""
-"इवेंट कैलेंडर, मॉडर्न इवेंट कैलेंडर, इवेंट मैनेजर, मीटअप्स, इवनटन, इवेंट एक्सप्रेसो और अन्य से कुछ "
-"सेकंड में अपने ईवेंट माइग्रेट करें।"
+"इवेंट कैलेंडर, आधुनिक ईवेंट कैलेंडर, इवेंट मैनेजर, मीटअप्स, इवेंटन, इवेंट एक्सप्रेसो और अन्य से कुछ "
+"सेकंड में अपने ईवेंट माइग्रेट करें."
 
 #. Author of the plugin/theme
 msgid "WP Event Manager"

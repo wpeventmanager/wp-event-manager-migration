@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: WP Event Manager Migration\n"
-"POT-Creation-Date: 2023-06-09 14:40+0530\n"
-"PO-Revision-Date: 2023-06-09 14:40+0530\n"
+"POT-Creation-Date: 2023-07-27 13:12+0530\n"
+"PO-Revision-Date: 2023-07-27 13:12+0530\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgid "Event Migration"
 msgstr ""
 
 #: admin/wpem-migration-admin.php:52
-msgid "Choose .csv or.xml or.xls or .xlsx file"
+msgid "Choose .csv or.xml file"
 msgstr ""
 
 #: admin/wpem-migration-admin.php:53
@@ -43,7 +43,7 @@ msgid "Must select Venue ID"
 msgstr ""
 
 #: admin/wpem-migration-admin.php:56
-msgid "Please select .csv or.xml or.xls or .xlsx file"
+msgid "Please select .csv or.xml or file"
 msgstr ""
 
 #: admin/wpem-migration-import.php:35
@@ -66,142 +66,146 @@ msgstr ""
 msgid "Registrations"
 msgstr ""
 
-#: admin/wpem-migration-import.php:64
+#: admin/wpem-migration-import.php:45
+msgid "Sell Tickets"
+msgstr ""
+
+#: admin/wpem-migration-import.php:63
 msgid "Select option"
 msgstr ""
 
-#: admin/wpem-migration-import.php:793
+#: admin/wpem-migration-import.php:792
 msgid "Ticket Name"
 msgstr ""
 
-#: admin/wpem-migration-import.php:796
+#: admin/wpem-migration-import.php:795
 msgid "Give your ticket name"
 msgstr ""
 
-#: admin/wpem-migration-import.php:800
+#: admin/wpem-migration-import.php:799
 msgid "Ticket Quantity"
 msgstr ""
 
-#: admin/wpem-migration-import.php:803
+#: admin/wpem-migration-import.php:802
 msgid "Enter number of tickets"
 msgstr ""
 
-#: admin/wpem-migration-import.php:807 admin/wpem-migration-import.php:810
+#: admin/wpem-migration-import.php:806 admin/wpem-migration-import.php:809
 msgid "Ticket Type"
 msgstr ""
 
-#: admin/wpem-migration-import.php:814
+#: admin/wpem-migration-import.php:813
 msgid "Ticket Price"
 msgstr ""
 
-#: admin/wpem-migration-import.php:817
+#: admin/wpem-migration-import.php:816
 msgid "Ticket price"
 msgstr ""
 
-#: admin/wpem-migration-import.php:821
+#: admin/wpem-migration-import.php:820
 msgid "Ticket Description"
 msgstr ""
 
-#: admin/wpem-migration-import.php:824
+#: admin/wpem-migration-import.php:823
 msgid "Tell your attendees more about this ticket type"
 msgstr ""
 
-#: admin/wpem-migration-import.php:828
+#: admin/wpem-migration-import.php:827
 msgid "Show Ticket Description"
 msgstr ""
 
-#: admin/wpem-migration-import.php:833
+#: admin/wpem-migration-import.php:832
 msgid "Show ticket description on event page"
 msgstr ""
 
-#: admin/wpem-migration-import.php:837
+#: admin/wpem-migration-import.php:836
 msgid "Fees Pay By"
 msgstr ""
 
-#: admin/wpem-migration-import.php:840
+#: admin/wpem-migration-import.php:839
 msgid ""
 "Pay by attendee : fees will be added to the ticket price and paid by the "
 "attendee."
 msgstr ""
 
-#: admin/wpem-migration-import.php:845
+#: admin/wpem-migration-import.php:844
 msgid "Pay By Attendee"
 msgstr ""
 
-#: admin/wpem-migration-import.php:846
+#: admin/wpem-migration-import.php:845
 msgid "Pay By Organizer"
 msgstr ""
 
-#: admin/wpem-migration-import.php:850
+#: admin/wpem-migration-import.php:849
 msgid "Tickets Visibility"
 msgstr ""
 
-#: admin/wpem-migration-import.php:853
+#: admin/wpem-migration-import.php:852
 msgid ""
 "Public ticket visible to all and Private ticket only visible to organizer."
 msgstr ""
 
-#: admin/wpem-migration-import.php:858
+#: admin/wpem-migration-import.php:857
 msgid "Public"
 msgstr ""
 
-#: admin/wpem-migration-import.php:859
+#: admin/wpem-migration-import.php:858
 msgid "Private"
 msgstr ""
 
-#: admin/wpem-migration-import.php:863
+#: admin/wpem-migration-import.php:862
 msgid "Minimum Tickets"
 msgstr ""
 
-#: admin/wpem-migration-import.php:866
+#: admin/wpem-migration-import.php:865
 msgid "Minimum tickets allowed per order"
 msgstr ""
 
-#: admin/wpem-migration-import.php:870
+#: admin/wpem-migration-import.php:869
 msgid "Maximum Tickets"
 msgstr ""
 
-#: admin/wpem-migration-import.php:873
+#: admin/wpem-migration-import.php:872
 msgid "Maximum tickets allowed per order"
 msgstr ""
 
-#: admin/wpem-migration-import.php:877 admin/wpem-migration-import.php:880
+#: admin/wpem-migration-import.php:876 admin/wpem-migration-import.php:879
 msgid "Sales start date"
 msgstr ""
 
-#: admin/wpem-migration-import.php:884
+#: admin/wpem-migration-import.php:883
 msgid "Sales Start Time"
 msgstr ""
 
-#: admin/wpem-migration-import.php:887
+#: admin/wpem-migration-import.php:886
 msgid "Tickets sales start time"
 msgstr ""
 
-#: admin/wpem-migration-import.php:892 admin/wpem-migration-import.php:895
+#: admin/wpem-migration-import.php:891 admin/wpem-migration-import.php:894
 msgid "Sales end date"
 msgstr ""
 
-#: admin/wpem-migration-import.php:899
+#: admin/wpem-migration-import.php:898
 msgid "Sales End Time"
 msgstr ""
 
-#: admin/wpem-migration-import.php:902
+#: admin/wpem-migration-import.php:901
 msgid "Tickets sales end time"
 msgstr ""
 
-#: admin/wpem-migration-import.php:906
+#: admin/wpem-migration-import.php:905
 msgid "Show remainging tickets"
 msgstr ""
 
-#: admin/wpem-migration-import.php:910
+#: admin/wpem-migration-import.php:909
 msgid "Show remaining tickets with tickets detail at single event page"
 msgstr ""
 
-#: admin/wpem-migration-import.php:914
+#: admin/wpem-migration-import.php:913
 msgid "Sold Tickets individually"
 msgstr ""
 
-#: admin/wpem-migration-import.php:918
+#: admin/wpem-migration-import.php:917
 msgid "Tickets will be sold one ticket per customer"
 msgstr ""
 
@@ -216,7 +220,7 @@ msgid "Choose File"
 msgstr ""
 
 #: templates/admin/event-migration-file-upload.php:13
-msgid "Upload .csv or.xml or.xls or .xlsx  file"
+msgid "Upload .csv or.xml file"
 msgstr ""
 
 #: templates/admin/event-migration-file-upload.php:20
@@ -261,8 +265,8 @@ msgid "%s Field"
 msgstr ""
 
 #: templates/admin/event-migration-mapping-form.php:16
-#: templates/admin/event-migration-mapping-form.php:54
-#: templates/admin/event-migration-mapping-form.php:127
+#: templates/admin/event-migration-mapping-form.php:56
+#: templates/admin/event-migration-mapping-form.php:129
 msgid "Custom Field"
 msgstr ""
 
@@ -274,31 +278,31 @@ msgstr ""
 msgid "Default Value"
 msgstr ""
 
-#: templates/admin/event-migration-mapping-form.php:37
-#: templates/admin/event-migration-mapping-form.php:83
+#: templates/admin/event-migration-mapping-form.php:39
+#: templates/admin/event-migration-mapping-form.php:85
 #, php-format
 msgid "Select %s Field"
 msgstr ""
 
-#: templates/admin/event-migration-mapping-form.php:45
-#: templates/admin/event-migration-mapping-form.php:89
+#: templates/admin/event-migration-mapping-form.php:47
+#: templates/admin/event-migration-mapping-form.php:91
 msgid "ID"
 msgstr ""
 
-#: templates/admin/event-migration-mapping-form.php:53
-#: templates/admin/event-migration-mapping-form.php:126
+#: templates/admin/event-migration-mapping-form.php:55
+#: templates/admin/event-migration-mapping-form.php:128
 msgid "Other"
 msgstr ""
 
-#: templates/admin/event-migration-mapping-form.php:94
+#: templates/admin/event-migration-mapping-form.php:96
 msgid "Event ID"
 msgstr ""
 
-#: templates/admin/event-migration-mapping-form.php:119
+#: templates/admin/event-migration-mapping-form.php:121
 msgid "Taxonomy"
 msgstr ""
 
-#: templates/admin/event-migration-mapping-form.php:157
+#: templates/admin/event-migration-mapping-form.php:159
 msgid "Step 2"
 msgstr ""
 
@@ -312,7 +316,7 @@ msgid "Total: <b>%s</b> %s Successfully Import"
 msgstr ""
 
 #: templates/admin/event-migration-success.php:12
-msgid "Import new .csv or .xlsx"
+msgid "Import new .csv or .xml"
 msgstr ""
 
 #: wpem-migration.php:32
