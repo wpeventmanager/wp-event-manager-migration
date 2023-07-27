@@ -27,9 +27,7 @@
                             $file_fields[str_replace(" ", "_", strtolower($element))] = array("label" => ucwords($element), "type" => "text");
                         }
                         $migration_fields = array_merge ($file_fields, $migration_fields);
-                        foreach ($file_head_fields as $key => $head_fields) : 
-                            error_log("key :".$key);
-                        error_log(print_r($head_fields, true));?>
+                        foreach ($file_head_fields as $key => $head_fields) : ?>
                             <tr>
                                 <td>
                                     <input readonly type="text" name="file_field[<?php echo $key; ?>]" value="<?php echo $head_fields; ?>" />

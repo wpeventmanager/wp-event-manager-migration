@@ -497,7 +497,7 @@ class WPEM_Migration_Import {
 			if ( $events->have_posts() ) {
 				while ( $events->have_posts() ) {
 					$events->the_post();
-					$event_id = the_ID();
+					$event_id = $events->post->ID;
 				}
 			} 
 			if ($attendee_name != '') {
