@@ -10,7 +10,7 @@
 			<tr>
 		        <th><?php _e('Choose File', 'wp-event-manager-migration' ); ?></th>
 		        <td>
-					<a href="javascript:void(0)" class="upload-file"><?php _e('Upload .csv or.xml or.xls or .xlsx  file', 'wp-event-manager-migration' ); ?></a>
+					<a href="javascript:void(0)" class="upload-file"><?php _e('Upload .csv or.xml file', 'wp-event-manager-migration' ); ?></a>
 					<span class="response-message"></span>
 					<input type="hidden" name="file_id" id="file_id" value="" />
 					<input type="hidden" name="file_type" id="file_type" value="" />

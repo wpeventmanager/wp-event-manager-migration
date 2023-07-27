@@ -49,11 +49,11 @@ class WPEM_Migration_Admin {
         wp_register_script('wp-event-manager-migration-admin', WPEM_MIGRATION_PLUGIN_URL . '/assets/js/admin-migration.min.js', array('jquery'), WPEM_MIGRATION_VERSION, true);
         wp_localize_script('wp-event-manager-migration-admin', 'event_manager_migration_admin', array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            'media_box_title' => __('Choose .csv or.xml or.xls or .xlsx file', 'wp-event-manager-migration'),
+            'media_box_title' => __('Choose .csv or.xml file', 'wp-event-manager-migration'),
             '_post_id' => __('Must select Post ID', 'wp-event-manager-migration'),
             '_event_organizer_ids' => __('Must select Organizer ID', 'wp-event-manager-migration'),
             '_event_venue_ids' => __('Must select Venue ID', 'wp-event-manager-migration'),
-            'file_type_error' => __('Please select .csv or.xml or.xls or .xlsx file', 'wp-event-manager-migration'),
+            'file_type_error' => __('Please select .csv or.xml or file', 'wp-event-manager-migration'),
             )
         );
         wp_enqueue_script('wp-event-manager-migration-admin');

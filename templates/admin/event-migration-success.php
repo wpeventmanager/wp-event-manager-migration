@@ -9,7 +9,7 @@
         <tr>
             <th>
                 <a href="<?php echo get_site_url(); ?>/wp-admin/admin.php?page=event-migration" class="button">
-                    <?php _e('Import new .csv or .xlsx', 'wp-event-manager-migration'); ?>
+                    <?php _e('Import new .csv or .xml', 'wp-event-manager-migration'); ?>
                 </a>
             </th>
         </tr>
