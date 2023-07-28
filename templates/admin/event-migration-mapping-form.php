@@ -30,7 +30,7 @@
                         foreach ($file_head_fields as $key => $head_fields) : ?>
                             <tr>
                                 <td>
-                                    <input readonly type="text" name="file_field[<?php echo $key; ?>]" value="<?php echo $head_fields; ?>" />
+                                    <input readonly type="text" name="file_field[<?php echo $key; ?>]" value="<?php echo str_replace(" ", "_", strtolower("_".ltrim($head_fields, " "))); ?>" />
                                 </td>
                                 <td>
                                     <select class="migration-field" name="migration_field[<?php echo $key; ?>]" id="migration_field_<?php echo $key; ?>" data-type="text">
@@ -45,7 +45,7 @@
                                                     <option class="text" value="_post_id"><?php _e('ID', 'wp-event-manager-migration'); ?></option>
                                                 <?php endif; 
                                                 if (!in_array($field['type'], ['term-select'])) : ?>
-                                                    <option class="text" value="_<?php echo esc_attr(ltrim($name, "_")); ?>" <?php selected(str_replace(" ", "_", strtolower("_".ltrim($head_fields, " "))), '_' . ltrim($name, "_")); ?> ><?php echo esc_html($field['label']); ?></option>
+                                                    <option class="text" value="_<?php echo esc_attr(ltrim($name, "_")); ?>" <?php selected(str_replace(" ", "_", strtolower("_".ltrim($head_fields, " "))), '_' . ltrim($name, "_")); ?> ><?php _e(esc_attr($field['label']), 'wp-event-manager-registrations');?></option>
                                                 <?php endif;
                                                 $i++; 
                                             endforeach; ?>
@@ -96,16 +96,16 @@
 
                                                     foreach ($group_fields as $name => $field) : 
                                                         if (!in_array($field['type'], ['term-select'])) : ?>
-                                                            <option class="text" value="<?php echo esc_attr($name); ?>" <?php selected($head_fields, $name); ?> ><?php echo esc_html($field['label']); ?></option>
+                                                            <option class="text" value="<?php echo esc_attr($name); ?>" <?php selected($head_fields, $name); ?> ><?php _e(esc_attr($field['label']), 'wp-event-manager'); ?></option>
                                                         <?php endif;
                                                     endforeach;
                                                 }else {
                                                     foreach ($group_fields as $name => $field) : 
                                                         if (!in_array($field['type'], ['term-select'])) : 
                                                             if($head_fields == '_thumbnail_id' && $group_key=='event' && $name=='event_banner'){ ?>
-                                                                <option class="text" value="_<?php echo esc_attr($name); ?>" selected ><?php echo esc_html($field['label']); ?></option>
+                                                                <option class="text" value="_<?php echo esc_attr($name); ?>" selected ><?php _e(esc_attr($field['label']), 'wp-event-manager'); ?></option>
                                                             <?php }else{  ?>
-                                                                <option class="text" value="_<?php echo esc_attr($name); ?>" <?php selected($head_fields, '_' . $name); ?> ><?php echo esc_html($field['label']); ?></option>
+                                                                <option class="text" value="_<?php echo esc_attr($name); ?>" <?php selected($head_fields, '_' . $name); ?> ><?php _e(esc_attr($field['label']), 'wp-event-manager'); ?></option>
                                                             <?php }
                                                         endif;
                                                     endforeach;
