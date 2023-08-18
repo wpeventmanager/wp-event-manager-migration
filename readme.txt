@@ -76,21 +76,19 @@ The manual installation method involves downloading the plugin and uploading it 
 Fixed : Registration data is imported using registration option.
 Fixed : Migration box line should be proper.
 Fixed : Langauge translation issue is fixed.
-Fixed : The registration option is not working.
+Fixed : The registration option was not working.
 Fixed : Import CSV file then display the fatal error message.
 Fixed : Need notification or notice if user has not installed WP Event Manage
-Fixed : Data in not available
-Fixed : Venue and organizer is not linking.
+Fixed : Venue and organizer was not linking.
 Fixed : Import organizer- Warning message is display
 Fixed : Select field not display on the event details page
-Fixed : Organizer logo is missing
 Fixed : Function deprecated error with .xlsx file import
 Fixed : Venue/organizer logo not upload during import
-Fixed : Enhancement - Upload xls file
-Fixed : Backend - Event type field data are missing
+Fixed : Backend - Event type field data werw missing
 Fixed : Deafault Event CSV/xml - Events are not imported
 Fixed : Need to read tags for organizer and venue from xml import file
-Fixed : Default mapping of post id with ID field
+Added : Default mapping of post id with ID field
+Added : Enhancement - Upload xls file
 
 = 1.0.1 [2nd December 2022] =
 
