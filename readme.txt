@@ -84,7 +84,7 @@ Fixed : Import organizer- Warning message is display
 Fixed : Select field not display on the event details page
 Fixed : Function deprecated error with .xlsx file import
 Fixed : Venue/organizer logo not upload during import
-Fixed : Backend - Event type field data werw missing
+Fixed : Backend - Event type field data was missing
 Fixed : Deafault Event CSV/xml - Events are not imported
 Fixed : Need to read tags for organizer and venue from xml import file
 Added : Default mapping of post id with ID field
