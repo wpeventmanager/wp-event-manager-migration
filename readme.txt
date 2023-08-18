@@ -71,7 +71,7 @@ The manual installation method involves downloading the plugin and uploading it 
 
 == Changelog ==
 
-= 1.0.2 [ 18th August 2023 ] =
+= 1.0.1 [ 18th August 2023 ] =
 
 Fixed : Registration data is imported using registration option.
 Fixed : Migration box line should be proper.
@@ -90,9 +90,6 @@ Fixed : Need to read tags for organizer and venue from xml import file
 Added : Default mapping of post id with ID field
 Added : Enhancement - Upload xls file
 
-= 1.0.1 [2nd December 2022] =
-
-= 1.0 2nd [July 2020] =
+= 1.0.0 [ 2nd July 2020 ] =
 
 * First release.
-
