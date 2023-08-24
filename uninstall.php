@@ -4,10 +4,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 }
 
-$options = array();
+$options = array(
+	'wpem_migration_import_fields'
+);
 
-//as of now we don't have any option stored in db
-
-/*foreach ( $options as $option ) {
+foreach ( $options as $option ) {
 	delete_option( $option );
-}*/
+}

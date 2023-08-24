@@ -1,0 +1,398 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: WP Event Manager Migration\n"
+"POT-Creation-Date: 2023-06-09 14:40+0530\n"
+"PO-Revision-Date: 2023-06-09 14:42+0530\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.3\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: wpem-migration.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Last-Translator: \n"
+"Language: de\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+
+#: admin/wpem-migration-admin.php:35
+#: templates/admin/event-migration-file-upload.php:2
+
+msgid "Event Migration"
+msgstr "Ereignis-Migration"
+
+#: admin/wpem-migration-admin.php:52
+
+msgid "Choose .csv or.xml or.xls or .xlsx file"
+msgstr "Wählen Sie .csv oder.xml oder.xls oder .xlsx Datei"
+
+#: admin/wpem-migration-admin.php:53
+
+msgid "Must select Post ID"
+msgstr "Post-ID muss ausgewählt werden"
+
+#: admin/wpem-migration-admin.php:54
+
+msgid "Must select Organizer ID"
+msgstr "Organizer-ID muss ausgewählt werden"
+
+#: admin/wpem-migration-admin.php:55
+
+msgid "Must select Venue ID"
+msgstr "Die ID des Veranstaltungsortes muss ausgewählt werden"
+
+#: admin/wpem-migration-admin.php:56
+
+msgid "Please select .csv or.xml or.xls or .xlsx file"
+msgstr "Bitte wählen Sie .csv oder.xml oder.xls oder .xlsx Datei aus"
+
+#: admin/wpem-migration-import.php:35
+msgid "Events"
+msgstr "Veranstaltungen"
+
+#: admin/wpem-migration-import.php:36
+msgid "Organizer"
+msgstr "Veranstalter"
+
+#: admin/wpem-migration-import.php:37
+msgid "Venue"
+msgstr "Veranstaltungsort"
+
+#: admin/wpem-migration-import.php:38
+msgid "Event Registration"
+msgstr "Anmeldung"
+
+#: admin/wpem-migration-import.php:41
+msgid "Registrations"
+msgstr "Registrierungen"
+
+#: admin/wpem-migration-import.php:64
+msgid "Select option"
+msgstr "Option auswählen"
+
+#: admin/wpem-migration-import.php:793
+msgid "Ticket Name"
+msgstr "Ticket-Bezeichnung"
+
+#: admin/wpem-migration-import.php:796
+
+msgid "Give your ticket name"
+msgstr "Geben Sie den Namen Ihres Tickets ein"
+
+#: admin/wpem-migration-import.php:800
+msgid "Ticket Quantity"
+msgstr "Anzahl der Tickets"
+
+#: admin/wpem-migration-import.php:803
+
+msgid "Enter number of tickets"
+msgstr "Geben Sie die Anzahl der Tickets ein"
+
+#: admin/wpem-migration-import.php:807 admin/wpem-migration-import.php:810
+msgid "Ticket Type"
+msgstr "Ticket Typ"
+
+#: admin/wpem-migration-import.php:814
+msgid "Ticket Price"
+msgstr "Ticket Preis"
+
+#: admin/wpem-migration-import.php:817
+msgid "Ticket price"
+msgstr "Seminar Preis"
+
+#: admin/wpem-migration-import.php:821
+msgid "Ticket Description"
+msgstr "Ticket Beschreibung"
+
+#: admin/wpem-migration-import.php:824
+
+msgid "Tell your attendees more about this ticket type"
+msgstr "Erzählen Sie Ihren Teilnehmern mehr über diesen Tickettyp"
+
+#: admin/wpem-migration-import.php:828
+
+msgid "Show Ticket Description"
+msgstr "Ticketbeschreibung anzeigen"
+
+#: admin/wpem-migration-import.php:833
+
+msgid "Show ticket description on event page"
+msgstr "Ticketbeschreibung auf der Veranstaltungsseite anzeigen"
+
+#: admin/wpem-migration-import.php:837
+
+msgid "Fees Pay By"
+msgstr "Gebühren, die per bezahlt werden"
+
+#: admin/wpem-migration-import.php:840
+
+msgid ""
+"Pay by attendee : fees will be added to the ticket price and paid by the "
+"attendee."
+msgstr ""
+"Bezahlung durch Teilnehmer: Die Gebühren werden zum Ticketpreis "
+"hinzugerechnet und vom Teilnehmer bezahlt."
+
+#: admin/wpem-migration-import.php:845
+
+msgid "Pay By Attendee"
+msgstr "Bezahlen nach Teilnehmer"
+
+#: admin/wpem-migration-import.php:846
+
+msgid "Pay By Organizer"
+msgstr "Bezahlen nach Organisator"
+
+#: admin/wpem-migration-import.php:850
+
+msgid "Tickets Visibility"
+msgstr "Sichtbarkeit von Tickets"
+
+#: admin/wpem-migration-import.php:853
+
+msgid ""
+"Public ticket visible to all and Private ticket only visible to organizer."
+msgstr ""
+"Öffentliches Ticket für alle sichtbar und privates Ticket nur für den "
+"Veranstalter sichtbar."
+
+#: admin/wpem-migration-import.php:858
+msgid "Public"
+msgstr "Öffentlich"
+
+#: admin/wpem-migration-import.php:859
+msgid "Private"
+msgstr "Privat"
+
+#: admin/wpem-migration-import.php:863
+msgid "Minimum Tickets"
+msgstr "Minimale Tickets"
+
+#: admin/wpem-migration-import.php:866
+
+msgid "Minimum tickets allowed per order"
+msgstr "Mindestanzahl an Tickets pro Bestellung"
+
+#: admin/wpem-migration-import.php:870
+msgid "Maximum Tickets"
+msgstr "Maximum Lose"
+
+#: admin/wpem-migration-import.php:873
+
+msgid "Maximum tickets allowed per order"
+msgstr "Maximal zulässige Tickets pro Bestellung"
+
+#: admin/wpem-migration-import.php:877 admin/wpem-migration-import.php:880
+
+msgid "Sales start date"
+msgstr "Startdatum des Verkaufs"
+
+#: admin/wpem-migration-import.php:884
+
+msgid "Sales Start Time"
+msgstr "Startzeit des Verkaufs"
+
+#: admin/wpem-migration-import.php:887
+
+msgid "Tickets sales start time"
+msgstr "Startzeit des Ticketverkaufs"
+
+#: admin/wpem-migration-import.php:892 admin/wpem-migration-import.php:895
+
+msgid "Sales end date"
+msgstr "Enddatum des Verkaufs"
+
+#: admin/wpem-migration-import.php:899
+
+msgid "Sales End Time"
+msgstr "Endzeit des Verkaufs"
+
+#: admin/wpem-migration-import.php:902
+
+msgid "Tickets sales end time"
+msgstr "Ende des Ticketverkaufs"
+
+#: admin/wpem-migration-import.php:906
+
+msgid "Show remainging tickets"
+msgstr "Restkarten anzeigen"
+
+#: admin/wpem-migration-import.php:910
+
+msgid "Show remaining tickets with tickets detail at single event page"
+msgstr ""
+"Verbleibende Tickets mit Ticketdetails auf der einzelnen "
+"Veranstaltungsseite anzeigen"
+
+#: admin/wpem-migration-import.php:914
+
+msgid "Sold Tickets individually"
+msgstr "Einzeln verkaufte Tickets"
+
+#: admin/wpem-migration-import.php:918
+
+msgid "Tickets will be sold one ticket per customer"
+msgstr "Die Tickets werden mit einem Ticket pro Kunde verkauft"
+
+#: templates/admin/event-migration-file-upload.php:5
+
+msgid ""
+"If you have separate Organizer and Venues file then first import Organizer "
+"then Venues. After import Organizer and Venues then import Event."
+msgstr ""
+"Wenn Sie eine separate Organizer- und Venues-Datei haben, importieren Sie "
+"zuerst Organizer und dann Venues. Nach dem Importieren von Organizer und "
+"Veranstaltungsorten importieren Sie dann Event."
+
+#: templates/admin/event-migration-file-upload.php:11
+msgid "Choose File"
+msgstr "Datei wählen"
+
+#: templates/admin/event-migration-file-upload.php:13
+
+msgid "Upload .csv or.xml or.xls or .xlsx  file"
+msgstr "Laden Sie .csv oder.xml oder.xls oder .xlsx Datei hoch"
+
+#: templates/admin/event-migration-file-upload.php:20
+msgid "Content Type"
+msgstr "Inhaltstyp"
+
+#: templates/admin/event-migration-file-upload.php:33
+msgid "Step 1"
+msgstr "Schritt 1"
+
+#: templates/admin/event-migration-import.php:2
+
+msgid "Event Migration Import"
+msgstr "Import der Ereignismigration"
+
+#: templates/admin/event-migration-import.php:6
+msgid "Field Name"
+msgstr "Feldname"
+
+#: templates/admin/event-migration-import.php:7
+msgid "Field Value"
+msgstr "Feldwert"
+
+#: templates/admin/event-migration-import.php:29
+msgid "Import"
+msgstr "Importieren"
+
+#: templates/admin/event-migration-mapping-form.php:2
+
+msgid "Event Migration Mapping Form"
+msgstr "Zuordnungsformular für die Ereignismigration"
+
+#: templates/admin/event-migration-mapping-form.php:6
+
+msgid "While import event must be select Organizer ID and Venues ID."
+msgstr ""
+"Beim Importieren des Ereignisses müssen die Organisatoren-ID und die "
+"Veranstaltungsort-ID ausgewählt werden."
+
+#: templates/admin/event-migration-mapping-form.php:14
+msgid "File Field"
+msgstr "Dateifeld"
+
+#: templates/admin/event-migration-mapping-form.php:15
+#, php-format
+msgid "%s Field"
+msgstr "%s Feld"
+
+#: templates/admin/event-migration-mapping-form.php:16
+#: templates/admin/event-migration-mapping-form.php:54
+#: templates/admin/event-migration-mapping-form.php:127
+msgid "Custom Field"
+msgstr "Benutzerdefiniertes Feld"
+
+#: templates/admin/event-migration-mapping-form.php:17
+msgid "&nbsp;"
+msgstr "&nbsp;"
+
+#: templates/admin/event-migration-mapping-form.php:18
+msgid "Default Value"
+msgstr "Standardwert"
+
+#: templates/admin/event-migration-mapping-form.php:37
+#: templates/admin/event-migration-mapping-form.php:83
+#, php-format
+msgid "Select %s Field"
+msgstr "Wählen Sie %s Feld aus"
+
+#: templates/admin/event-migration-mapping-form.php:45
+#: templates/admin/event-migration-mapping-form.php:89
+msgid "ID"
+msgstr "ID"
+
+#: templates/admin/event-migration-mapping-form.php:53
+#: templates/admin/event-migration-mapping-form.php:126
+msgid "Other"
+msgstr "Andere"
+
+#: templates/admin/event-migration-mapping-form.php:94
+msgid "Event ID"
+msgstr "Veranstaltung ID"
+
+#: templates/admin/event-migration-mapping-form.php:119
+msgid "Taxonomy"
+msgstr "Taxonomie"
+
+#: templates/admin/event-migration-mapping-form.php:157
+msgid "Step 2"
+msgstr "Schritt 2"
+
+#: templates/admin/event-migration-success.php:2
+
+msgid "Event Migration Successfully"
+msgstr "Erfolgreiche Ereignismigration"
+
+#: templates/admin/event-migration-success.php:6
+#, php-format
+msgid "Total: <b>%s</b> %s Successfully Import"
+msgstr "Gesamt: <b>%s</b> %s Erfolgreicher Import"
+
+#: templates/admin/event-migration-success.php:12
+
+msgid "Import new .csv or .xlsx"
+msgstr "Neue .csv oder .xlsx importieren"
+
+#: wpem-migration.php:32
+
+msgid "WP Event Manager is require to use WP Event Manager - Migration"
+msgstr ""
+"WP Event Manager ist erforderlich, um WP Event Manager - Migration zu "
+"verwenden"
+
+#. Plugin Name of the plugin/theme
+
+msgid "WP Event Manager Migration"
+msgstr "WP Event Manager-Migration"
+
+#. Plugin URI of the plugin/theme
+msgid "https://www.wp-eventmanager.com/"
+msgstr "https://www.wp-eventmanager.com/"
+
+#. Description of the plugin/theme
+
+msgid ""
+"Migrate your events in few seconds from The Event Calendar, Modern Event "
+"Calendar, Event Manager, Meetups, Eventon, Event Expresso and others."
+msgstr ""
+"Migrieren Sie Ihre Veranstaltungen in wenigen Sekunden aus dem "
+"Veranstaltungskalender, dem modernen Veranstaltungskalender, dem Event "
+"Manager, Meetups, Eventon, Event Expresso und anderen."
+
+#. Author of the plugin/theme
+msgid "WP Event Manager"
+msgstr "WP Event Manager"
+
+#. Author URI of the plugin/theme
+
+msgid "https://www.wp-eventmanager.com/the-team"
+msgstr "https://www.wp-eventmanager.com/the-team"

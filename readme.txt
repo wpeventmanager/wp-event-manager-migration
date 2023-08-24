@@ -3,10 +3,10 @@
 Contributors: wpeventmanager,ashokdudhat,hiteshmakvana
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=55FRYATTFLA5N
 Tags: event, events migration, migration, calendar, meetups, eventon, event expresso.
-Requires at least: 4.1
-Tested up to: 5.2.2
-Stable tag: 1.0.0
-Requires PHP: 5.4
+Requires at least: 5.4.1
+Tested up to: 6.2.2
+Stable tag: 1.0.2
+Requires PHP: 7.1
 License: GNU General Public License v3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -71,7 +71,25 @@ The manual installation method involves downloading the plugin and uploading it 
 
 == Changelog ==
 
-= 1.0 [July 2nd, 2020] =
+= 1.0.1 [ 24th August 2023 ] =
+
+Fixed : Registration data is imported using registration option.
+Fixed : Migration box line should be proper.
+Fixed : Langauge translation issue is fixed.
+Fixed : The registration option was not working.
+Fixed : Import CSV file then display the fatal error message.
+Fixed : Need notification or notice if user has not installed WP Event Manage
+Fixed : Venue and organizer was not linking.
+Fixed : Import organizer- Warning message is display
+Fixed : Select field not display on the event details page
+Fixed : Function deprecated error with .xlsx file import
+Fixed : Venue/organizer logo not upload during import
+Fixed : Backend - Event type field data was missing
+Fixed : Deafault Event CSV/xml - Events are not imported
+Fixed : Need to read tags for organizer and venue from xml import file
+Added : Default mapping of post id with ID field
+Added : Enhancement - Upload xls file
+
+= 1.0.0 [ 2nd July 2020 ] =
 
 * First release.
-
