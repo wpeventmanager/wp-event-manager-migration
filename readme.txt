@@ -71,7 +71,7 @@ The manual installation method involves downloading the plugin and uploading it 
 
 == Changelog ==
 
-= 1.0.1 [ 18th August 2023 ] =
+= 1.0.1 [ 24th August 2023 ] =
 
 Fixed : Registration data is imported using registration option.
 Fixed : Migration box line should be proper.
