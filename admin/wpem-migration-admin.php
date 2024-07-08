@@ -8,6 +8,8 @@ if (!defined('ABSPATH')) {
  */
 class WPEM_Migration_Admin {
 
+    public $import_class;
+
     /**
      * __construct function.
      *
