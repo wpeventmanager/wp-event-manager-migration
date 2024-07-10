@@ -7,7 +7,7 @@
 * Author URI: https://www.wp-eventmanager.com/the-team
 * Text Domain: wp-event-manager-migration
 * Domain Path: /languages
-* Version: 1.0.1
+* Version: 1.0.2
 * Since: 1.0.0
 * Requires WordPress Version at least: 5.4.1
 * Copyright: 2020 WP Event Manager
@@ -72,7 +72,7 @@ class WPEM_Migration {
 	 */
 	public function __construct() {
 		// Define constants
-		define( 'WPEM_MIGRATION_VERSION', '1.0.1' );
+		define( 'WPEM_MIGRATION_VERSION', '1.0.2' );
 		define( 'WPEM_MIGRATION_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 		define( 'WPEM_MIGRATION_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
 
