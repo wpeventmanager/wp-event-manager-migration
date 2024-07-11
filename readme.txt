@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: event, events migration, migration, calendar, meetups, eventon, event expresso.
 Requires at least: 5.4.1
 Tested up to: 6.2.2
-Stable tag: 1.0.2
+Stable tag: 1.0.1
 Requires PHP: 7.1
 License: GNU General Public License v3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
