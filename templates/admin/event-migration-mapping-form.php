@@ -45,7 +45,7 @@
                                                     <option class="text" value="_post_id"><?php _e('ID', 'wp-event-manager-migration'); ?></option>
                                                 <?php endif; 
                                                 if (!in_array($field['type'], ['term-select'])) : ?>
-                                                    <option class="text" value="_<?php echo esc_attr(ltrim($name, "_")); ?>" <?php selected(str_replace(" ", "_", strtolower("_".ltrim($head_fields, " "))), '_' . ltrim($name, "_")); ?> ><?php echo (esc_attr($field['label']), 'wp-event-manager-registrations');?></option>
+                                                    <option class="text" value="_<?php echo esc_attr(ltrim($name, "_")); ?>" <?php selected(str_replace(" ", "_", strtolower("_".ltrim($head_fields, " "))), '_' . ltrim($name, "_")); ?> ><?php _e(esc_attr($field['label']), 'wp-event-manager-registrations');?></option>
                                                 <?php endif;
                                                 $i++; 
                                             endforeach; ?>

@@ -1,10 +1,10 @@
 <div class="wrap wp-event-manager-migration-wrap">
-	<h2><?php esc_html_e('Event Migration Import', 'wp-event-manager-migration'); ?></h2>
+	<h2><?php _e('Event Migration Import', 'wp-event-manager-migration'); ?></h2>
 
     <table class="widefat">
         <tr>
-            <th><?php esc_html_e('Field Name', 'wp-event-manager-migration' ); ?></th>
-            <th><?php esc_html_e('Field Value', 'wp-event-manager-migration' ); ?></th>
+            <th><?php _e('Field Name', 'wp-event-manager-migration' ); ?></th>
+            <th><?php _e('Field Value', 'wp-event-manager-migration' ); ?></th>
         </tr>
 
         <?php if(!empty($sample_data)) :
@@ -26,7 +26,7 @@
                     <input type="hidden" name="file_id" id="file_id" value="<?php echo $file_id; ?>" />
                     <input type="hidden" name="file_type" id="file_type" value="<?php echo $file_type; ?>" />
                     <input type="hidden" name="action" value="import" />
-                    <input type="submit" class="button-primary" name="wp_event_manager_migration_import" value="<?php esc_html_e( 'Import', 'wp-event-manager-migration' ); ?>" />
+                    <input type="submit" class="button-primary" name="wp_event_manager_migration_import" value="<?php _e( 'Import', 'wp-event-manager-migration' ); ?>" />
                     <?php wp_nonce_field( 'event_manager_migration_import' ); ?>
                 </td>
             </tr>
