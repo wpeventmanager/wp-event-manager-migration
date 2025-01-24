@@ -71,11 +71,12 @@ The manual installation method involves downloading the plugin and uploading it 
 
 == Changelog ==
 
-= 1.0.2 [ 10th July 2024 ] =
+= 1.0.2 [ 24 January 2025 ] =
 
 Fixed : Venue logo image and Event location Map are not displayed.
 Fixed : The registration option is not working.
 Fixed : Migration box line should be proper.
+Fixed : Plugin check error is fixed.
 Fixed : Language translation issue is fixed.
 Fixed : The fatal error message is fixed.
 Fixed : Deprecated code error is fixed
