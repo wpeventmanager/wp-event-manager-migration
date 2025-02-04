@@ -4,7 +4,7 @@ Contributors: wpeventmanager,ashokdudhat,hiteshmakvana
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=55FRYATTFLA5N
 Tags: event, events migration, migration, calendar, meetups, eventon, event expresso.
 Requires at least: 5.4.1
-Tested up to: 6.2.2
+Tested up to: 6.7.1
 Stable tag: 1.0.2
 Requires PHP: 7.1
 License: GNU General Public License v3.0
